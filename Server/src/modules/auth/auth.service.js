@@ -34,9 +34,26 @@ class AuthService{
             throw exception;
         }
     }
+    findAllUsers = async(filter = {})=>{
+        try{
+            const users = await UserModel.find(filter).select('-password -activationToken');
+            return users;
+        }catch(exception){
+            throw exception;
+        }
+    }
     updateUser = async (data, userId)=>{
         try{
             const result = await UserModel.findByIdAndUpdate(userId, {$set: data})
+            return result;
+        }catch(exception){
+            throw exception;
+        }
+    }
+    
+    deleteUser = async (userId)=>{
+        try{
+            const result = await UserModel.findByIdAndDelete(userId);
             return result;
         }catch(exception){
             throw exception;

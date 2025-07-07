@@ -37,14 +37,6 @@ class BluebookService {
             throw exception
         }
     }
-    findOneBluebook = async (filter) => {
-        try {
-            const bluebookObj = await BluebookModel.findOne(filter);
-            return bluebookObj;
-        } catch (exception) {
-            throw exception
-        }
-    }
     findManyBluebooks = async (filter) => {
         try {
             const bluebooks = await BluebookModel.find(filter);
@@ -54,6 +46,16 @@ class BluebookService {
         }
     };
 
+    updateBluebook = async (data, bluebookId) => {
+        try {
+            const result = await BluebookModel.findByIdAndUpdate(bluebookId, {
+                $set: data
+            }, { new: true });
+            return result;
+        } catch (exception) {
+            throw exception;
+        }
+    }
 }
 
 const bluebookSvc = new BluebookService();

@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const BluebookSchema = new mongoose.Schema({
     vehicleRegNo:{
-        type: Number,
+        type: String,
         require: true
     },
     vehicleType:{
@@ -54,7 +54,7 @@ const BluebookSchema = new mongoose.Schema({
     },
     status:{
         type: String,
-        enum: ["pending","verified"],
+        enum: ["pending","verified","rejected"],
         default: "pending"
     },
    

@@ -4,8 +4,8 @@ const bluebookCreateDTO = Joi.object({
     vehicleType: Joi.string().required(),
     VehicleRegistrationDate: Joi.string().required(),
     vehicleOwnerName: Joi.string().required(),
-    taxPayDate: Joi.date().required(),
-    taxExpireDate: Joi.date().required(),
+    taxPayDate: Joi.string().required(),
+    taxExpireDate: Joi.string().required(),
     vehicleModel: Joi.string().required(),
     manufactureYear: Joi.string().required(),
     chasisNumber: Joi.string().required(),
@@ -14,14 +14,7 @@ const bluebookCreateDTO = Joi.object({
     vehicleColor: Joi.string().required(),
 
 })
-const bluebookFetchDTO = Joi.object({
-    vehicleRegNo: Joi.string().required(),
-    vehicleOwnerName: Joi.string().required(),
-    vehicleModel: Joi.string().required(),
-    vehicleNumber: Joi.string().required()
-})
 
 module.exports = {
     bluebookCreateDTO,
-    bluebookFetchDTO
 }

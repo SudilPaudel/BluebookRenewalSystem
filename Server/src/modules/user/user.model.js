@@ -39,8 +39,20 @@ citizenshipNo:{
     },
     status:{
         type: String,
-        enum: ["active","inactive"],
-        default: "inactive"
+        enum: ["active","inactive","pending"],
+        default: "pending"
+    },
+    emailOtp: {
+        type: String,
+        default: null
+    },
+    emailOtpExpiresAt: {
+        type: Date,
+        default: null
+    },
+    emailVerified: {
+        type: Boolean,
+        default: false
     },
     phone:{
         type: String

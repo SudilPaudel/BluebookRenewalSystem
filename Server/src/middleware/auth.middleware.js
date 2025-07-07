@@ -5,9 +5,20 @@ const auth = async(req, res, next)=>{
     try{
         let token = req.headers['authorization'] || null;
         if(!token){
-            next({code: 401, message: "Token is required"})
+            return res.status(401).json({ message: "Token is required" });
         }
-        token = token.split(" ").pop()
+        
+        // Check if token has the correct format (Bearer <token>)
+        if (!token.startsWith('Bearer ')) {
+            return res.status(401).json({ message: "Invalid token format. Use 'Bearer <token>'" });
+        }
+        
+        token = token.split(" ").pop();
+        
+        if (!token) {
+            return res.status(401).json({ message: "Token is required" });
+        }
+        
         //token verify
         //sign and expiry, formatting
         const tokenData = jwt.verify(token, process.env.JWT_SECRET)
@@ -15,13 +26,13 @@ const auth = async(req, res, next)=>{
             _id: tokenData.sub
         })
         if(!userDetail){
-            next({code:400, message: "User does not exists anymore"})
+            return res.status(400).json({ message: "User does not exists anymore" });
         }
         req.authUser = userDetail;
         next()// allow the user to access
     }catch(exception){
         console.log("Exception", exception)
-        next({code: 401, message: "Unauthorized Access"})
+        return res.status(401).json({ message: "Unauthorized Access" });
     }
 }
 
