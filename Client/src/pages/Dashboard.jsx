@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaCar, FaFileAlt, FaClock, FaCheckCircle, FaTimesCircle, FaPlus, FaSearch, FaDownload, FaEdit, FaTrash } from "react-icons/fa";
+import { FaCar, FaFileAlt, FaClock, FaCheckCircle, FaTimesCircle, FaPlus, FaSearch, FaDownload, FaEdit, FaTrash, FaMotorcycle } from "react-icons/fa";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -293,7 +293,10 @@ function Dashboard() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
-                        <FaCar className="h-8 w-8 text-nepal-blue" />
+                        {
+                          bluebook.vehicleType === "Car" ?  <FaCar className="h-8 w-8 text-nepal-blue" /> :  <FaMotorcycle className="h-8 w-8 text-nepal-blue" /> 
+                        }
+                       
                       </div>
                       <div className="ml-4">
                         <div className="flex items-center space-x-2">

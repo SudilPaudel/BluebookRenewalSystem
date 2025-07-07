@@ -58,13 +58,23 @@ function Login() {
         navigate("/dashboard");
       }
         }, 1500);
+      }else{
+        showNotification("error", "Login Failed. Please try again with other credentials");
+        return;
       }
+
     } catch (error) {
-      const message = error.response?.data?.message || "Login failed. Please try again.";
-      showNotification("error", message);
-    } finally {
-      setLoading(false);
-    }
+  console.error("Login error:", error); // for dev visibility
+  try {
+    const message =
+      error?.response?.data?.message?.toString() || "Login failed. Please try again.";
+    showNotification("error", message);
+  } catch {
+    showNotification("error", "Something went wrong during login.");
+  }
+} finally {
+  setLoading(false);
+}
   };
 
   return (

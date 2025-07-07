@@ -4,6 +4,7 @@ import logo from "../assets/logo.png";
 import flag from "../assets/flag.gif";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { FaHome } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   // Check auth state from localStorage
@@ -142,18 +143,18 @@ function Navbar() {
         <ul className="flex space-x-6 items-center w-full">
           {/* Home icon as separate menu item */}
           <li className="nav-item">
-            <a
-              href="/"
+            <Link
+              to="/"
               className="text-white text-2xl hover:text-red-400"
               aria-label="Home"
             >
               <FaHome />
-            </a>
+            </Link>
           </li>
           {/* Services Dropdown */}
           <li className="nav-item relative group">
-            <a
-              href="#"
+            <Link
+              to="#"
               className="text-white text-base hover:text-red-400 flex items-center gap-1"
               aria-haspopup="true"
               aria-expanded="false"
@@ -162,24 +163,24 @@ function Navbar() {
               <span className="ml-1 transition-transform duration-200 group-hover:rotate-180">
                 ▼
               </span>
-            </a>
+            </Link>
 
             <ul className="absolute left-0 mt-2 bg-white rounded shadow-lg opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-all duration-200 z-10 min-w-[180px]">
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="block px-4 py-2 text-sm text-gray-800 hover:bg-nepal-blue hover:text-white"
                 >
                   Blue Book Renewal
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="block px-4 py-2 text-sm text-gray-800 hover:bg-nepal-blue hover:text-white"
                 >
                   License Renewal
-                </a>
+                </Link>
               </li>
             </ul>
           </li>
@@ -191,31 +192,31 @@ function Navbar() {
           {!isLoggedIn ? (
             <>
               <li>
-                <a
-                  href="/login"
+                <Link
+                  to="/login"
                   className="bg-white text-nepal-blue font-semibold px-4 py-1 rounded hover:bg-gray-200 transition"
                 >
                   Login
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/signup"
+                <Link
+                  to="/signup"
                   className="bg-red-500 text-white font-semibold px-4 py-1 rounded hover:bg-red-600 transition"
                 >
                   Signup
-                </a>
+                </Link>
               </li>
             </>
           ) : (
             <>
               <li>
-                <a
-                  href="/dashboard"
+                <Link
+                  to="/dashboard"
                   className="text-white hover:text-red-400 transition"
                 >
                   Dashboard
-                </a>
+                </Link>
               </li>
               <li>
                 <button

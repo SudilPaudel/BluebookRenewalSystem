@@ -240,6 +240,7 @@ class AuthController{
                 throw {code: 400, message: "User does not exists with this email"}
             }
             if(bcrypt.compareSync(password, userDetail.password)){
+                 
                 if(userDetail.status === 'pending'){
                     throw {code: 400, message: "Please verify your email address before logging in. Check your email for the verification OTP."}
                 }
@@ -274,7 +275,10 @@ class AuthController{
                     message: "User Logged in Successfully",
                     meta: null
                 })
+            }else{
+                throw {code: 400, message: "Credentials doesnt match"}
             }
+            
         }catch(exception){
             next(exception);
         }

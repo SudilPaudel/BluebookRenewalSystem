@@ -148,6 +148,22 @@ class BluebookController {
             // Pipe PDF to response
             doc.pipe(res);
 
+            // --- Add Logo at the Top Center ---
+            const logoPath = process.env.TRANSPORT_LOGO_PATH || 'public/images/transport-logo.png';
+            let logoHeight = 100;
+            try {
+                const logoWidth = 100;
+                logoHeight = 100;
+                const centerX = (doc.page.width - logoWidth) / 2;
+                doc.image(logoPath, centerX, 40, { width: logoWidth, height: logoHeight });
+            } catch (e) {
+                // If logo not found, continue without error
+            }
+
+            // Move cursor below the logo before adding the certificate title
+            doc.moveDown();
+            doc.y = 40 + logoHeight + 20; // 40 (logo y) + logoHeight + 20px padding
+
             // Add content to PDF
             doc.fontSize(24)
                .font('Helvetica-Bold')
@@ -224,6 +240,19 @@ class BluebookController {
             });
 
             doc.moveDown(2);
+
+            // --- Add Stamp (bottom right, visible) ---
+            const stampPath = process.env.TRANSPORT_STAMP_PATH || 'public/images/transport-stamp.png';
+            try {
+                doc.image(
+                    stampPath,
+                    doc.page.width - 150, // x position
+                    doc.page.height - 180, // y position
+                    { width: 100 }
+                );
+            } catch (e) {
+                // If stamp not found, continue without error
+            }
 
             // Footer
             doc.fontSize(10)
