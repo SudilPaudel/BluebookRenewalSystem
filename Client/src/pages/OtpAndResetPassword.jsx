@@ -65,15 +65,17 @@ function OtpAndResetPassword() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-16 p-8 bg-white shadow-xl rounded-lg">
+    <div className="max-w-md mx-auto mt-20 p-10 bg-white/80 shadow-2xl rounded-3xl border border-blue-100 backdrop-blur-lg animate-fade-in">
       {!otpVerified ? (
         <>
-          <h2 className="text-3xl font-bold text-nepal-blue mb-8 text-center">
+          <h2 className="text-4xl font-extrabold text-nepal-blue mb-10 text-center tracking-tight animate-slide-down">
             OTP Verification
           </h2>
-          <form onSubmit={handleOtpSubmit} className="space-y-6">
-            <div>
-              <label className="block font-medium mb-1 text-left">Enter OTP</label>
+          <form onSubmit={handleOtpSubmit} className="space-y-8">
+            <div className="relative">
+              <label className="block font-semibold mb-2 text-left text-gray-700 tracking-wide">
+                Enter OTP
+              </label>
               <input
                 type="text"
                 maxLength={6}
@@ -81,7 +83,7 @@ function OtpAndResetPassword() {
                 placeholder="6-digit OTP"
                 value={otp}
                 onChange={handleOtpChange}
-                className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-nepal-blue"
+                className="w-full border-2 border-blue-200 px-5 py-3 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 transition-all duration-300 text-lg tracking-widest bg-blue-50/60 shadow-sm"
                 inputMode="numeric"
                 pattern="\d{6}"
               />
@@ -89,20 +91,20 @@ function OtpAndResetPassword() {
 
             <button
               type="submit"
-              className="w-full bg-nepal-blue text-white py-3 font-semibold rounded hover:bg-blue-700 transition"
+              className="w-full bg-gradient-to-r from-nepal-blue to-blue-500 text-white py-3 font-bold rounded-xl shadow-lg hover:scale-105 hover:from-blue-700 hover:to-nepal-blue transition-all duration-300"
             >
               Verify OTP
             </button>
           </form>
 
-          <div className="text-center mt-4 text-sm text-gray-600">
+          <div className="text-center mt-6 text-base text-gray-500 animate-fade-in">
             Didn&apos;t get code?{" "}
             <button
               onClick={handleResend}
               disabled={!canResend}
-              className={`font-semibold ${
+              className={`font-bold transition-all duration-200 ${
                 canResend
-                  ? "text-nepal-blue hover:underline cursor-pointer"
+                  ? "text-nepal-blue hover:underline hover:text-blue-700 cursor-pointer"
                   : "text-gray-400 cursor-not-allowed"
               }`}
             >
@@ -112,12 +114,14 @@ function OtpAndResetPassword() {
         </>
       ) : (
         <>
-          <h2 className="text-3xl font-bold text-nepal-blue mb-8 text-center">
+          <h2 className="text-4xl font-extrabold text-nepal-blue mb-10 text-center tracking-tight animate-slide-down">
             Set New Password
           </h2>
-          <form onSubmit={handlePasswordSubmit} className="space-y-6">
-            <div>
-              <label className="block font-medium mb-1 text-left">New Password</label>
+          <form onSubmit={handlePasswordSubmit} className="space-y-8">
+            <div className="relative">
+              <label className="block font-semibold mb-2 text-left text-gray-700 tracking-wide">
+                New Password
+              </label>
               <input
                 type="password"
                 required
@@ -125,12 +129,14 @@ function OtpAndResetPassword() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 autoComplete="new-password"
-                className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-nepal-blue"
+                className="w-full border-2 border-blue-200 px-5 py-3 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 transition-all duration-300 text-lg bg-blue-50/60 shadow-sm"
               />
             </div>
 
-            <div>
-              <label className="block font-medium mb-1 text-left">Confirm Password</label>
+            <div className="relative">
+              <label className="block font-semibold mb-2 text-left text-gray-700 tracking-wide">
+                Confirm Password
+              </label>
               <input
                 type="password"
                 required
@@ -138,17 +144,17 @@ function OtpAndResetPassword() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 autoComplete="new-password"
-                className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-nepal-blue"
+                className="w-full border-2 border-blue-200 px-5 py-3 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 transition-all duration-300 text-lg bg-blue-50/60 shadow-sm"
               />
             </div>
 
             {passwordError && (
-              <p className="text-red-600 text-sm mb-2">{passwordError}</p>
+              <p className="text-red-600 text-base mb-2 animate-shake">{passwordError}</p>
             )}
 
             <button
               type="submit"
-              className="w-full bg-nepal-blue text-white py-3 font-semibold rounded hover:bg-blue-700 transition"
+              className="w-full bg-gradient-to-r from-nepal-blue to-blue-500 text-white py-3 font-bold rounded-xl shadow-lg hover:scale-105 hover:from-blue-700 hover:to-nepal-blue transition-all duration-300"
             >
               Reset Password
             </button>

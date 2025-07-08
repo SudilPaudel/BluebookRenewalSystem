@@ -78,93 +78,119 @@ function Login() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-16 p-8 bg-white shadow-xl rounded-lg">
-      <h2 className="text-3xl font-bold text-nepal-blue mb-8 text-center">
-        User Login
-      </h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300">
+      <div className="w-full max-w-md mx-auto p-10 bg-white/90 shadow-2xl rounded-3xl border border-blue-100 backdrop-blur-md animate-fade-in-up">
+        <h2 className="text-4xl font-extrabold text-nepal-blue mb-10 text-center tracking-tight drop-shadow animate-fade-in">
+          User Login
+        </h2>
 
-      <Notification
-        type={notification.type}
-        message={notification.message}
-        onClose={clearNotification}
-      />
+        <Notification
+          type={notification.type}
+          message={notification.message}
+          onClose={clearNotification}
+        />
 
-      <form onSubmit={handleSubmit}>
-        <div className="space-y-6">
-          {/* Email */}
-          <div>
-            <label className="block font-medium mb-1 text-left">Email</label>
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="Enter your email"
-              autoComplete="username"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-nepal-blue"
-              disabled={loading}
-            />
+        <form onSubmit={handleSubmit} className="animate-fade-in delay-100">
+          <div className="space-y-8">
+            {/* Email */}
+            <div className="relative group">
+              <label className="block font-semibold mb-2 text-left text-gray-700 group-hover:text-nepal-blue transition">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="Enter your email"
+                autoComplete="username"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full border border-gray-200 px-5 py-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-nepal-blue transition bg-gray-50 group-hover:bg-blue-50"
+                disabled={loading}
+              />
+            </div>
+
+            {/* Password */}
+            <div className="relative group">
+              <label className="block font-semibold mb-2 text-left text-gray-700 group-hover:text-nepal-blue transition">
+                Password
+              </label>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                required
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full border border-gray-200 px-5 py-3 pr-12 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-nepal-blue transition bg-gray-50 group-hover:bg-blue-50"
+                disabled={loading}
+              />
+              <span
+                className="absolute top-10 right-4 text-gray-400 hover:text-nepal-blue cursor-pointer transition"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                tabIndex={0}
+              >
+                {showPassword ? <FaEye className="animate-fade-in" /> : <FaEyeSlash className="animate-fade-in" />}
+              </span>
+            </div>
+
+            {/* Forgot Password Link */}
+            <div className="text-right">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-nepal-blue hover:underline hover:text-blue-700 transition"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+
+            {/* Submit Button */}
+            <div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-nepal-blue to-blue-500 text-white py-3 font-semibold rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {loading ? <FaSpinner className="animate-spin" /> : null}
+                {loading ? "Logging in..." : "Login"}
+              </button>
+            </div>
           </div>
+        </form>
 
-          {/* Password */}
-          <div className="relative">
-            <label className="block font-medium mb-1 text-left">Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              required
-              placeholder="Enter your password"
-              autoComplete="current-password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full border px-4 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-nepal-blue"
-              disabled={loading}
-            />
-            <span
-              className="absolute top-[38px] right-3 text-gray-500 cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
-            </span>
-          </div>
-
-          {/* Forgot Password Link */}
-          <div className="text-right">
+        <div className="mt-8 text-center animate-fade-in delay-200">
+          <p className="text-gray-600">
+            Don't have an account?{" "}
             <Link
-              to="/forgot-password"
-              className="text-sm text-nepal-blue hover:underline"
+              to="/signup"
+              className="text-nepal-blue hover:text-blue-700 font-semibold underline underline-offset-2 transition"
             >
-              Forgot Password?
+              Register here
             </Link>
-          </div>
-
-          {/* Submit Button */}
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-nepal-blue text-white py-3 font-semibold rounded hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-            >
-              {loading ? <FaSpinner className="animate-spin mr-2" /> : null}
-              {loading ? "Logging in..." : "Login"}
-            </button>
-          </div>
+          </p>
         </div>
-      </form>
-
-      <div className="mt-6 text-center">
-        <p className="text-gray-600">
-          Don't have an account?{" "}
-          <Link
-            to="/signup"
-            className="text-nepal-blue hover:text-blue-700 font-medium"
-          >
-            Register here
-          </Link>
-        </p>
       </div>
+      {/* Animations */}
+      <style>
+        {`
+          .animate-fade-in {
+            animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1) both;
+          }
+          .animate-fade-in-up {
+            animation: fadeInUp 0.9s cubic-bezier(.4,0,.2,1) both;
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
+          }
+        `}
+      </style>
     </div>
   );
 }

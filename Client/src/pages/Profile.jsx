@@ -139,21 +139,21 @@ function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-blue-200 py-12 animate-fade-in">
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => navigate('/dashboard')}
-                className="mr-6 p-3 text-gray-500 hover:text-gray-700 hover:bg-white rounded-full transition-all duration-200 shadow-sm"
+                className="mr-6 p-3 text-gray-500 hover:text-blue-700 hover:bg-white rounded-full transition-all duration-200 shadow-md hover:scale-110 active:scale-95"
               >
-                <FaArrowLeft className="text-xl" />
+                <FaArrowLeft className="text-2xl" />
               </button>
               <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">My Profile</h1>
-                <p className="text-gray-600 text-lg">
+                <h1 className="text-4xl font-extrabold text-gray-900 mb-1 tracking-tight animate-slide-in-down">My Profile</h1>
+                <p className="text-gray-500 text-lg font-medium animate-fade-in-slow">
                   Manage your account information and preferences
                 </p>
               </div>
@@ -162,7 +162,7 @@ function Profile() {
               {!editing ? (
                 <button
                   onClick={handleEdit}
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-nepal-blue to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nepal-blue transition-all duration-200 shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center px-7 py-3 border border-transparent text-base font-semibold rounded-2xl text-white bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-700 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 animate-pop-in"
                 >
                   <FaEdit className="mr-2" />
                   Edit Profile
@@ -171,14 +171,14 @@ function Profile() {
                 <div className="flex space-x-3">
                   <button
                     onClick={handleSave}
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 shadow-lg hover:shadow-xl"
+                    className="inline-flex items-center px-7 py-3 border border-transparent text-base font-semibold rounded-2xl text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 animate-pop-in"
                   >
                     <FaSave className="mr-2" />
                     Save Changes
                   </button>
                   <button
                     onClick={handleCancel}
-                    className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nepal-blue transition-all duration-200 shadow-lg hover:shadow-xl"
+                    className="inline-flex items-center px-7 py-3 border border-gray-300 text-base font-semibold rounded-2xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 animate-pop-in"
                   >
                     <FaTimes className="mr-2" />
                     Cancel
@@ -191,7 +191,7 @@ function Profile() {
 
         {/* Success/Error Messages */}
         {success && (
-          <div className="mb-6 bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-xl shadow-sm">
+          <div className="mb-6 bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-2xl shadow-md animate-fade-in-slow">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <FaSave className="h-5 w-5 text-green-400" />
@@ -203,7 +203,7 @@ function Profile() {
           </div>
         )}
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-xl shadow-sm">
+          <div className="mb-6 bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-2xl shadow-md animate-fade-in-slow">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <FaTimes className="h-5 w-5 text-red-400" />
@@ -216,38 +216,41 @@ function Profile() {
         )}
 
         {/* Profile Card */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-blue-100 animate-fade-in-slow">
           {/* Profile Header with Picture */}
-          <div className="bg-gradient-to-r from-nepal-blue to-blue-600 px-8 py-8">
+          <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-700 px-10 py-10 relative">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 relative group">
                 {user?.image ? (
                   <img 
                     src={`${import.meta.env.VITE_API_URL}/public/uploads/users/${user.image}`}
                     alt="Profile"
-                    className="h-24 w-24 rounded-full object-cover border-4 border-white shadow-lg"
+                    className="h-28 w-28 rounded-full object-cover border-4 border-white shadow-xl transition-transform duration-300 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="h-24 w-24 rounded-full bg-white/20 flex items-center justify-center border-4 border-white shadow-lg">
-                    <FaUser className="h-12 w-12 text-white" />
+                  <div className="h-28 w-28 rounded-full bg-white/30 flex items-center justify-center border-4 border-white shadow-xl">
+                    <FaUser className="h-14 w-14 text-white" />
                   </div>
                 )}
+                <span className="absolute bottom-2 right-2 bg-white/80 text-blue-600 text-xs px-2 py-1 rounded-full shadow-md font-semibold animate-bounce">
+                  {user?.role?.toUpperCase() || 'USER'}
+                </span>
               </div>
-              <div className="ml-6">
-                <h2 className="text-3xl font-bold text-white mb-2">
+              <div className="ml-8">
+                <h2 className="text-3xl font-extrabold text-white mb-1 tracking-wide animate-slide-in-right">
                   {user?.name || 'User Name'}
                 </h2>
-                <p className="text-blue-100 text-lg">{user?.email}</p>
-                <div className="flex items-center mt-3 space-x-4">
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                <p className="text-blue-100 text-lg font-medium">{user?.email}</p>
+                <div className="flex items-center mt-4 space-x-4">
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold shadow-md transition-all duration-200 ${
                     user?.status === 'active' 
-                      ? 'bg-green-100 text-green-800' 
+                      ? 'bg-green-100 text-green-800 animate-pulse' 
                       : 'bg-yellow-100 text-yellow-800'
                   }`}>
                     <FaShieldAlt className="mr-1" />
                     {user?.status?.toUpperCase() || 'UNKNOWN'}
                   </span>
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800 shadow-md">
                     <FaUserTag className="mr-1" />
                     {user?.role?.toUpperCase() || 'USER'}
                   </span>
@@ -257,15 +260,15 @@ function Profile() {
           </div>
 
           {/* Profile Information */}
-          <div className="px-8 py-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Personal Information</h3>
+          <div className="px-10 py-10 bg-gradient-to-br from-white via-blue-50 to-indigo-50">
+            <h3 className="text-2xl font-extrabold text-gray-900 mb-8 tracking-tight animate-slide-in-up">Personal Information</h3>
             
-            <div className="space-y-6">
+            <div className="space-y-8">
               {/* Full Name */}
-              <div className="bg-gray-50 rounded-xl p-6">
+              <div className="bg-white/80 rounded-2xl p-6 shadow-md border border-blue-100 hover:shadow-xl transition-shadow duration-300 animate-fade-in">
                 <div className="flex items-center mb-3">
-                  <FaUser className="h-5 w-5 text-nepal-blue mr-3" />
-                  <label className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                  <FaUser className="h-5 w-5 text-blue-500 mr-3" />
+                  <label className="text-sm font-bold text-gray-700 uppercase tracking-widest">
                     Full Name
                   </label>
                 </div>
@@ -275,19 +278,19 @@ function Profile() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-transparent text-gray-900 bg-white"
+                    className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-900 bg-white/90 font-semibold transition-all duration-200"
                     placeholder="Enter your full name"
                   />
                 ) : (
-                  <p className="text-lg text-gray-900 font-medium">{user?.name || 'N/A'}</p>
+                  <p className="text-lg text-gray-900 font-semibold">{user?.name || 'N/A'}</p>
                 )}
               </div>
 
               {/* Email Address */}
-              <div className="bg-gray-50 rounded-xl p-6">
+              <div className="bg-white/80 rounded-2xl p-6 shadow-md border border-blue-100 hover:shadow-xl transition-shadow duration-300 animate-fade-in">
                 <div className="flex items-center mb-3">
-                  <FaEnvelope className="h-5 w-5 text-nepal-blue mr-3" />
-                  <label className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                  <FaEnvelope className="h-5 w-5 text-blue-500 mr-3" />
+                  <label className="text-sm font-bold text-gray-700 uppercase tracking-widest">
                     Email Address
                   </label>
                 </div>
@@ -297,19 +300,19 @@ function Profile() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-transparent text-gray-900 bg-white"
+                    className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-900 bg-white/90 font-semibold transition-all duration-200"
                     placeholder="Enter your email address"
                   />
                 ) : (
-                  <p className="text-lg text-gray-900 font-medium">{user?.email || 'N/A'}</p>
+                  <p className="text-lg text-gray-900 font-semibold">{user?.email || 'N/A'}</p>
                 )}
               </div>
 
               {/* Citizenship Number */}
-              <div className="bg-gray-50 rounded-xl p-6">
+              <div className="bg-white/80 rounded-2xl p-6 shadow-md border border-blue-100 hover:shadow-xl transition-shadow duration-300 animate-fade-in">
                 <div className="flex items-center mb-3">
-                  <FaIdCard className="h-5 w-5 text-nepal-blue mr-3" />
-                  <label className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                  <FaIdCard className="h-5 w-5 text-blue-500 mr-3" />
+                  <label className="text-sm font-bold text-gray-700 uppercase tracking-widest">
                     Citizenship Number
                   </label>
                 </div>
@@ -319,32 +322,32 @@ function Profile() {
                     name="citizenshipNo"
                     value={formData.citizenshipNo}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-transparent text-gray-900 bg-white"
+                    className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-900 bg-white/90 font-semibold transition-all duration-200"
                     placeholder="Enter your citizenship number"
                   />
                 ) : (
-                  <p className="text-lg text-gray-900 font-medium">{user?.citizenshipNo || 'N/A'}</p>
+                  <p className="text-lg text-gray-900 font-semibold">{user?.citizenshipNo || 'N/A'}</p>
                 )}
               </div>
 
               {/* Passport Size Photo Section */}
               {user?.image ? (
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+                <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-100 rounded-2xl p-6 border border-blue-200 shadow-md hover:shadow-xl transition-shadow duration-300 animate-fade-in">
                   <div className="flex items-center mb-4">
-                    <FaCamera className="h-6 w-6 text-nepal-blue mr-3" />
+                    <FaCamera className="h-6 w-6 text-blue-500 mr-3" />
                     <label className="text-lg font-bold text-gray-800">
                       Passport Size Photo
                     </label>
                   </div>
                   
-                  <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+                  <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-8">
                     {/* Photo Display */}
                     <div className="flex-shrink-0">
-                      <div className="relative">
+                      <div className="relative group">
                         <img 
                           src={`${import.meta.env.VITE_API_URL}/public/uploads/users/${user.image}`}
                           alt="Passport Size Photo"
-                          className="h-32 w-24 rounded-lg object-cover border-4 border-white shadow-lg"
+                          className="h-36 w-28 rounded-xl object-cover border-4 border-white shadow-xl transition-transform duration-300 group-hover:scale-105"
                           style={{ aspectRatio: '3/4' }}
                           onError={(e) => {
                             console.error('Image failed to load:', e.target.src);
@@ -353,12 +356,12 @@ function Profile() {
                           }}
                         />
                         <div 
-                          className="h-32 w-24 rounded-lg border-4 border-white shadow-lg bg-gray-200 flex items-center justify-center text-gray-500 text-xs"
+                          className="h-36 w-28 rounded-xl border-4 border-white shadow-lg bg-gray-200 flex items-center justify-center text-gray-500 text-xs"
                           style={{ display: 'none', aspectRatio: '3/4' }}
                         >
                           Image Failed to Load
                         </div>
-                        <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                        <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow-md font-bold animate-bounce">
                           ✓ Verified
                         </div>
                       </div>
@@ -375,28 +378,28 @@ function Profile() {
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <div className="bg-white rounded-lg p-3 border border-gray-200">
-                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Format</p>
+                          <div className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+                            <p className="text-xs font-medium text-gray-500 uppercase tracking-widest">Format</p>
                             <p className="text-sm font-semibold text-gray-900">Passport Size (3:4)</p>
                           </div>
                           
-                          <div className="bg-white rounded-lg p-3 border border-gray-200">
-                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Upload Date</p>
+                          <div className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+                            <p className="text-xs font-medium text-gray-500 uppercase tracking-widest">Upload Date</p>
                             <p className="text-sm font-semibold text-gray-900">Registration</p>
                           </div>
                           
-                          <div className="bg-white rounded-lg p-3 border border-gray-200">
-                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Status</p>
+                          <div className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+                            <p className="text-xs font-medium text-gray-500 uppercase tracking-widest">Status</p>
                             <p className="text-sm font-semibold text-green-600">✓ Approved</p>
                           </div>
                           
-                          <div className="bg-white rounded-lg p-3 border border-gray-200">
-                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Usage</p>
+                          <div className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+                            <p className="text-xs font-medium text-gray-500 uppercase tracking-widest">Usage</p>
                             <p className="text-sm font-semibold text-gray-900">Account Profile</p>
                           </div>
                         </div>
                         
-                        <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                        <div className="bg-blue-50 rounded-lg p-3 border border-blue-200 shadow-sm">
                           <p className="text-xs font-medium text-blue-800 mb-1">Photo Requirements Met:</p>
                           <ul className="text-xs text-blue-700 space-y-1">
                             <li>• Passport-size dimensions (3:4 aspect ratio)</li>
@@ -410,16 +413,16 @@ function Profile() {
                   </div>
                 </div>
               ) : (
-                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <div className="bg-white/80 rounded-2xl p-6 border border-blue-100 shadow-md hover:shadow-xl transition-shadow duration-300 animate-fade-in">
                   <div className="flex items-center mb-4">
-                    <FaCamera className="h-6 w-6 text-gray-500 mr-3" />
+                    <FaCamera className="h-6 w-6 text-gray-400 mr-3" />
                     <label className="text-lg font-bold text-gray-600">
                       No Passport Photo Uploaded
                     </label>
                   </div>
                   <div className="text-center py-8">
-                    <div className="h-32 w-24 mx-auto rounded-lg border-4 border-gray-300 bg-gray-100 flex items-center justify-center">
-                      <FaUser className="h-12 w-12 text-gray-400" />
+                    <div className="h-36 w-28 mx-auto rounded-xl border-4 border-gray-300 bg-gray-100 flex items-center justify-center">
+                      <FaUser className="h-14 w-14 text-gray-400" />
                     </div>
                     <p className="text-gray-600 mt-4">No passport-size photo has been uploaded yet.</p>
                     <p className="text-sm text-gray-500">Photos are uploaded during account registration.</p>
@@ -428,19 +431,19 @@ function Profile() {
               )}
 
               {/* Profile Picture Section - Show for both cases */}
-              <div className="bg-gray-50 rounded-xl p-6">
+              <div className="bg-white/80 rounded-2xl p-6 shadow-md border border-blue-100 hover:shadow-xl transition-shadow duration-300 animate-fade-in">
                 <div className="flex items-center mb-3">
-                  <FaCamera className="h-5 w-5 text-nepal-blue mr-3" />
-                  <label className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                  <FaCamera className="h-5 w-5 text-blue-500 mr-3" />
+                  <label className="text-sm font-bold text-gray-700 uppercase tracking-widest">
                     Profile Picture
                   </label>
                 </div>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-6">
                   {user?.image ? (
                     <img 
                       src={`${import.meta.env.VITE_API_URL}/public/uploads/users/${user.image}`}
                       alt="Profile"
-                      className="h-20 w-20 rounded-full object-cover border-2 border-gray-200"
+                      className="h-20 w-20 rounded-full object-cover border-2 border-blue-200 shadow-md transition-transform duration-300 hover:scale-105"
                       onError={(e) => {
                         console.error('Profile image failed to load:', e.target.src);
                         e.target.style.display = 'none';
@@ -449,12 +452,12 @@ function Profile() {
                     />
                   ) : null}
                   <div 
-                    className={`h-20 w-20 rounded-full border-2 border-gray-200 bg-gray-100 flex items-center justify-center ${user?.image ? 'hidden' : ''}`}
+                    className={`h-20 w-20 rounded-full border-2 border-blue-200 bg-gray-100 flex items-center justify-center ${user?.image ? 'hidden' : ''}`}
                   >
                     <FaUser className="h-8 w-8 text-gray-400" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 font-medium">
                       {user?.image ? 'Uploaded during registration' : 'No profile picture uploaded'}
                     </p>
                     <p className="text-xs text-gray-500">
@@ -467,6 +470,22 @@ function Profile() {
           </div>
         </div>
       </div>
+      {/* Animations */}
+      <style>
+        {`
+          .animate-fade-in { animation: fadeIn 0.7s ease; }
+          .animate-fade-in-slow { animation: fadeIn 1.2s ease; }
+          .animate-slide-in-down { animation: slideInDown 0.7s cubic-bezier(.4,0,.2,1); }
+          .animate-slide-in-up { animation: slideInUp 0.7s cubic-bezier(.4,0,.2,1); }
+          .animate-slide-in-right { animation: slideInRight 0.7s cubic-bezier(.4,0,.2,1); }
+          .animate-pop-in { animation: popIn 0.5s cubic-bezier(.4,0,.2,1); }
+          @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+          @keyframes slideInDown { from { opacity: 0; transform: translateY(-30px);} to { opacity: 1; transform: translateY(0);} }
+          @keyframes slideInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
+          @keyframes slideInRight { from { opacity: 0; transform: translateX(30px);} to { opacity: 1; transform: translateX(0);} }
+          @keyframes popIn { 0% { opacity: 0; transform: scale(0.8);} 80% { opacity: 1; transform: scale(1.05);} 100% { opacity: 1; transform: scale(1);} }
+        `}
+      </style>
     </div>
   );
 }

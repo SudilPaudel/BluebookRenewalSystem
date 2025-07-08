@@ -150,67 +150,71 @@ function NewBluebook() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 py-12 animate-fade-in">
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-10">
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
+            <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate('/dashboard')}
-                className="mr-4 p-2 text-gray-400 hover:text-gray-600"
+                className="mr-2 p-2 rounded-full bg-white shadow hover:bg-blue-100 transition-all duration-200"
               >
-                <FaArrowLeft className="h-5 w-5" />
+                <FaArrowLeft className="h-5 w-5 text-blue-500" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Register New Bluebook</h1>
-                <p className="mt-1 text-sm text-gray-500">
+                <h1 className="text-4xl font-extrabold text-blue-900 tracking-tight animate-slide-down">
+                  Register New Bluebook
+                </h1>
+                <p className="mt-1 text-base text-blue-600 animate-fade-in delay-100">
                   Enter vehicle details for bluebook registration
                 </p>
               </div>
             </div>
             <div className="flex items-center">
-              <FaCar className="h-8 w-8 text-nepal-blue" />
+              <FaCar className="h-10 w-10 text-blue-500 drop-shadow-lg animate-bounce-slow" />
             </div>
           </div>
         </div>
 
         {/* Form */}
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <form onSubmit={handleSubmit} className="space-y-6 p-6">
+        <div className="bg-white/90 shadow-2xl backdrop-blur-md ring-1 ring-blue-100 overflow-hidden sm:rounded-2xl animate-fade-in-up">
+          <form onSubmit={handleSubmit} className="space-y-8 p-8">
             {/* Vehicle Information */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Vehicle Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Vehicle Registration Number <span className="text-nepal-red">*</span>
+              <h3 className="text-xl font-semibold text-blue-800 mb-6 border-l-4 border-blue-400 pl-3 animate-slide-right">
+                Vehicle Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Vehicle Registration Number <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     name="vehicleRegNo"
                     value={formData.vehicleRegNo}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.vehicleRegNo ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.vehicleRegNo ? 'border-red-400' : 'border-blue-200'
                     }`}
                     placeholder="Enter registration number"
                   />
                   {errors.vehicleRegNo && (
-                    <p className="mt-1 text-sm text-red-600">{errors.vehicleRegNo}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.vehicleRegNo}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Vehicle Type <span className="text-nepal-red">*</span>
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Vehicle Type <span className="text-red-500">*</span>
                   </label>
                   <select
                     name="vehicleType"
                     value={formData.vehicleType}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.vehicleType ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.vehicleType ? 'border-red-400' : 'border-blue-200'
                     }`}
                   >
                     <option value="">Select vehicle type</option>
@@ -219,116 +223,116 @@ function NewBluebook() {
                     ))}
                   </select>
                   {errors.vehicleType && (
-                    <p className="mt-1 text-sm text-red-600">{errors.vehicleType}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.vehicleType}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Vehicle Registration Date <span className="text-nepal-red">*</span>
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Vehicle Registration Date <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"
                     name="VehicleRegistrationDate"
                     value={formData.VehicleRegistrationDate}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.VehicleRegistrationDate ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.VehicleRegistrationDate ? 'border-red-400' : 'border-blue-200'
                     }`}
                   />
                   {errors.VehicleRegistrationDate && (
-                    <p className="mt-1 text-sm text-red-600">{errors.VehicleRegistrationDate}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.VehicleRegistrationDate}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Vehicle Owner Name <span className="text-nepal-red">*</span>
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Vehicle Owner Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     name="vehicleOwnerName"
                     value={formData.vehicleOwnerName}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.vehicleOwnerName ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.vehicleOwnerName ? 'border-red-400' : 'border-blue-200'
                     }`}
                     placeholder="Enter owner name"
                   />
                   {errors.vehicleOwnerName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.vehicleOwnerName}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.vehicleOwnerName}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Vehicle Model <span className="text-nepal-red">*</span>
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Vehicle Model <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     name="vehicleModel"
                     value={formData.vehicleModel}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.vehicleModel ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.vehicleModel ? 'border-red-400' : 'border-blue-200'
                     }`}
                     placeholder="e.g., Honda City, Toyota Corolla"
                   />
                   {errors.vehicleModel && (
-                    <p className="mt-1 text-sm text-red-600">{errors.vehicleModel}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.vehicleModel}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Manufacture Year <span className="text-nepal-red">*</span>
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Manufacture Year <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"
                     name="manufactureYear"
                     value={formData.manufactureYear}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.manufactureYear ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.manufactureYear ? 'border-red-400' : 'border-blue-200'
                     }`}
                     placeholder="e.g., 2020"
                     min="1900"
                     max={new Date().getFullYear() + 1}
                   />
                   {errors.manufactureYear && (
-                    <p className="mt-1 text-sm text-red-600">{errors.manufactureYear}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.manufactureYear}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Chassis Number <span className="text-nepal-red">*</span>
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Chassis Number <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     name="chasisNumber"
                     value={formData.chasisNumber}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.chasisNumber ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.chasisNumber ? 'border-red-400' : 'border-blue-200'
                     }`}
                     placeholder="Enter chassis number"
                   />
                   {errors.chasisNumber && (
-                    <p className="mt-1 text-sm text-red-600">{errors.chasisNumber}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.chasisNumber}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Vehicle Color <span className="text-nepal-red">*</span>
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Vehicle Color <span className="text-red-500">*</span>
                   </label>
                   <select
                     name="vehicleColor"
                     value={formData.vehicleColor}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.vehicleColor ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.vehicleColor ? 'border-red-400' : 'border-blue-200'
                     }`}
                   >
                     <option value="">Select color</option>
@@ -337,47 +341,47 @@ function NewBluebook() {
                     ))}
                   </select>
                   {errors.vehicleColor && (
-                    <p className="mt-1 text-sm text-red-600">{errors.vehicleColor}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.vehicleColor}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Engine CC <span className="text-nepal-red">*</span>
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Engine CC <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"
                     name="vehicleEngineCC"
                     value={formData.vehicleEngineCC}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.vehicleEngineCC ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.vehicleEngineCC ? 'border-red-400' : 'border-blue-200'
                     }`}
                     placeholder="e.g., 1500"
                     min="50"
                     max="10000"
                   />
                   {errors.vehicleEngineCC && (
-                    <p className="mt-1 text-sm text-red-600">{errors.vehicleEngineCC}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.vehicleEngineCC}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Vehicle Number <span className="text-nepal-red">*</span>
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Vehicle Number <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     name="vehicleNumber"
                     value={formData.vehicleNumber}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.vehicleNumber ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.vehicleNumber ? 'border-red-400' : 'border-blue-200'
                     }`}
                     placeholder="e.g., Ba 1 Pa 1234"
                   />
                   {errors.vehicleNumber && (
-                    <p className="mt-1 text-sm text-red-600">{errors.vehicleNumber}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.vehicleNumber}</p>
                   )}
                 </div>
               </div>
@@ -385,59 +389,61 @@ function NewBluebook() {
 
             {/* Tax Information */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Tax Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Tax Pay Date <span className="text-nepal-red">*</span>
+              <h3 className="text-xl font-semibold text-blue-800 mb-6 border-l-4 border-blue-400 pl-3 animate-slide-right">
+                Tax Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Tax Pay Date <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"
                     name="taxPayDate"
                     value={formData.taxPayDate}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.taxPayDate ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.taxPayDate ? 'border-red-400' : 'border-blue-200'
                     }`}
                   />
                   {errors.taxPayDate && (
-                    <p className="mt-1 text-sm text-red-600">{errors.taxPayDate}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.taxPayDate}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 text-left">
-                    Tax Expire Date <span className="text-nepal-red">*</span>
+                <div className="transition-all duration-200 hover:scale-[1.02]">
+                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                    Tax Expire Date <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"
                     name="taxExpireDate"
                     value={formData.taxExpireDate}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-nepal-blue ${
-                      errors.taxExpireDate ? 'border-red-500' : 'border-gray-300'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
+                      errors.taxExpireDate ? 'border-red-400' : 'border-blue-200'
                     }`}
                   />
                   {errors.taxExpireDate && (
-                    <p className="mt-1 text-sm text-red-600">{errors.taxExpireDate}</p>
+                    <p className="mt-1 text-xs text-red-500">{errors.taxExpireDate}</p>
                   )}
                 </div>
               </div>
             </div>
 
             {/* Submit Buttons */}
-            <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+            <div className="flex justify-end space-x-4 pt-8 border-t border-blue-100">
               <button
                 type="button"
                 onClick={() => navigate('/dashboard')}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nepal-blue"
+                className="px-5 py-2 border border-blue-200 rounded-lg text-sm font-semibold text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-200 shadow-sm"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-nepal-blue hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nepal-blue disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center px-6 py-2 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -455,6 +461,24 @@ function NewBluebook() {
           </form>
         </div>
       </div>
+      {/* Animations */}
+      <style>
+        {`
+          .animate-fade-in { animation: fadeIn 0.7s ease; }
+          .animate-fade-in-up { animation: fadeInUp 0.8s cubic-bezier(.39,.575,.565,1.000); }
+          .animate-slide-down { animation: slideDown 0.7s cubic-bezier(.39,.575,.565,1.000); }
+          .animate-slide-right { animation: slideRight 0.7s cubic-bezier(.39,.575,.565,1.000); }
+          .animate-bounce-slow { animation: bounceSlow 2.5s infinite; }
+          @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+          @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px);} to { opacity: 1; transform: none;} }
+          @keyframes slideDown { from { opacity: 0; transform: translateY(-30px);} to { opacity: 1; transform: none;} }
+          @keyframes slideRight { from { opacity: 0; transform: translateX(-30px);} to { opacity: 1; transform: none;} }
+          @keyframes bounceSlow {
+            0%, 100% { transform: translateY(0);}
+            50% { transform: translateY(-10px);}
+          }
+        `}
+      </style>
     </div>
   );
 }

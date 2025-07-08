@@ -94,100 +94,98 @@ function PaymentVerification() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-100 py-12 flex items-center justify-center">
+      <div className="max-w-2xl w-full mx-auto px-6 sm:px-8 lg:px-10">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center">
+        <div className="mb-10">
+          <div className="flex items-center gap-4">
             <button
               onClick={handleBackToDashboard}
-              className="mr-4 p-2 text-gray-400 hover:text-gray-600"
+              className="p-2 rounded-full bg-white shadow hover:bg-blue-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
             >
-              <FaArrowLeft className="h-5 w-5" />
+              <FaArrowLeft className="h-5 w-5 text-blue-500" />
             </button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Payment Verification</h1>
-              <p className="mt-1 text-sm text-gray-500">
-                Payment verification result
-              </p>
+              <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight drop-shadow-sm">Payment Verification</h1>
+              <p className="mt-1 text-base text-gray-500">See your payment status below</p>
             </div>
           </div>
         </div>
 
         {/* Verification Result */}
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-            <div className="flex items-center">
+        <div className="bg-white/80 shadow-xl backdrop-blur-md border border-gray-100 rounded-3xl overflow-hidden animate-fade-in-up">
+          <div className="px-6 py-7 sm:px-8 border-b border-gray-100">
+            <div className="flex items-center gap-4">
               {verificationStatus === 'success' ? (
-                <div className="flex items-center">
-                  <FaCheckCircle className="h-8 w-8 text-green-500 mr-3" />
-                  <KhaltiLogo className="h-6 w-6 mr-2" />
+                <div className="flex items-center gap-2">
+                  <FaCheckCircle className="h-10 w-10 text-green-500 animate-bounce" />
+                  <KhaltiLogo className="h-7 w-7 mr-1 drop-shadow" />
                 </div>
               ) : (
-                <FaTimesCircle className="h-8 w-8 text-red-500 mr-3" />
+                <FaTimesCircle className="h-10 w-10 text-red-500 animate-shake" />
               )}
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h3 className="text-2xl font-semibold text-gray-900">
                 {verificationStatus === 'success' ? 'Payment Successful' : 'Payment Failed'}
               </h3>
             </div>
           </div>
 
-          <div className="border-t border-gray-200">
+          <div className="border-t border-gray-100">
             {verificationStatus === 'success' ? (
-              <div className="px-4 py-5 sm:px-6">
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-                  <div className="flex items-center">
-                    <FaCheckCircle className="h-5 w-5 text-green-400 mr-3" />
+              <div className="px-6 py-8 sm:px-8">
+                <div className="bg-gradient-to-r from-green-100 via-green-50 to-green-200 border border-green-200 rounded-xl p-5 mb-8 shadow-inner animate-fade-in">
+                  <div className="flex items-center gap-4">
+                    <FaCheckCircle className="h-6 w-6 text-green-400 animate-pulse" />
                     <div className="flex-1">
-                      <h4 className="text-sm font-medium text-green-800">Payment Verified Successfully</h4>
+                      <h4 className="text-base font-semibold text-green-800">Payment Verified Successfully</h4>
                       <p className="text-sm text-green-700 mt-1">
                         Your vehicle tax has been renewed for another year.
                       </p>
                     </div>
-                    <KhaltiLogo className="h-8 w-8" />
+                    <KhaltiLogo className="h-10 w-10" />
                   </div>
                 </div>
 
                 {verificationData && (
-                  <div className="space-y-4">
-                    <h4 className="text-lg font-medium text-gray-900">Transaction Details</h4>
-                    <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                      <div>
-                        <dt className="text-sm font-medium text-gray-500">Total Amount</dt>
-                        <dd className="mt-1 text-sm text-gray-900">Rs. {verificationData.totalAmount?.toLocaleString()}</dd>
+                  <div className="space-y-5">
+                    <h4 className="text-lg font-semibold text-gray-900">Transaction Details</h4>
+                    <dl className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                      <div className="bg-gray-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount</dt>
+                        <dd className="mt-1 text-lg font-bold text-gray-900">Rs. {verificationData.totalAmount?.toLocaleString()}</dd>
                       </div>
-                      <div>
-                        <dt className="text-sm font-medium text-gray-500">Transaction ID</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{verificationData.transactionId}</dd>
+                      <div className="bg-gray-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction ID</dt>
+                        <dd className="mt-1 text-lg font-mono text-gray-900">{verificationData.transactionId}</dd>
                       </div>
-                      <div>
-                        <dt className="text-sm font-medium text-gray-500">Fee</dt>
-                        <dd className="mt-1 text-sm text-gray-900">Rs. {verificationData.fee?.toLocaleString()}</dd>
+                      <div className="bg-gray-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</dt>
+                        <dd className="mt-1 text-lg font-bold text-gray-900">Rs. {verificationData.fee?.toLocaleString()}</dd>
                       </div>
-                      <div>
-                        <dt className="text-sm font-medium text-gray-500">Refunded</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{verificationData.refunded ? 'Yes' : 'No'}</dd>
+                      <div className="bg-gray-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">Refunded</dt>
+                        <dd className="mt-1 text-lg font-bold text-gray-900">{verificationData.refunded ? 'Yes' : 'No'}</dd>
                       </div>
                     </dl>
                   </div>
                 )}
 
-                <div className="mt-8">
+                <div className="mt-10">
                   <button
                     onClick={handleBackToDashboard}
-                    className="w-full bg-nepal-blue hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200"
+                    className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all duration-200 text-lg tracking-wide"
                   >
                     Back to Dashboard
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="px-4 py-5 sm:px-6">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                  <div className="flex items-center">
-                    <FaTimesCircle className="h-5 w-5 text-red-400 mr-3" />
+              <div className="px-6 py-8 sm:px-8">
+                <div className="bg-gradient-to-r from-red-100 via-red-50 to-red-200 border border-red-200 rounded-xl p-5 mb-8 shadow-inner animate-fade-in">
+                  <div className="flex items-center gap-4">
+                    <FaTimesCircle className="h-6 w-6 text-red-400 animate-shake" />
                     <div>
-                      <h4 className="text-sm font-medium text-red-800">Payment Verification Failed</h4>
+                      <h4 className="text-base font-semibold text-red-800">Payment Verification Failed</h4>
                       <p className="text-sm text-red-700 mt-1">
                         {error || 'Unable to verify your payment. Please try again.'}
                       </p>
@@ -196,26 +194,38 @@ function PaymentVerification() {
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="text-lg font-medium text-gray-900">What to do next?</h4>
+                  <h4 className="text-lg font-semibold text-gray-900">What to do next?</h4>
                   <div className="space-y-2 text-sm text-gray-600">
-                    <div>Check if the payment was actually completed in your Khalti account</div>
-                    <div>Wait a few minutes and try verifying again</div>
-                    <div>Contact support if the issue persists</div>
-                    <div>Make sure you have sufficient balance in your Khalti account</div>
+                    <div className="flex items-center gap-2">
+                      <span className="inline-block w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+                      Check if the payment was actually completed in your Khalti account
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="inline-block w-2 h-2 bg-purple-400 rounded-full animate-pulse"></span>
+                      Wait a few minutes and try verifying again
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                      Contact support if the issue persists
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="inline-block w-2 h-2 bg-pink-400 rounded-full animate-pulse"></span>
+                      Make sure you have sufficient balance in your Khalti account
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-8 space-y-3">
+                <div className="mt-10 space-y-4">
                   <button
                     onClick={handleRetry}
-                    className="w-full bg-nepal-blue hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200"
+                    className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all duration-200 text-lg tracking-wide flex items-center justify-center gap-2"
                   >
-                    <FaSpinner className="inline mr-2" />
+                    <FaSpinner className="animate-spin" />
                     Try Again
                   </button>
                   <button
                     onClick={handleBackToDashboard}
-                    className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-4 rounded-lg transition-colors duration-200"
+                    className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-xl shadow transition-all duration-200 text-lg tracking-wide"
                   >
                     Back to Dashboard
                   </button>
@@ -225,6 +235,33 @@ function PaymentVerification() {
           </div>
         </div>
       </div>
+      {/* Animations */}
+      <style>
+        {`
+          @keyframes fade-in-up {
+            0% { opacity: 0; transform: translateY(40px);}
+            100% { opacity: 1; transform: translateY(0);}
+          }
+          .animate-fade-in-up {
+            animation: fade-in-up 0.7s cubic-bezier(0.23, 1, 0.32, 1) both;
+          }
+          @keyframes fade-in {
+            0% { opacity: 0;}
+            100% { opacity: 1;}
+          }
+          .animate-fade-in {
+            animation: fade-in 1s ease both;
+          }
+          @keyframes shake {
+            0%, 100% { transform: translateX(0);}
+            20%, 60% { transform: translateX(-6px);}
+            40%, 80% { transform: translateX(6px);}
+          }
+          .animate-shake {
+            animation: shake 0.5s;
+          }
+        `}
+      </style>
     </div>
   );
 }

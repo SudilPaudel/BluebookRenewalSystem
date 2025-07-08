@@ -315,76 +315,78 @@ function Payment() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-100 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => navigate('/dashboard')}
-                className="mr-4 p-2 text-gray-400 hover:text-gray-600"
+                className="mr-4 p-2 rounded-full bg-white shadow hover:shadow-lg transition-all duration-200 text-gray-400 hover:text-nepal-blue hover:bg-blue-50"
               >
                 <FaArrowLeft className="h-5 w-5" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Vehicle Tax Payment</h1>
-                <p className="mt-1 text-sm text-gray-500">
-                  Pay your vehicle tax online
+                <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight animate-fade-in">
+                  Vehicle Tax Payment
+                </h1>
+                <p className="mt-1 text-base text-gray-500 animate-fade-in-slow">
+                  Pay your vehicle tax online, securely and easily.
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <FaReceipt className="h-8 w-8 text-nepal-blue" />
+              <FaReceipt className="h-10 w-10 text-nepal-blue animate-bounce-slow" />
             </div>
           </div>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-xl">
+          <div className="mb-8 bg-red-100 border border-red-200 text-red-800 px-6 py-4 rounded-2xl shadow animate-fade-in">
             <div className="flex items-center">
               <FaExclamationTriangle className="h-5 w-5 text-red-400 mr-3" />
-              <p className="text-sm font-medium">{error}</p>
+              <p className="text-base font-medium">{error}</p>
             </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 animate-fade-in-up">
           {/* Vehicle Information */}
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-              <h3 className="text-lg leading-6 font-medium text-gray-900 flex items-center">
-                <FaCreditCard className="mr-2" />
+          <div className="bg-white shadow-xl hover:shadow-2xl transition-shadow duration-300 rounded-2xl overflow-hidden border border-gray-100 animate-fade-in-up">
+            <div className="px-6 py-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-purple-50">
+              <h3 className="text-xl leading-7 font-semibold text-gray-900 flex items-center">
+                <FaCreditCard className="mr-2 text-nepal-blue" />
                 Vehicle Information
               </h3>
             </div>
-            <div className="border-t border-gray-200">
+            <div className="border-t border-gray-100">
               <dl>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Registration Number</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 font-semibold">{bluebook.vehicleRegNo}</dd>
+                <div className="bg-gray-50 px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt className="text-sm font-semibold text-gray-500">Registration Number</dt>
+                  <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2 font-bold tracking-wide">{bluebook.vehicleRegNo}</dd>
                 </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Vehicle Type</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{bluebook.vehicleType}</dd>
+                <div className="bg-white px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt className="text-sm font-semibold text-gray-500">Vehicle Type</dt>
+                  <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">{bluebook.vehicleType}</dd>
                 </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Engine CC</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{bluebook.vehicleEngineCC} cc</dd>
+                <div className="bg-gray-50 px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt className="text-sm font-semibold text-gray-500">Engine CC</dt>
+                  <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">{bluebook.vehicleEngineCC} cc</dd>
                 </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Owner Name</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{bluebook.vehicleOwnerName}</dd>
+                <div className="bg-white px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt className="text-sm font-semibold text-gray-500">Owner Name</dt>
+                  <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">{bluebook.vehicleOwnerName}</dd>
                 </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Tax Expire Date</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{formatDate(bluebook.taxExpireDate)}</dd>
+                <div className="bg-gray-50 px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt className="text-sm font-semibold text-gray-500">Tax Expire Date</dt>
+                  <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">{formatDate(bluebook.taxExpireDate)}</dd>
                 </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Status</dt>
-                  <dd className="mt-1 text-sm sm:mt-0 sm:col-span-2">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getDaysLeftStatus(taxDetails?.daysLeft || 0).color.replace('text-', 'bg-').replace('-600', '-100')} ${getDaysLeftStatus(taxDetails?.daysLeft || 0).color}`}>
+                <div className="bg-white px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <dt className="text-sm font-semibold text-gray-500">Status</dt>
+                  <dd className="mt-1 text-base sm:mt-0 sm:col-span-2">
+                    <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-base font-semibold shadow-sm transition-all duration-200 ${getDaysLeftStatus(taxDetails?.daysLeft || 0).color.replace('text-', 'bg-').replace('-600', '-200')} ${getDaysLeftStatus(taxDetails?.daysLeft || 0).color} animate-pulse`}>
                       {getDaysLeftStatus(taxDetails?.daysLeft || 0).icon}
                       <span className="ml-2">{getDaysLeftStatus(taxDetails?.daysLeft || 0).text}</span>
                     </span>
@@ -395,65 +397,66 @@ function Payment() {
           </div>
 
           {/* Tax Calculation */}
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-              <h3 className="text-lg leading-6 font-medium text-gray-900 flex items-center">
-                <FaCalculator className="mr-2" />
+          <div className="bg-white shadow-xl hover:shadow-2xl transition-shadow duration-300 rounded-2xl overflow-hidden border border-gray-100 animate-fade-in-up delay-100">
+            <div className="px-6 py-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-blue-50">
+              <h3 className="text-xl leading-7 font-semibold text-gray-900 flex items-center">
+                <FaCalculator className="mr-2 text-purple-500" />
                 Tax Calculation
               </h3>
             </div>
-            <div className="border-t border-gray-200">
+            <div className="border-t border-gray-100">
               {taxDetails ? (
-                <div className="px-4 py-5 sm:px-6">
-                  <div className="space-y-4">
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Base Tax</span>
-                      <span className="text-sm font-medium">Rs. {taxDetails.baseTax.toLocaleString()}</span>
+                <div className="px-6 py-6">
+                  <div className="space-y-5">
+                    <div className="flex justify-between items-center">
+                      <span className="text-base text-gray-600">Base Tax</span>
+                      <span className="text-base font-semibold">Rs. {taxDetails.baseTax.toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Renewal Charge</span>
-                      <span className="text-sm font-medium">Rs. {taxDetails.renewalCharge.toLocaleString()}</span>
+                    <div className="flex justify-between items-center">
+                      <span className="text-base text-gray-600">Renewal Charge</span>
+                      <span className="text-base font-semibold">Rs. {taxDetails.renewalCharge.toLocaleString()}</span>
                     </div>
                     {taxDetails.fineAmount > 0 && (
-                      <div className="flex justify-between">
-                        <span className="text-sm text-red-600">Fine Amount</span>
-                        <span className="text-sm font-medium text-red-600">Rs. {taxDetails.fineAmount.toLocaleString()}</span>
+                      <div className="flex justify-between items-center">
+                        <span className="text-base text-red-600 font-medium">Fine Amount</span>
+                        <span className="text-base font-semibold text-red-600">Rs. {taxDetails.fineAmount.toLocaleString()}</span>
                       </div>
                     )}
                     {taxDetails.oldVehicleTax > 0 && (
-                      <div className="flex justify-between">
-                        <span className="text-sm text-orange-600">Old Vehicle Tax (10%)</span>
-                        <span className="text-sm font-medium text-orange-600">Rs. {taxDetails.oldVehicleTax.toLocaleString()}</span>
+                      <div className="flex justify-between items-center">
+                        <span className="text-base text-orange-600 font-medium">Old Vehicle Tax (10%)</span>
+                        <span className="text-base font-semibold text-orange-600">Rs. {taxDetails.oldVehicleTax.toLocaleString()}</span>
                       </div>
                     )}
-                    <div className="border-t pt-4">
-                      <div className="flex justify-between">
-                        <span className="text-lg font-semibold text-gray-900">Total Amount</span>
-                        <span className="text-lg font-bold text-nepal-blue">Rs. {taxDetails.totalTaxAmount.toLocaleString()}</span>
+                    <div className="border-t border-dashed border-gray-300 pt-5">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xl font-bold text-gray-900">Total Amount</span>
+                        <span className="text-xl font-extrabold text-nepal-blue animate-fade-in">{`Rs. ${taxDetails.totalTaxAmount.toLocaleString()}`}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Payment Method Selection */}
-                  <div className="mt-6">
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Payment Method</h4>
+                  <div className="mt-8">
+                    <h4 className="text-base font-semibold text-gray-900 mb-3">Payment Method</h4>
                     <div className="flex space-x-4">
-                      <div className="flex items-center p-3 border border-gray-200 rounded-lg hover:border-nepal-blue hover:bg-blue-50 cursor-pointer transition-colors">
-                        <KhaltiLogo className="h-8 w-8" />
+                      <div className="flex items-center p-4 border-2 border-nepal-blue bg-blue-50 rounded-xl shadow hover:scale-105 transition-transform cursor-pointer">
+                        <KhaltiLogo className="h-10 w-10" />
+                        <span className="ml-3 text-lg font-bold text-nepal-blue">Khalti</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Payment Button */}
-                  <div className="mt-6">
+                  <div className="mt-8">
                     {taxDetails.canPay ? (
                       <button
                         onClick={handlePayment}
                         disabled={paymentLoading}
-                        className="w-full bg-nepal-blue hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                        className="w-full bg-gradient-to-r from-nepal-blue to-purple-500 hover:from-blue-700 hover:to-purple-700 disabled:bg-gray-400 text-white font-extrabold py-4 px-4 rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center text-lg tracking-wide animate-fade-in"
                       >
                         {paymentLoading ? (
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
                         ) : (
                           <>
                             Pay Rs. {taxDetails.totalTaxAmount.toLocaleString()}
@@ -462,7 +465,7 @@ function Payment() {
                       </button>
                     ) : (
                       <div className="text-center py-4">
-                        <p className="text-sm text-gray-600">
+                        <p className="text-base text-gray-500 font-medium animate-fade-in-slow">
                           Tax payment is not due yet. You can pay when there are less than 30 days remaining.
                         </p>
                       </div>
@@ -470,11 +473,11 @@ function Payment() {
                   </div>
                 </div>
               ) : (
-                <div className="px-4 py-5 sm:px-6">
-                  <div className="animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                <div className="px-6 py-6">
+                  <div className="animate-pulse space-y-4">
+                    <div className="h-5 bg-gray-200 rounded w-3/4 mb-4"></div>
+                    <div className="h-5 bg-gray-200 rounded w-1/2 mb-4"></div>
+                    <div className="h-5 bg-gray-200 rounded w-2/3"></div>
                   </div>
                 </div>
               )}
@@ -484,30 +487,30 @@ function Payment() {
 
         {/* OTP Modal */}
         {showOtpModal && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-              <div className="mt-3 text-center">
+          <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex items-center justify-center z-50 animate-fade-in-fast">
+            <div className="relative mx-auto p-8 w-full max-w-md shadow-2xl rounded-2xl bg-white border border-blue-100 animate-scale-in">
+              <div className="text-center">
                 <div className="flex justify-center mb-4">
-                  <KhaltiLogo className="h-12 w-12" />
+                  <KhaltiLogo className="h-14 w-14 animate-bounce" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Enter OTP</h3>
-                <p className="text-sm text-gray-500 mb-4">
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">Enter OTP</h3>
+                <p className="text-base text-gray-500 mb-5">
                   Please check your email for the OTP and enter it below to confirm your payment.
                 </p>
                 
                 {error && (
-                  <div className="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
-                    <p className="text-sm">{error}</p>
+                  <div className="mb-4 bg-red-100 border border-red-200 text-red-800 px-4 py-3 rounded-lg animate-fade-in">
+                    <p className="text-base">{error}</p>
                   </div>
                 )}
 
-                <div className="mb-4">
+                <div className="mb-6">
                   <input
                     type="text"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     placeholder="Enter 6-digit OTP"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-transparent text-center text-lg font-mono"
+                    className="w-full px-4 py-3 border-2 border-nepal-blue rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent text-center text-xl font-mono tracking-widest transition-all duration-200"
                     maxLength={6}
                   />
                 </div>
@@ -516,10 +519,10 @@ function Payment() {
                   <button
                     onClick={handleOtpVerification}
                     disabled={otpLoading || otp.length !== 6}
-                    className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+                    className="flex-1 bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-xl shadow transition-all duration-200 flex items-center justify-center"
                   >
                     {otpLoading ? (
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                     ) : (
                       'Verify OTP'
                     )}
@@ -530,12 +533,12 @@ function Payment() {
                       setOtp('');
                       setError(null);
                     }}
-                    className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                    className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-xl shadow"
                   >
                     Cancel
                   </button>
                 </div>
-                <div className="mt-4 text-xs text-gray-500">
+                <div className="mt-5 text-xs text-gray-400">
                   Didn't receive OTP? Check your email or try again.
                 </div>
               </div>
@@ -545,32 +548,32 @@ function Payment() {
 
         {/* Payment Modal */}
         {showPaymentModal && paymentUrl && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-              <div className="mt-3 text-center">
+          <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex items-center justify-center z-50 animate-fade-in-fast">
+            <div className="relative mx-auto p-8 w-full max-w-md shadow-2xl rounded-2xl bg-white border border-purple-100 animate-scale-in">
+              <div className="text-center">
                 <div className="flex justify-center mb-4">
-                  <KhaltiLogo className="h-12 w-12" />
+                  <KhaltiLogo className="h-14 w-14 animate-bounce" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Complete Payment</h3>
-                <p className="text-sm text-gray-500 mb-4">
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">Complete Payment</h3>
+                <p className="text-base text-gray-500 mb-5">
                   Your payment has been confirmed. You will be redirected to Khalti to complete your payment securely.
                 </p>
                 <div className="flex space-x-3">
                   <button
                     onClick={() => window.open(paymentUrl, '_blank')}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+                    className="flex-1 bg-gradient-to-r from-nepal-blue to-purple-500 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl shadow transition-all duration-200 flex items-center justify-center"
                   >
-                    <KhaltiLogo className="h-4 w-4 mr-2" />
+                    <KhaltiLogo className="h-5 w-5 mr-2" />
                     Proceed to Payment
                   </button>
                   <button
                     onClick={() => setShowPaymentModal(false)}
-                    className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                    className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-xl shadow"
                   >
                     Cancel
                   </button>
                 </div>
-                <div className="mt-4 text-xs text-gray-500">
+                <div className="mt-5 text-xs text-gray-400">
                   After payment, you can verify your transaction using the transaction ID.
                 </div>
               </div>
@@ -578,6 +581,42 @@ function Payment() {
           </div>
         )}
       </div>
+
+      {/* Animations */}
+      <style>
+        {`
+          .animate-fade-in {
+            animation: fadeIn 1s cubic-bezier(.4,0,.2,1) both;
+          }
+          .animate-fade-in-slow {
+            animation: fadeIn 1.5s cubic-bezier(.4,0,.2,1) both;
+          }
+          .animate-fade-in-up {
+            animation: fadeInUp 1s cubic-bezier(.4,0,.2,1) both;
+          }
+          .animate-fade-in-fast {
+            animation: fadeIn 0.3s cubic-bezier(.4,0,.2,1) both;
+          }
+          .animate-scale-in {
+            animation: scaleIn 0.5s cubic-bezier(.4,0,.2,1) both;
+          }
+          .animate-bounce-slow {
+            animation: bounce 2.5s infinite;
+          }
+          @keyframes fadeIn {
+            from { opacity: 0 }
+            to { opacity: 1 }
+          }
+          @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
+          }
+          @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.85);}
+            to { opacity: 1; transform: scale(1);}
+          }
+        `}
+      </style>
     </div>
   );
 }

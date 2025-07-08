@@ -104,58 +104,61 @@ function Navbar() {
   return (
     <>
       {/* Top Marquee Heading */}
-      <div className="overflow-hidden whitespace-nowrap bg-nepal-blue group">
-        <div className="inline-block animate-marquee py-2 px-4 text-white font-semibold text-center group-hover:[animation-play-state:paused]">
-          Government of Nepal - Ministry of Physical Infrastructure and
-          Transport - Department of Transport Management - Nepal
+      <div className="overflow-hidden bg-gradient-to-r from-nepal-blue via-blue-700 to-nepal-blue shadow-md">
+        <div className="inline-block animate-marquee py-2 px-4 text-white font-bold text-lg tracking-wide group-hover:[animation-play-state:paused]">
+          Government of Nepal - Ministry of Physical Infrastructure and Transport - Department of Transport Management - Nepal
         </div>
       </div>
 
       {/* Main Heading */}
-      <div className="main-heading grid grid-cols-3 items-center p-4">
-        <div className="img-container justify-self-start">
-          <img src={logo} alt="logo" className="w-[90px] h-[80px]" />
+      <div className="main-heading grid grid-cols-3 items-center p-6 bg-white rounded-xl shadow-lg mt-4 mx-4">
+        <div className="img-container justify-self-start flex items-center">
+          <img
+            src={logo}
+            alt="logo"
+            className="w-[90px] h-[80px] rounded-lg shadow-lg border-2 border-nepal-blue transition-transform duration-300 hover:scale-105"
+          />
         </div>
 
-        <div className="middle-heading text-nepal-red space-y-1 text-center justify-self-center">
-          <h6 className="text-sm font-semibold">Government of Nepal</h6>
-          <h6 className="text-sm">
-            Ministry of Physical Infrastructure and Transport
-          </h6>
-          <h3 className="text-xl font-bold">
-            Department of Transport Management
-          </h3>
-          <h6 className="text-sm">Nepal</h6>
+        <div className="middle-heading text-nepal-red space-y-1 text-center justify-self-center animate-fade-in">
+          <h6 className="text-base font-semibold tracking-wide">Government of Nepal</h6>
+          <h6 className="text-base font-medium">Ministry of Physical Infrastructure and Transport</h6>
+          <h3 className="text-2xl font-extrabold text-nepal-blue drop-shadow-lg">Department of Transport Management</h3>
+          <h6 className="text-base font-medium">Nepal</h6>
         </div>
 
         <div className="right-heading flex flex-col items-end">
-          <div className="flag-container jestify-self-end">
-            <img src={flag} alt="flag" className="w-[66px] h-[80px]" />
+          <div className="flag-container justify-self-end">
+            <img
+              src={flag}
+              alt="flag"
+              className="w-[66px] h-[80px] rounded-lg shadow-lg border-2 border-red-400 animate-bounce-slow"
+            />
           </div>
-          <div className="date text-sm mt-2 text-black text-center">
+          <div className="date text-sm mt-2 text-gray-700 text-center font-mono bg-gray-100 px-3 py-1 rounded-lg shadow-inner animate-fade-in">
             {dateTimeStr}
           </div>
         </div>
       </div>
 
       {/* Menu */}
-      <nav className="menu bg-nepal-blue p-3">
-        <ul className="flex space-x-6 items-center w-full">
+      <nav className="menu bg-gradient-to-r from-nepal-blue via-blue-700 to-nepal-blue p-4 rounded-b-xl shadow-lg mx-4 mb-4 mt-2">
+        <ul className="flex space-x-8 items-center w-full">
           {/* Home icon as separate menu item */}
-          <li className="nav-item">
+          <li className="nav-item transition-transform duration-200 hover:scale-110">
             <Link
               to="/"
-              className="text-white text-2xl hover:text-red-400"
+              className="text-white text-3xl hover:text-red-400 drop-shadow-lg"
               aria-label="Home"
             >
               <FaHome />
             </Link>
           </li>
           {/* Services Dropdown */}
-          <li className="nav-item relative group">
+          <li className="nav-item relative group transition-all duration-200">
             <Link
               to="#"
-              className="text-white text-base hover:text-red-400 flex items-center gap-1"
+              className="text-white text-lg font-semibold hover:text-red-400 flex items-center gap-1 transition-colors duration-200"
               aria-haspopup="true"
               aria-expanded="false"
             >
@@ -165,11 +168,11 @@ function Navbar() {
               </span>
             </Link>
 
-            <ul className="absolute left-0 mt-2 bg-white rounded shadow-lg opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-all duration-200 z-10 min-w-[180px]">
+            <ul className="absolute left-0 mt-3 bg-white rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-all duration-300 z-20 min-w-[200px] scale-95 group-hover:scale-100">
               <li>
                 <Link
                   to="#"
-                  className="block px-4 py-2 text-sm text-gray-800 hover:bg-nepal-blue hover:text-white"
+                  className="block px-6 py-3 text-base text-gray-800 hover:bg-nepal-blue hover:text-white rounded-t-xl transition-colors duration-200"
                 >
                   Blue Book Renewal
                 </Link>
@@ -177,7 +180,7 @@ function Navbar() {
               <li>
                 <Link
                   to="#"
-                  className="block px-4 py-2 text-sm text-gray-800 hover:bg-nepal-blue hover:text-white"
+                  className="block px-6 py-3 text-base text-gray-800 hover:bg-nepal-blue hover:text-white rounded-b-xl transition-colors duration-200"
                 >
                   License Renewal
                 </Link>
@@ -194,7 +197,7 @@ function Navbar() {
               <li>
                 <Link
                   to="/login"
-                  className="bg-white text-nepal-blue font-semibold px-4 py-1 rounded hover:bg-gray-200 transition"
+                  className="bg-white text-nepal-blue font-bold px-6 py-2 rounded-lg shadow-md hover:bg-gray-100 hover:scale-105 transition-all duration-200 border border-nepal-blue"
                 >
                   Login
                 </Link>
@@ -202,7 +205,7 @@ function Navbar() {
               <li>
                 <Link
                   to="/signup"
-                  className="bg-red-500 text-white font-semibold px-4 py-1 rounded hover:bg-red-600 transition"
+                  className="bg-gradient-to-r from-red-500 to-red-600 text-white font-bold px-6 py-2 rounded-lg shadow-md hover:from-red-600 hover:to-red-700 hover:scale-105 transition-all duration-200"
                 >
                   Signup
                 </Link>
@@ -213,7 +216,7 @@ function Navbar() {
               <li>
                 <Link
                   to="/dashboard"
-                  className="text-white hover:text-red-400 transition"
+                  className="text-white font-semibold hover:text-red-400 transition-colors duration-200"
                 >
                   Dashboard
                 </Link>
@@ -221,7 +224,7 @@ function Navbar() {
               <li>
                 <button
                   onClick={handleLogout}
-                  className="bg-white text-nepal-blue font-semibold px-4 py-1 rounded hover:bg-gray-200 transition"
+                  className="bg-white text-nepal-blue font-bold px-6 py-2 rounded-lg shadow-md hover:bg-gray-100 hover:scale-105 transition-all duration-200 border border-nepal-blue"
                 >
                   Logout
                 </button>
@@ -231,7 +234,7 @@ function Navbar() {
         </ul>
       </nav>
 
-      {/* Marquee Animation */}
+      {/* Animations */}
       <style>{`
         @keyframes marquee {
           0% { transform: translateX(100%); }
@@ -240,7 +243,21 @@ function Navbar() {
         .animate-marquee {
           display: inline-block;
           min-width: 100%;
-          animation: marquee 20s linear infinite;
+          animation: marquee 18s linear infinite;
+        }
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(-10px);}
+          to { opacity: 1; transform: translateY(0);}
+        }
+        .animate-fade-in {
+          animation: fade-in 1s ease-in;
+        }
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0);}
+          50% { transform: translateY(-8px);}
+        }
+        .animate-bounce-slow {
+          animation: bounce-slow 2.5s infinite;
         }
       `}</style>
     </>

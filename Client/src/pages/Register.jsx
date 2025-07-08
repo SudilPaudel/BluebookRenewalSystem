@@ -250,8 +250,8 @@ function Register() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-8 bg-white shadow-xl rounded-lg">
-      <h2 className="text-3xl font-bold text-nepal-blue mb-8 text-center">
+    <div className="max-w-3xl mx-auto mt-14 p-10 bg-gradient-to-br from-white via-blue-50 to-blue-100 shadow-2xl rounded-3xl border border-blue-100 animate-fade-in">
+      <h2 className="text-4xl font-extrabold text-nepal-blue mb-10 text-center tracking-tight drop-shadow animate-slide-down">
         User Registration
       </h2>
 
@@ -261,11 +261,11 @@ function Register() {
         onClose={clearNotification}
       />
 
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-6">
+      <form onSubmit={handleSubmit} className="animate-fade-in-slow">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Name */}
-          <div>
-            <label className="block font-medium mb-1 text-left">Name</label>
+          <div className="flex flex-col gap-2">
+            <label className="block font-semibold mb-1 text-left text-gray-700">Name</label>
             <input
               type="text"
               name="name"
@@ -273,13 +273,13 @@ function Register() {
               placeholder="Enter your full name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-nepal-blue"
+              className="w-full border border-blue-200 px-5 py-3 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 bg-white shadow transition-all duration-200"
             />
           </div>
 
           {/* Email */}
-          <div>
-            <label className="block font-medium mb-1 text-left">Email</label>
+          <div className="flex flex-col gap-2">
+            <label className="block font-semibold mb-1 text-left text-gray-700">Email</label>
             <input
               type="email"
               name="email"
@@ -287,13 +287,13 @@ function Register() {
               placeholder="example@email.com"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-nepal-blue"
+              className="w-full border border-blue-200 px-5 py-3 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 bg-white shadow transition-all duration-200"
             />
           </div>
 
           {/* Citizenship No */}
-          <div>
-            <label className="block font-medium mb-1 text-left">Citizenship No</label>
+          <div className="flex flex-col gap-2">
+            <label className="block font-semibold mb-1 text-left text-gray-700">Citizenship No</label>
             <input
               type="text"
               name="citizenshipNo"
@@ -301,13 +301,13 @@ function Register() {
               placeholder="Enter your citizenship number"
               value={formData.citizenshipNo}
               onChange={handleChange}
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-nepal-blue"
+              className="w-full border border-blue-200 px-5 py-3 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 bg-white shadow transition-all duration-200"
             />
           </div>
 
           {/* Password */}
-          <div className="relative">
-            <label className="block font-medium mb-1 text-left">Password</label>
+          <div className="relative flex flex-col gap-2">
+            <label className="block font-semibold mb-1 text-left text-gray-700">Password</label>
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -316,19 +316,20 @@ function Register() {
               value={formData.password}
               onChange={handleChange}
               autoComplete="new-password"
-              className="w-full border px-4 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-nepal-blue"
+              className="w-full border border-blue-200 px-5 py-3 pr-12 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 bg-white shadow transition-all duration-200"
             />
             <span
-              className="absolute top-[38px] right-3 text-gray-500 cursor-pointer"
+              className="absolute top-10 right-4 text-gray-400 hover:text-nepal-blue cursor-pointer transition-colors duration-150"
               onClick={() => setShowPassword(!showPassword)}
+              tabIndex={0}
             >
               {showPassword ? <FaEye /> : <FaEyeSlash />}
             </span>
           </div>
 
           {/* Confirm Password */}
-          <div className="relative">
-            <label className="block font-medium mb-1 text-left">Confirm Password</label>
+          <div className="relative flex flex-col gap-2">
+            <label className="block font-semibold mb-1 text-left text-gray-700">Confirm Password</label>
             <input
               type={showConfirm ? "text" : "password"}
               name="confirmPassword"
@@ -337,44 +338,48 @@ function Register() {
               value={formData.confirmPassword}
               onChange={handleChange}
               autoComplete="new-password"
-              className="w-full border px-4 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-nepal-blue"
+              className="w-full border border-blue-200 px-5 py-3 pr-12 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 bg-white shadow transition-all duration-200"
             />
             <span
-              className="absolute top-[38px] right-3 text-gray-500 cursor-pointer"
+              className="absolute top-10 right-4 text-gray-400 hover:text-nepal-blue cursor-pointer transition-colors duration-150"
               onClick={() => setShowConfirm(!showConfirm)}
+              tabIndex={0}
             >
               {showConfirm ? <FaEye /> : <FaEyeSlash />}
             </span>
           </div>
 
           {/* Image Upload */}
-          <div className="col-span-2">
-            <label className="block font-medium mb-1 text-left">Passport-sized Photo</label>
+          <div className="col-span-1 md:col-span-2 flex flex-col gap-2">
+            <label className="block font-semibold mb-1 text-left text-gray-700">Passport-sized Photo</label>
             <input
               type="file"
               name="image"
               accept="image/*"
               onChange={handleChange}
-              className="w-full"
+              className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-nepal-blue/90 file:text-white hover:file:bg-nepal-blue/100 transition-all duration-200"
             />
             {imageError && (
-              <p className="text-red-600 text-sm mt-1">{imageError}</p>
+              <p className="text-red-600 text-sm mt-1 animate-shake">{imageError}</p>
             )}
             {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="w-[120px] h-[160px] mt-3 object-cover border rounded"
-              />
+              <div className="flex items-center gap-4 mt-2 animate-fade-in">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-[120px] h-[160px] object-cover border-2 border-blue-200 rounded-xl shadow-lg transition-transform duration-200 hover:scale-105"
+                />
+                <span className="text-gray-500 text-xs">Preview</span>
+              </div>
             )}
           </div>
 
           {/* Submit Button */}
-          <div className="col-span-2">
+          <div className="col-span-1 md:col-span-2 mt-2">
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-nepal-blue text-white py-3 font-semibold rounded hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full bg-gradient-to-r from-nepal-blue to-blue-500 text-white py-3 font-bold rounded-2xl shadow-lg hover:from-blue-700 hover:to-nepal-blue transition-all duration-200 flex items-center justify-center text-lg tracking-wide disabled:opacity-60 disabled:cursor-not-allowed animate-bounce-in"
             >
               {isLoading ? <FaSpinner className="animate-spin mr-2" /> : null}
               Register
@@ -383,17 +388,49 @@ function Register() {
         </div>
       </form>
 
-      <div className="mt-6 text-center">
-        <p className="text-gray-600">
+      <div className="mt-8 text-center animate-fade-in-slow">
+        <p className="text-gray-600 text-base">
           Already have an account?{" "}
           <button
             onClick={() => navigate("/login")}
-            className="text-nepal-blue hover:text-blue-700 font-medium"
+            className="text-nepal-blue hover:text-blue-700 font-semibold underline underline-offset-2 transition-colors duration-150"
           >
             Login here
           </button>
         </p>
       </div>
+      {/* Animations keyframes (add to your global CSS or Tailwind config if needed) */}
+      <style>
+        {`
+          @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+          }
+          @keyframes fade-in-slow {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          @keyframes slide-down {
+            from { opacity: 0; transform: translateY(-30px);}
+            to { opacity: 1; transform: translateY(0);}
+          }
+          @keyframes bounce-in {
+            0% { transform: scale(0.95);}
+            60% { transform: scale(1.05);}
+            100% { transform: scale(1);}
+          }
+          @keyframes shake {
+            0%, 100% { transform: translateX(0);}
+            20%, 60% { transform: translateX(-6px);}
+            40%, 80% { transform: translateX(6px);}
+          }
+          .animate-fade-in { animation: fade-in 0.7s cubic-bezier(.4,0,.2,1) both;}
+          .animate-fade-in-slow { animation: fade-in-slow 1.2s cubic-bezier(.4,0,.2,1) both;}
+          .animate-slide-down { animation: slide-down 0.7s cubic-bezier(.4,0,.2,1) both;}
+          .animate-bounce-in { animation: bounce-in 0.5s cubic-bezier(.4,0,.2,1) both;}
+          .animate-shake { animation: shake 0.4s;}
+        `}
+      </style>
     </div>
   );
 }
