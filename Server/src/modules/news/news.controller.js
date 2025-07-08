@@ -2,6 +2,7 @@ const newsSvc = require('./news.service');
 
 class NewsController {
     // Create new news article
+    // Transforms request data, creates a news article, and returns the created article.
     createNews = async (req, res, next) => {
         try {
             const transformedData = newsSvc.transformCreateData(req);
@@ -18,6 +19,7 @@ class NewsController {
     };
 
     // Get all news articles (admin)
+    // Retrieves paginated news articles with optional status and search filters.
     getAllNews = async (req, res, next) => {
         try {
             const { page = 1, limit = 10, status, search } = req.query;
@@ -61,6 +63,7 @@ class NewsController {
     };
 
     // Get single news article
+    // Retrieves a single news article by its ID.
     getNewsById = async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -81,6 +84,7 @@ class NewsController {
     };
 
     // Update news article
+    // Updates a news article by ID with transformed request data.
     updateNews = async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -103,6 +107,7 @@ class NewsController {
     };
 
     // Delete news article
+    // Deletes a news article by ID and returns a success message.
     deleteNews = async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -123,6 +128,7 @@ class NewsController {
     };
 
     // Get active news for public display
+    // Retrieves a limited number of active news articles for public view.
     getActiveNews = async (req, res, next) => {
         try {
             const { limit = 5 } = req.query;
@@ -139,6 +145,7 @@ class NewsController {
     };
 
     // Update news status
+    // Updates the status (active, inactive, draft) of a news article by ID.
     updateNewsStatus = async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -170,4 +177,4 @@ class NewsController {
     };
 }
 
-module.exports = new NewsController(); 
+module.exports = new NewsController();

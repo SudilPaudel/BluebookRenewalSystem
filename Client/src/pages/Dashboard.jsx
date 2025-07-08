@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { FaCar, FaFileAlt, FaClock, FaCheckCircle, FaTimesCircle, FaPlus, FaSearch, FaDownload, FaEdit, FaTrash, FaMotorcycle } from "react-icons/fa";
 
 function Dashboard() {
+  // Main dashboard component for displaying user bluebooks and stats
+
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [bluebooks, setBluebooks] = useState([]);
@@ -20,6 +22,10 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Checks if the user is authenticated by verifying localStorage.
+   * Redirects to login if not authenticated.
+   */
   const checkAuth = () => {
     const userDetail = localStorage.getItem('userDetail');
     const token = localStorage.getItem('accessToken');
@@ -37,6 +43,9 @@ function Dashboard() {
     }
   };
 
+  /**
+   * Fetches the user's bluebooks from the API and updates state and stats.
+   */
   const fetchUserBluebooks = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -71,6 +80,11 @@ function Dashboard() {
     }
   };
 
+  /**
+   * Handles downloading a bluebook PDF by ID.
+   * Prompts login if not authenticated.
+   * @param {string} id
+   */
   const handleDownload = async (id) => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -101,6 +115,12 @@ function Dashboard() {
     }
   };
 
+  /**
+   * Formats a date string into a readable format (e.g., Jan 1, 2024).
+   * Returns 'N/A' if the date is not provided.
+   * @param {string} dateString
+   * @returns {string}
+   */
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -110,6 +130,11 @@ function Dashboard() {
     });
   };
 
+  /**
+   * Returns a status badge JSX element based on the bluebook status.
+   * @param {string} status
+   * @returns {JSX.Element}
+   */
   const getStatusBadge = (status) => {
     switch (status) {
       case 'verified':
@@ -129,6 +154,11 @@ function Dashboard() {
     }
   };
 
+  /**
+   * Checks if the provided expiry date is in the past.
+   * @param {string} expireDate
+   * @returns {boolean}
+   */
   const isExpired = (expireDate) => {
     if (!expireDate) return false;
     return new Date(expireDate) < new Date();
@@ -363,4 +393,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard; 
+export default Dashboard;

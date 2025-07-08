@@ -1,6 +1,7 @@
 const NewsModel = require('./news.model');
 
 class NewsService {
+    // Transforms request data for creating a news article: sets createdBy, handles status, image, tags, and priority.
     transformCreateData = (req) => {
         try {
             const payload = req.body;
@@ -38,6 +39,7 @@ class NewsService {
         }
     }
 
+    // Transforms request data for updating a news article: sets updatedBy, handles status, image, tags, and priority.
     transformUpdateData = (req) => {
         try {
             const payload = req.body;
@@ -75,6 +77,7 @@ class NewsService {
         }
     }
 
+    // Creates a new news article in the database with the provided data.
     createNews = async (data) => {
         try {
             const news = new NewsModel(data);
@@ -84,6 +87,7 @@ class NewsService {
         }
     }
 
+    // Finds a single news article based on the given filter and populates user info.
     findOneNews = async (filter) => {
         try {
             const newsObj = await NewsModel.findOne(filter)
@@ -95,6 +99,7 @@ class NewsService {
         }
     }
 
+    // Finds multiple news articles with pagination, sorting, and populates user info.
     findManyNews = async (filter = {}, options = {}) => {
         try {
             const { page = 1, limit = 10, sort = { createdAt: -1 } } = options;
@@ -122,6 +127,7 @@ class NewsService {
         }
     }
 
+    // Updates a news article by ID with the provided data and populates user info.
     updateNews = async (data, newsId) => {
         try {
             const result = await NewsModel.findByIdAndUpdate(
@@ -136,6 +142,7 @@ class NewsService {
         }
     }
 
+    // Deletes a news article from the database by its ID.
     deleteNews = async (newsId) => {
         try {
             const result = await NewsModel.findByIdAndDelete(newsId);
@@ -145,6 +152,7 @@ class NewsService {
         }
     }
 
+    // Retrieves a limited number of active news articles for public display, sorted by priority and published date.
     getActiveNews = async (limit = 5) => {
         try {
             const news = await NewsModel.find({ 
@@ -162,4 +170,4 @@ class NewsService {
     }
 }
 
-module.exports = new NewsService(); 
+module.exports = new NewsService();

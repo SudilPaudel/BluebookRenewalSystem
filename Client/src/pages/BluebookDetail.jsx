@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaCar, FaArrowLeft, FaDownload, FaCheckCircle, FaClock, FaTimesCircle, FaCreditCard } from "react-icons/fa";
 
 function BluebookDetail() {
+  // Main component for displaying bluebook details page
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [bluebook, setBluebook] = useState(null);
@@ -14,6 +16,10 @@ function BluebookDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  /**
+   * Fetches bluebook details from the API using the provided ID.
+   * Handles authentication, error, and loading state.
+   */
   const fetchBluebookDetail = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -44,6 +50,12 @@ function BluebookDetail() {
     }
   };
 
+  /**
+   * Formats a date string into a readable format (e.g., January 1, 2024).
+   * Returns 'N/A' if the date is not provided.
+   * @param {string} dateString
+   * @returns {string}
+   */
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -53,6 +65,11 @@ function BluebookDetail() {
     });
   };
 
+  /**
+   * Returns a status badge JSX element based on the bluebook status.
+   * @param {string} status
+   * @returns {JSX.Element}
+   */
   const getStatusBadge = (status) => {
     switch (status) {
       case 'verified':
@@ -72,11 +89,22 @@ function BluebookDetail() {
     }
   };
 
+  /**
+   * Checks if the provided expiry date is in the past.
+   * @param {string} expireDate
+   * @returns {boolean}
+   */
   const isExpired = (expireDate) => {
     if (!expireDate) return false;
     return new Date(expireDate) < new Date();
   };
 
+  /**
+   * Calculates the number of days until the expiry date.
+   * Returns Infinity if no expiry date is provided.
+   * @param {string} expireDate
+   * @returns {number}
+   */
   const getDaysUntilExpiry = (expireDate) => {
     if (!expireDate) return Infinity;
     const expiryDate = new Date(expireDate);
@@ -86,6 +114,11 @@ function BluebookDetail() {
     return diffDays;
   };
 
+  /**
+   * Handles downloading the bluebook PDF by making an API call.
+   * Prompts user to log in if not authenticated.
+   * @param {string} id
+   */
   const handleDownload = async (id) => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -345,4 +378,4 @@ function BluebookDetail() {
   );
 }
 
-export default BluebookDetail; 
+export default BluebookDetail;

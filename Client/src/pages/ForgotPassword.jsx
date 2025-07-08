@@ -1,9 +1,19 @@
 import React, { useState } from "react";
 
+/**
+ * ForgotPassword component allows users to request a password reset link by entering their email address.
+ */
 function ForgotPassword() {
+  // State for storing the user's email input
   const [email, setEmail] = useState("");
+  // State for displaying a message after form submission
   const [message, setMessage] = useState(null);
 
+  /**
+   * Handles the form submission for requesting a password reset.
+   * Prevents default form behavior, simulates API call, and sets a success message.
+   * @param {React.FormEvent} e
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
 

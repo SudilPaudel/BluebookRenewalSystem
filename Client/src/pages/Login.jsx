@@ -4,32 +4,56 @@ import { Link, useNavigate } from "react-router-dom";
 import API from "../api/api";
 import Notification from "../components/Notification";
 
+/**
+ * Login component handles user authentication and login form.
+ */
 function Login() {
   const navigate = useNavigate();
 
+  // State for login form fields
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  // State for toggling password visibility
   const [showPassword, setShowPassword] = useState(false);
+  // State for notification messages
   const [notification, setNotification] = useState({ type: "", message: "" });
+  // State for loading spinner
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Handles input changes for form fields and clears notifications.
+   * @param {React.ChangeEvent<HTMLInputElement>} e
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setNotification({ type: "", message: "" }); // Clear notification on input change
   };
 
+  /**
+   * Shows a notification with the given type and message.
+   * @param {string} type
+   * @param {string} message
+   */
   const showNotification = (type, message) => {
     setNotification({ type, message });
   };
 
+  /**
+   * Clears the notification message.
+   */
   const clearNotification = () => {
     setNotification({ type: "", message: "" });
   };
 
+  /**
+   * Handles form submission for login.
+   * Sends login request to API, manages tokens, notifications, and redirects.
+   * @param {React.FormEvent} e
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -41,40 +65,40 @@ function Login() {
 
       if (data.success) {
         // Save tokens in localStorage
-      localStorage.setItem("accessToken", data.result.tokens.accessToken);
-      localStorage.setItem("refreshToken", data.result.tokens.refreshToken);
-      localStorage.setItem("userDetail", JSON.stringify(data.result.detail));
+        localStorage.setItem("accessToken", data.result.tokens.accessToken);
+        localStorage.setItem("refreshToken", data.result.tokens.refreshToken);
+        localStorage.setItem("userDetail", JSON.stringify(data.result.detail));
 
         showNotification("success", "Login successful! Redirecting...");
 
         // Trigger storage event to update Navbar
         window.dispatchEvent(new Event('storage'));
 
-      // Redirect based on user role
+        // Redirect based on user role
         setTimeout(() => {
-      if (data.result.detail.role === 'admin') {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/dashboard");
-      }
+          if (data.result.detail.role === 'admin') {
+            navigate("/admin-dashboard");
+          } else {
+            navigate("/dashboard");
+          }
         }, 1500);
-      }else{
+      } else {
         showNotification("error", "Login Failed. Please try again with other credentials");
         return;
       }
 
     } catch (error) {
-  console.error("Login error:", error); // for dev visibility
-  try {
-    const message =
-      error?.response?.data?.message?.toString() || "Login failed. Please try again.";
-    showNotification("error", message);
-  } catch {
-    showNotification("error", "Something went wrong during login.");
-  }
-} finally {
-  setLoading(false);
-}
+      console.error("Login error:", error); // for dev visibility
+      try {
+        const message =
+          error?.response?.data?.message?.toString() || "Login failed. Please try again.";
+        showNotification("error", message);
+      } catch {
+        showNotification("error", "Something went wrong during login.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

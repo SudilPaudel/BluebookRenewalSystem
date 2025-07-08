@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaIdCard, FaEdit, FaSave, FaTimes, FaCamera, FaArrowLeft, FaShieldAlt, FaUserTag } from "react-icons/fa";
 
 function Profile() {
+  // Main component for displaying and editing user profile
+
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,6 +21,10 @@ function Profile() {
     fetchProfile();
   }, []);
 
+  /**
+   * Fetches the user's profile from the API and sets user and form data state.
+   * Handles authentication and error state.
+   */
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -54,6 +60,11 @@ function Profile() {
     }
   };
 
+  /**
+   * Handles input changes for profile form fields.
+   * Updates formData state.
+   * @param {React.ChangeEvent<HTMLInputElement>} e
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -62,12 +73,20 @@ function Profile() {
     }));
   };
 
+  /**
+   * Enables editing mode for the profile.
+   * Clears error and success messages.
+   */
   const handleEdit = () => {
     setEditing(true);
     setError("");
     setSuccess("");
   };
 
+  /**
+   * Cancels editing mode and resets form data to original user values.
+   * Clears error and success messages.
+   */
   const handleCancel = () => {
     setEditing(false);
     setFormData({
@@ -79,6 +98,10 @@ function Profile() {
     setSuccess("");
   };
 
+  /**
+   * Handles saving the updated profile information.
+   * Sends update request to API and updates user state.
+   */
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -480,9 +503,9 @@ function Profile() {
           .animate-slide-in-right { animation: slideInRight 0.7s cubic-bezier(.4,0,.2,1); }
           .animate-pop-in { animation: popIn 0.5s cubic-bezier(.4,0,.2,1); }
           @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-          @keyframes slideInDown { from { opacity: 0; transform: translateY(-30px);} to { opacity: 1; transform: translateY(0);} }
-          @keyframes slideInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
-          @keyframes slideInRight { from { opacity: 0; transform: translateX(30px);} to { opacity: 1; transform: translateX(0);} }
+          @keyframes slideInDown { from { opacity: 0; transform: translateY(-30px);} to { opacity: 1, transform: translateY(0);} }
+          @keyframes slideInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1, transform: translateY(0);} }
+          @keyframes slideInRight { from { opacity: 0; transform: translateX(30px);} to { opacity: 1, transform: translateX(0);} }
           @keyframes popIn { 0% { opacity: 0; transform: scale(0.8);} 80% { opacity: 1; transform: scale(1.05);} 100% { opacity: 1; transform: scale(1);} }
         `}
       </style>
@@ -490,4 +513,4 @@ function Profile() {
   );
 }
 
-export default Profile; 
+export default Profile;

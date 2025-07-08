@@ -4,11 +4,17 @@ import { FaArrowLeft, FaCreditCard, FaShieldAlt, FaCheckCircle, FaClock, FaExcla
 import khaltiLogo from "../assets/khalti.png";
 
 // Khalti Logo Component using PNG
+/**
+ * Renders the Khalti logo image.
+ * @param {object} props
+ */
 const KhaltiLogo = ({ className = "h-8 w-8" }) => (
   <img src={khaltiLogo} alt="Khalti" className={className} />
 );
 
 function Payment() {
+  // Main component for handling vehicle tax payment
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [bluebook, setBluebook] = useState(null);
@@ -28,6 +34,9 @@ function Payment() {
     fetchBluebookDetail();
   }, [id]);
 
+  /**
+   * Fetches bluebook details from the API and calculates tax details.
+   */
   const fetchBluebookDetail = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -59,6 +68,10 @@ function Payment() {
     }
   };
 
+  /**
+   * Calculates tax, renewal charge, fine, and old vehicle tax based on bluebook data.
+   * @param {object} bluebookData
+   */
   const calculateTaxDetails = (bluebookData) => {
     const now = new Date();
     const taxExpireDate = new Date(bluebookData.taxExpireDate);
@@ -139,6 +152,10 @@ function Payment() {
     });
   };
 
+  /**
+   * Handles the payment initiation process.
+   * Sends payment request to API and manages OTP modal.
+   */
   const handlePayment = async () => {
     if (!taxDetails.canPay) {
       setError('Tax payment is not due yet. You can pay when there are less than 30 days remaining.');
@@ -197,6 +214,10 @@ function Payment() {
     }
   };
 
+  /**
+   * Handles OTP verification for payment.
+   * Sends OTP and payment ID to API and manages payment modal.
+   */
   const handleOtpVerification = async () => {
     if (!otp || otp.length !== 6) {
       setError('Please enter a valid 6-digit OTP');
@@ -237,6 +258,11 @@ function Payment() {
     }
   };
 
+  /**
+   * Formats a date string into a readable format.
+   * @param {string} dateString
+   * @returns {string}
+   */
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -246,6 +272,11 @@ function Payment() {
     });
   };
 
+  /**
+   * Returns status object for days left (color, icon, text).
+   * @param {number} daysLeft
+   * @returns {{color: string, icon: JSX.Element, text: string}}
+   */
   const getDaysLeftStatus = (daysLeft) => {
     if (daysLeft > 30) {
       return { color: 'text-green-600', icon: <FaCheckCircle />, text: 'Tax is valid' };
@@ -621,4 +652,4 @@ function Payment() {
   );
 }
 
-export default Payment; 
+export default Payment;

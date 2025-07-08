@@ -1,7 +1,11 @@
 import NewsSection from "../components/NewsSection";
 import GuidanceSection from "../components/GuidanceSection.jsx";
 
+/**
+ * Home component renders the landing page with hero, news, and guidance sections.
+ */
 function Home() {
+  // Renders the main home/landing page layout
   return (
     <div className="px-6 py-12 space-y-16 bg-gradient-to-br from-blue-50 to-white min-h-screen animate-fade-in">
       {/* Hero */}

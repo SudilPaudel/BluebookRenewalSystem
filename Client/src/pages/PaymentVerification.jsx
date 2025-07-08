@@ -4,11 +4,17 @@ import { FaCheckCircle, FaTimesCircle, FaSpinner, FaArrowLeft } from "react-icon
 import khaltiLogo from "../assets/khalti.png";
 
 // Khalti Logo Component using PNG
+/**
+ * Renders the Khalti logo image.
+ * @param {object} props
+ */
 const KhaltiLogo = ({ className = "h-8 w-8" }) => (
   <img src={khaltiLogo} alt="Khalti" className={className} />
 );
 
 function PaymentVerification() {
+  // Main component for verifying payment status
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -20,6 +26,10 @@ function PaymentVerification() {
     verifyPayment();
   }, []);
 
+  /**
+   * Verifies the payment by sending the transaction ID (pidx) to the backend.
+   * Updates verification status and error messages based on response.
+   */
   const verifyPayment = async () => {
     try {
       const pidx = searchParams.get('pidx');
@@ -71,10 +81,17 @@ function PaymentVerification() {
     }
   };
 
+  /**
+   * Handles navigation back to the dashboard.
+   */
   const handleBackToDashboard = () => {
     navigate('/dashboard');
   };
 
+  /**
+   * Handles retrying the payment verification process.
+   * Resets status and error, then calls verifyPayment again.
+   */
   const handleRetry = () => {
     setVerificationStatus('verifying');
     setError(null);
@@ -266,4 +283,4 @@ function PaymentVerification() {
   );
 }
 
-export default PaymentVerification; 
+export default PaymentVerification;

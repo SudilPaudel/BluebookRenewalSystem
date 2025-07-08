@@ -65,7 +65,10 @@ class DemoPaymentService {
 const demoPaymentService = new DemoPaymentService();
 
 class PaymentController {
-   payTax = async (req, res, next) => {
+  // Handles tax payment initiation for a bluebook.
+  // Calculates tax, checks vehicle type and age, applies fines if overdue, and initiates payment via Khalti or demo mode.
+  // Sends OTP to user's email and returns payment details and payment URL.
+  payTax = async (req, res, next) => {
     try {
       const id = req.params.id;
       //fetch bluebook data
@@ -445,6 +448,8 @@ class PaymentController {
     }
   };
 
+  // Verifies a payment transaction using pidx.
+  // Checks payment status via Khalti or demo mode, updates payment and bluebook records if successful.
   verifyTransaction = async (req, res, next) => {
     try {
       const { pidx } = req.body;
@@ -559,6 +564,8 @@ class PaymentController {
       });
     }
   };
+  // Verifies the OTP for a payment.
+  // Checks OTP validity, expiration, and updates payment status if correct.
   verifyOtp = async (req, res, next) => {
     try {
       const { paymentId, otp } = req.body;
@@ -640,7 +647,8 @@ class PaymentController {
     }
   };
 
-  // Demo endpoint to complete a payment (for testing)
+  // Demo endpoint to complete a payment (for testing).
+  // Marks a demo payment as completed using the provided pidx.
   completeDemoPayment = async (req, res, next) => {
     try {
       const { pidx } = req.body;

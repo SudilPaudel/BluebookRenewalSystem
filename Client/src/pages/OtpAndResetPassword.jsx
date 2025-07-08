@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function OtpAndResetPassword() {
+  // Main component for OTP verification and password reset
+
   const [otp, setOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -13,6 +15,10 @@ function OtpAndResetPassword() {
 
   const navigate = useNavigate();
 
+  /**
+   * Handles the resend timer countdown for OTP.
+   * Enables resend button when timer reaches zero.
+   */
   useEffect(() => {
     if (resendTimer === 0) {
       setCanResend(true);
@@ -22,11 +28,21 @@ function OtpAndResetPassword() {
     return () => clearTimeout(timerId);
   }, [resendTimer]);
 
+  /**
+   * Handles changes to the OTP input field.
+   * Only allows numeric input and limits to 6 digits.
+   * @param {React.ChangeEvent<HTMLInputElement>} e
+   */
   const handleOtpChange = (e) => {
     const val = e.target.value.replace(/\D/g, "").slice(0, 6);
     setOtp(val);
   };
 
+  /**
+   * Handles OTP form submission.
+   * Verifies OTP length and sets OTP as verified if valid.
+   * @param {React.FormEvent} e
+   */
   const handleOtpSubmit = (e) => {
     e.preventDefault();
 
@@ -38,6 +54,10 @@ function OtpAndResetPassword() {
     setOtpVerified(true);
   };
 
+  /**
+   * Handles resending the OTP.
+   * Resets the resend timer and disables the resend button.
+   */
   const handleResend = () => {
     if (!canResend) return;
     setResendTimer(30);
@@ -45,6 +65,11 @@ function OtpAndResetPassword() {
     // TODO: Resend OTP backend call
   };
 
+  /**
+   * Handles new password form submission.
+   * Validates password length and match, then resets password.
+   * @param {React.FormEvent} e
+   */
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
     setPasswordError(""); // reset error

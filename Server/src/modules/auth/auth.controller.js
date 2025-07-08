@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 class AuthController{
+    // Handles user registration, generates OTP, sends verification email, and returns registration info.
     register = async(req,res, next)=>{
         try{
             const data = authSvc.transformRegisterData(req);
@@ -73,6 +74,8 @@ class AuthController{
             next(exception)
         }
     }
+
+    // Verifies the OTP sent to user's email and activates the account if valid.
     verifyEmailOtp = async(req, res, next)=>{
         try{
             const {userId, otp} = req.body;
@@ -130,6 +133,7 @@ class AuthController{
         }
     }
     
+    // Resends a new OTP to the user's email for verification.
     resendOtp = async(req, res, next)=>{
         try{
             const {userId} = req.body;
@@ -208,6 +212,7 @@ class AuthController{
         }
     }
     
+    // Activates a user account using an activation token.
     activate = async(req, res, next)=>{
         try{
             const {token}= req.params;
@@ -230,6 +235,8 @@ class AuthController{
             next(exception);
         }
     }
+
+    // Handles user login, checks credentials, status, and returns JWT tokens if successful.
     login = async(req, res, next)=>{
         try{
             const {email, password} = req.body;
@@ -283,6 +290,8 @@ class AuthController{
             next(exception);
         }
     }
+
+    // Returns the profile of the currently logged-in user.
     getLoggedIn= async(req, res, next)=>{
         try{
             const loggedInUser = req.authUser;
@@ -305,6 +314,7 @@ class AuthController{
         }
     }
     
+    // Updates the profile of the currently logged-in user after validation.
     updateProfile = async(req, res, next)=>{
         try{
             const {name, email, citizenshipNo} = req.body;
@@ -353,6 +363,8 @@ class AuthController{
             next(exception);
         }
     }
+
+    // Returns the authenticated user's data for admin access check.
     getadminAccess = (req, res, next)=>{
         try{
             const data= req.authUser;
@@ -366,7 +378,7 @@ class AuthController{
         }
     }
 
-    // Admin user management methods
+    // Fetches all users and returns user data with meta statistics (admin only).
     getAllUsers = async (req, res, next) => {
         try {
             const users = await authSvc.findAllUsers();
@@ -387,6 +399,7 @@ class AuthController{
         }
     }
 
+    // Fetches a single user by ID (admin only).
     getUserById = async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -406,6 +419,7 @@ class AuthController{
         }
     }
 
+    // Updates a user's status (active/inactive) by ID (admin only).
     updateUserStatus = async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -431,6 +445,7 @@ class AuthController{
         }
     }
 
+    // Updates a user's information by ID after validation (admin only).
     updateUser = async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -494,6 +509,7 @@ class AuthController{
         }
     }
 
+    // Deletes a user by ID after checking existence and role (admin only).
     deleteUser = async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -522,7 +538,7 @@ class AuthController{
         }
     }
 
-    // Create a new admin (admin only)
+    // Creates a new admin user (admin only).
     createAdmin = async (req, res, next) => {
         try {
             const { name, email, password } = req.body;

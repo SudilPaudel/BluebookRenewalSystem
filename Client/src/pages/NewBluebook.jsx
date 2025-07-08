@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { FaCar, FaSave, FaArrowLeft, FaUpload } from "react-icons/fa";
 
 function NewBluebook() {
+  // Main component for registering a new bluebook
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,6 +29,10 @@ function NewBluebook() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Checks if the user is authenticated by verifying the access token.
+   * Redirects to login page if not authenticated.
+   */
   const checkAuth = () => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -34,6 +40,10 @@ function NewBluebook() {
     }
   };
 
+  /**
+   * Handles input changes for form fields and clears errors for the changed field.
+   * @param {React.ChangeEvent<HTMLInputElement|HTMLSelectElement>} e
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -50,6 +60,10 @@ function NewBluebook() {
     }
   };
 
+  /**
+   * Validates the form fields and sets error messages if validation fails.
+   * @returns {boolean} True if the form is valid, false otherwise.
+   */
   const validateForm = () => {
     const newErrors = {};
 
@@ -86,6 +100,11 @@ function NewBluebook() {
     return Object.keys(newErrors).length === 0;
   };
 
+  /**
+   * Handles form submission for registering a new bluebook.
+   * Validates the form, sends data to the API, and manages loading and navigation.
+   * @param {React.FormEvent} e
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -483,4 +502,4 @@ function NewBluebook() {
   );
 }
 
-export default NewBluebook; 
+export default NewBluebook;

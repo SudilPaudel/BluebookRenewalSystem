@@ -4,6 +4,8 @@ const BluebookModel = require('../Bluebook/bluebook.model');
 const PaymentModel = require('../payment/payment.model');
 
 class AdminController {
+    // Generates a PDF report for users, bluebooks, or payments based on the 'type' parameter.
+    // Fetches relevant data, formats it, and streams a PDF file as the response.
     generateReport = async (req, res, next) => {
         try {
             const { type } = req.params;
@@ -96,6 +98,7 @@ class AdminController {
         }
     }
 
+    // Formats a single data item for the PDF report summary, depending on the report type.
     formatReportItem = (item, type) => {
         switch (type) {
             case 'users':
@@ -109,6 +112,7 @@ class AdminController {
         }
     }
 
+    // Retrieves all payment records, populates user info, and returns a summary with meta statistics.
     getAllPayments = async (req, res, next) => {
         try {
             const payments = await PaymentModel.find({}).populate('userId', 'name email');
@@ -137,6 +141,7 @@ class AdminController {
         }
     }
 
+    // Gathers and returns overall system statistics: user, bluebook, and payment counts.
     getSystemStats = async (req, res, next) => {
         try {
             const totalUsers = await UserModel.countDocuments({});
@@ -163,6 +168,7 @@ class AdminController {
         }
     }
 
+    // Fetches all users, removes sensitive fields, and returns user data with meta statistics.
     getAllUsers = async (req, res, next) => {
         try {
             const users = await UserModel.find({}).select('-password -activationToken');
@@ -183,6 +189,8 @@ class AdminController {
         }
     }
 
+    // Updates a user's information by ID after validating input and existence.
+    // Returns the updated user data.
     updateUser = async (req, res, next) => {
         try {
             const id = req.params.id;
@@ -224,6 +232,7 @@ class AdminController {
         }
     }
 
+    // Deletes a user by ID after checking existence and ensuring the user is not an admin.
     deleteUser = async (req, res, next) => {
         try {
             const id = req.params.id;
@@ -252,6 +261,7 @@ class AdminController {
         }
     }
 
+    // Toggles a user's status (active/inactive) by ID and returns the updated user.
     toggleUserStatus = async (req, res, next) => {
         try {
             const id = req.params.id;
@@ -282,4 +292,4 @@ class AdminController {
 }
 
 const adminCtrl = new AdminController();
-module.exports = adminCtrl; 
+module.exports = adminCtrl;

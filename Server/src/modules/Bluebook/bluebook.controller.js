@@ -5,6 +5,7 @@ const PDFDocument = require('pdfkit');
 require("dotenv").config();
 
 class BluebookController {
+    // Handles creation of a new bluebook record using request data and authenticated user.
     createBluebook = async (req, res, next) => {
         try {
             const data = bluebookSvc.transformCreateData(req);
@@ -22,6 +23,8 @@ class BluebookController {
             next(exception)
         }
     }
+
+    // Verifies a bluebook by ID and updates its status to 'verified'.
     verifyBluebook = async (req, res, next) => {
         try {
             const id = req.params.id
@@ -43,6 +46,8 @@ class BluebookController {
             next(exception)
         }
     }
+
+    // Fetches bluebooks based on provided search fields in the request body.
     fetchBluebook = async (req, res, next) => {
         try {
             // Build dynamic query from provided fields
@@ -76,6 +81,8 @@ class BluebookController {
             next(exception)
         }
     }
+
+    // Fetches a single bluebook by its ID and checks its verification status.
     fetchBluebookById = async (req, res, next) => {
         try {
             const id = req.params.id
@@ -98,6 +105,8 @@ class BluebookController {
             next(exception)
         }
     }
+
+    // Retrieves all bluebooks created by the currently authenticated user.
     getMyBluebook = async (req, res, next) => {
         try {
             const userId = req.authUser._id; // assuming it's added by middleware
@@ -115,6 +124,8 @@ class BluebookController {
             next(exception)
         }
     }
+
+    // Generates and streams a PDF certificate for a bluebook if the user has permission.
     downloadBluebook = async (req, res, next) => {
         try {
             const id = req.params.id;
@@ -288,6 +299,7 @@ class BluebookController {
     }
 
     // Admin methods
+    // Fetches all bluebooks for admin, with meta statistics for pending and verified.
     getAllBluebooks = async (req, res, next) => {
         try {
             const result = await bluebookSvc.findManyBluebooks({});
@@ -306,6 +318,7 @@ class BluebookController {
         }
     }
 
+    // Fetches all bluebooks with status 'pending' for admin review.
     getPendingBluebooks = async (req, res, next) => {
         try {
             const result = await bluebookSvc.findManyBluebooks({ status: 'pending' });
@@ -322,6 +335,7 @@ class BluebookController {
         }
     }
 
+    // Fetches all bluebooks with status 'verified' for admin.
     getVerifiedBluebooks = async (req, res, next) => {
         try {
             const result = await bluebookSvc.findManyBluebooks({ status: 'verified' });
@@ -338,6 +352,7 @@ class BluebookController {
         }
     }
 
+    // Rejects a pending bluebook by ID and updates its status to 'rejected'.
     rejectBluebook = async (req, res, next) => {
         try {
             const id = req.params.id;
@@ -366,6 +381,7 @@ class BluebookController {
         }
     }
 
+    // Updates a bluebook's information by ID after validating required fields and status.
     updateBluebook = async (req, res, next) => {
         try {
             const id = req.params.id;
@@ -407,5 +423,6 @@ class BluebookController {
         }
     }
 }
+
 const bluebookCtrl = new BluebookController()
 module.exports = bluebookCtrl;

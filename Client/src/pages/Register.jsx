@@ -5,6 +5,8 @@ import API from "../api/api";
 import Notification from "../components/Notification";
 
 function Register() {
+  // Main component for user registration and email OTP verification
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -29,6 +31,11 @@ function Register() {
   const [notification, setNotification] = useState({ type: "", message: "" });
   const [resendTimer, setResendTimer] = useState(0);
 
+  /**
+   * Handles input changes for form fields and image upload.
+   * Validates image size and aspect ratio for passport photo.
+   * @param {React.ChangeEvent<HTMLInputElement>} e
+   */
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
@@ -63,14 +70,25 @@ function Register() {
     }
   };
 
+  /**
+   * Shows a notification with the given type and message.
+   * @param {string} type
+   * @param {string} message
+   */
   const showNotification = (type, message) => {
     setNotification({ type, message });
   };
 
+  /**
+   * Clears the notification message.
+   */
   const clearNotification = () => {
     setNotification({ type: "", message: "" });
   };
 
+  /**
+   * Starts the resend OTP timer countdown.
+   */
   const startResendTimer = () => {
     setResendTimer(60);
     const interval = setInterval(() => {
@@ -84,6 +102,11 @@ function Register() {
     }, 1000);
   };
 
+  /**
+   * Handles registration form submission.
+   * Validates passwords and image, sends registration data to API, and shows OTP form on success.
+   * @param {React.FormEvent} e
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -132,6 +155,11 @@ function Register() {
     }
   };
 
+  /**
+   * Handles OTP form submission for email verification.
+   * Validates OTP and sends verification request to API.
+   * @param {React.FormEvent} e
+   */
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     
@@ -152,7 +180,7 @@ function Register() {
       if (response.data.result) {
         showNotification("success", response.data.message || "Email verified successfully! You can now login.");
         setTimeout(() => {
-    navigate("/login");
+          navigate("/login");
         }, 2000);
       }
     } catch (error) {
@@ -163,6 +191,10 @@ function Register() {
     }
   };
 
+  /**
+   * Handles resending the OTP for email verification.
+   * Sends resend request to API and restarts the resend timer.
+   */
   const handleResendOtp = async () => {
     if (resendTimer > 0) return;
 

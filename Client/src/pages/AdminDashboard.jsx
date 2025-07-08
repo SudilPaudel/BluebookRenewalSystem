@@ -111,7 +111,9 @@ function AdminDashboard() {
     fetchDashboardData();
   }, []);
 
+  // Checks authentication and redirects user if not admin or not logged in.
   const checkAuth = () => {
+    // Checks localStorage for user details and token, parses user, and redirects if not admin.
     const userDetail = localStorage.getItem('userDetail');
     const token = localStorage.getItem('accessToken');
     
@@ -133,6 +135,7 @@ function AdminDashboard() {
     }
   };
 
+  // Fetches all dashboard data: users, bluebooks, pending bluebooks, payments, and news.
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -220,6 +223,7 @@ function AdminDashboard() {
     }
   };
 
+  // Handles bluebook verification by sending a request to the backend and refreshing data.
   const handleVerifyBluebook = async (bluebookId) => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -244,6 +248,7 @@ function AdminDashboard() {
     }
   };
 
+  // Updates a user's status (active/inactive) and refreshes dashboard data.
   const handleUpdateUserStatus = async (userId, newStatus) => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -269,7 +274,9 @@ function AdminDashboard() {
     }
   };
 
+  // Formats a date string into a readable format.
   const formatDate = (dateString) => {
+    // Converts a date string to a human-readable format or returns 'N/A' if not present.
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -278,7 +285,9 @@ function AdminDashboard() {
     });
   };
 
+  // Returns a badge component for bluebook status.
   const getStatusBadge = (status) => {
+    // Returns a styled badge based on bluebook status (verified, pending, rejected, unknown).
     switch (status) {
       case 'verified':
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -302,7 +311,9 @@ function AdminDashboard() {
     }
   };
 
+  // Returns a badge component for user status.
   const getUserStatusBadge = (status) => {
+    // Returns a styled badge for user status (active/inactive).
     return status === 'active' ? (
       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
         <FaCheckCircle className="mr-1" />
@@ -316,7 +327,9 @@ function AdminDashboard() {
     );
   };
 
+  // Returns a badge component for user role.
   const getUserRoleBadge = (role) => {
+    // Returns a styled badge for user role (admin/user).
     return role === 'admin' ? (
       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
         <FaShieldAlt className="mr-1" />
@@ -330,17 +343,23 @@ function AdminDashboard() {
     );
   };
 
+  // Opens the user details modal for the selected user.
   const handleViewUserDetails = (user) => {
+    // Sets selected user and shows the user modal.
     setSelectedUser(user);
     setShowUserModal(true);
   };
 
+  // Opens the delete confirmation modal for the selected user.
   const handleDeleteUser = (user) => {
+    // Sets user to delete and shows the delete modal.
     setUserToDelete(user);
     setShowDeleteModal(true);
   };
 
+  // Opens the edit modal and sets the selected user's data for editing.
   const handleEditUser = (user) => {
+    // Sets editing user and populates edit form data, then shows edit modal.
     setEditingUser(user);
     setEditFormData({
       name: user.name,
@@ -352,7 +371,9 @@ function AdminDashboard() {
     setShowEditModal(true);
   };
 
+  // Handles changes in the edit user form fields.
   const handleEditFormChange = (e) => {
+    // Updates edit form data state as user types in the edit modal.
     const { name, value } = e.target;
     setEditFormData(prev => ({
       ...prev,
@@ -360,6 +381,7 @@ function AdminDashboard() {
     }));
   };
 
+  // Sends updated user data to the backend and refreshes dashboard data.
   const handleUpdateUser = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -387,7 +409,9 @@ function AdminDashboard() {
     }
   };
 
+  // Opens the edit bluebook modal and sets the selected bluebook's data.
   const handleEditBluebook = (bluebook) => {
+    // Sets editing bluebook and populates edit bluebook form data, then shows modal.
     setEditingBluebook(bluebook);
     setEditBluebookFormData({
       vehicleRegNo: bluebook.vehicleRegNo || '',
@@ -407,7 +431,9 @@ function AdminDashboard() {
     setShowEditBluebookModal(true);
   };
 
+  // Handles changes in the edit bluebook form fields.
   const handleEditBluebookFormChange = (e) => {
+    // Updates edit bluebook form data state as user types in the modal.
     const { name, value } = e.target;
     setEditBluebookFormData(prev => ({
       ...prev,
@@ -415,6 +441,7 @@ function AdminDashboard() {
     }));
   };
 
+  // Sends updated bluebook data to the backend and refreshes dashboard data.
   const handleUpdateBluebook = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -442,6 +469,7 @@ function AdminDashboard() {
     }
   };
 
+  // Confirms and deletes a user, then refreshes dashboard data.
   const confirmDeleteUser = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -469,6 +497,7 @@ function AdminDashboard() {
     }
   };
 
+  // Rejects a bluebook by sending a request to the backend and refreshes data.
   const handleRejectBluebook = async (bluebookId) => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -493,6 +522,7 @@ function AdminDashboard() {
     }
   };
 
+  // Generates a report PDF for users, bluebooks, or payments.
   const generateReport = async (reportType) => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -524,11 +554,14 @@ function AdminDashboard() {
     }
   };
 
+  // Handles changes in the create admin form fields.
   const handleCreateAdminFormChange = (e) => {
+    // Updates create admin form state as user types.
     const { name, value } = e.target;
     setCreateAdminForm(prev => ({ ...prev, [name]: value }));
   };
 
+  // Sends a request to create a new admin and refreshes dashboard data.
   const handleCreateAdmin = async () => {
     setCreateAdminLoading(true);
     setCreateAdminError('');
@@ -562,8 +595,9 @@ function AdminDashboard() {
     }
   };
 
-  // News management functions
+  // Handles changes in the news form fields.
   const handleNewsFormChange = (e) => {
+    // Updates news form state as user types.
     const { name, value } = e.target;
     setNewsForm(prev => ({
       ...prev,
@@ -571,13 +605,16 @@ function AdminDashboard() {
     }));
   };
 
+  // Handles image file selection for news.
   const handleNewsImageChange = (e) => {
+    // Sets selected image file for news article.
     const file = e.target.files[0];
     if (file) {
       setNewsImage(file);
     }
   };
 
+  // Sends a request to create a news article and refreshes dashboard data.
   const handleCreateNews = async () => {
     setNewsLoading(true);
     setNewsError('');
@@ -636,7 +673,9 @@ function AdminDashboard() {
     }
   };
 
+  // Opens the news modal for editing and sets the selected news data.
   const handleEditNews = (newsItem) => {
+    // Sets editing news and populates news form, then shows modal.
     setEditingNews(newsItem);
     setNewsForm({
       title: newsItem.title,
@@ -648,6 +687,7 @@ function AdminDashboard() {
     setShowNewsModal(true);
   };
 
+  // Sends updated news data to the backend and refreshes dashboard data.
   const handleUpdateNews = async () => {
     setNewsLoading(true);
     setNewsError('');
@@ -707,11 +747,14 @@ function AdminDashboard() {
     }
   };
 
+  // Opens the delete confirmation modal for the selected news article.
   const handleDeleteNews = (newsItem) => {
+    // Sets news to delete and shows delete modal.
     setNewsToDelete(newsItem);
     setShowDeleteNewsModal(true);
   };
 
+  // Confirms and deletes a news article, then refreshes dashboard data.
   const confirmDeleteNews = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -740,6 +783,7 @@ function AdminDashboard() {
     }
   };
 
+  // Updates the status of a news article (active/inactive/draft).
   const handleUpdateNewsStatus = async (newsId, newStatus) => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -763,7 +807,9 @@ function AdminDashboard() {
     }
   };
 
+  // Returns a badge component for news status.
   const getNewsStatusBadge = (status) => {
+    // Returns a styled badge for news status (active/inactive/draft).
     const statusConfig = {
       active: { color: 'bg-green-100 text-green-800', text: 'Active' },
       inactive: { color: 'bg-red-100 text-red-800', text: 'Inactive' },
@@ -1883,4 +1929,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard; 
+export default AdminDashboard;

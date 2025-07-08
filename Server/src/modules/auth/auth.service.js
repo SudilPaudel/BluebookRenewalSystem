@@ -2,6 +2,7 @@ const {generateRandomString} = require('../../utils/helpers');
 const bcrypt = require('bcryptjs');
 const UserModel = require('../user/user.model');
 class AuthService{
+    // Transforms registration data: hashes passwords, sets status and activation token, and adds image if present.
     transformRegisterData=(req)=>{
         try{
             const payload = req.body;
@@ -18,6 +19,8 @@ class AuthService{
         }
 
     }
+
+    // Creates a new user in the database with the provided data.
     createUser = async (data)=>{
             try{
                 const user = new UserModel(data);
@@ -26,6 +29,8 @@ class AuthService{
                 throw exception;
             }
     }
+
+    // Finds a single user based on the given filter.
     findOneUser = async(filter)=>{
         try{
             const userObj = await UserModel.findOne(filter);
@@ -34,6 +39,8 @@ class AuthService{
             throw exception;
         }
     }
+
+    // Finds all users matching the filter and excludes sensitive fields.
     findAllUsers = async(filter = {})=>{
         try{
             const users = await UserModel.find(filter).select('-password -activationToken');
@@ -42,6 +49,8 @@ class AuthService{
             throw exception;
         }
     }
+
+    // Updates a user's data by user ID.
     updateUser = async (data, userId)=>{
         try{
             const result = await UserModel.findByIdAndUpdate(userId, {$set: data})
@@ -51,6 +60,7 @@ class AuthService{
         }
     }
     
+    // Deletes a user from the database by user ID.
     deleteUser = async (userId)=>{
         try{
             const result = await UserModel.findByIdAndDelete(userId);
