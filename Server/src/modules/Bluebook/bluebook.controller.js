@@ -148,7 +148,26 @@ class BluebookController {
             // Pipe PDF to response
             doc.pipe(res);
 
-            // --- Add Logo at the Top Center ---
+            // --- Add Background Image (with logo included in the image) ---
+            const backgroundPath = process.env.TRANSPORT_BG_PATH || 'public/images/transport-logo.png';
+            try {
+                // Set watermark size (e.g., 300x300 or adjust as needed)
+                const watermarkWidth = 300;
+                const watermarkHeight = 300;
+                const centerX = (doc.page.width - watermarkWidth) / 2;
+                const centerY = (doc.page.height - watermarkHeight) / 2;
+
+                // Set opacity for watermark effect
+                doc.save();
+                doc.opacity(0.15);
+                doc.image(backgroundPath, centerX, centerY, { width: watermarkWidth, height: watermarkHeight });
+                doc.opacity(1);
+                doc.restore();
+            } catch (e) {
+                // If background not found, continue without error
+            }
+
+            // --- Optionally, overlay logo at the top center if needed ---
             const logoPath = process.env.TRANSPORT_LOGO_PATH || 'public/images/transport-logo.png';
             let logoHeight = 100;
             try {
