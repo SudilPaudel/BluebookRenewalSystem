@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../api/api";
 import Notification from "../components/Notification";
+import { toast } from "react-toastify"
 
 /**
  * Login component handles user authentication and login form.
@@ -27,6 +28,13 @@ function Login() {
    * Handles input changes for form fields and clears notifications.
    * @param {React.ChangeEvent<HTMLInputElement>} e
    */
+  const isLoggedIn = localStorage.getItem('accessToken');
+  useEffect(()=>{
+    if(isLoggedIn){
+      toast.info("You are already logged in");
+      navigate('/dashboard');
+    }
+  }, [isLoggedIn, navigate])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaGlobe, FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaShieldAlt, FaCar, FaFileAlt, FaUsers, FaClock } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 function Footer() {
   const navigate = useNavigate();
@@ -8,7 +9,7 @@ function Footer() {
   const handleProtectedLink = (path) => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
-      alert('Please login to access this feature');
+      toast.info('Please login to access this feature');
       navigate('/login');
       return;
     }

@@ -31,6 +31,7 @@ import {
   FaImage
 } from "react-icons/fa";
 import fallbackNews from "../assets/news1.jpeg"; 
+import { toast } from "react-toastify";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -236,15 +237,15 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        alert('Bluebook verified successfully!');
+        toast.success('Bluebook verified successfully!');
         fetchDashboardData(); // Refresh data
       } else {
         const error = await response.json();
-        alert(error.message || 'Failed to verify bluebook');
+        toast.error(error.message || 'Failed to verify bluebook');
       }
     } catch (error) {
       console.error('Error verifying bluebook:', error);
-      alert('An error occurred while verifying bluebook');
+      toast.error('An error occurred while verifying bluebook');
     }
   };
 
@@ -262,15 +263,15 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        alert(`User status updated to ${newStatus} successfully!`);
+        toast.error(`User status updated to ${newStatus} successfully!`);
         fetchDashboardData(); // Refresh data
       } else {
         const error = await response.json();
-        alert(error.message || 'Failed to update user status');
+        toast.error(error.message || 'Failed to update user status');
       }
     } catch (error) {
       console.error('Error updating user status:', error);
-      alert('An error occurred while updating user status');
+      toast.error('An error occurred while updating user status');
     }
   };
 
@@ -395,17 +396,17 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        alert('User updated successfully!');
+        toast.error('User updated successfully!');
         fetchDashboardData(); // Refresh data
         setShowEditModal(false);
         setEditingUser(null);
       } else {
         const error = await response.json();
-        alert(error.message || 'Failed to update user');
+        toast.error(error.message || 'Failed to update user');
       }
     } catch (error) {
       console.error('Error updating user:', error);
-      alert('An error occurred while updating user');
+      toast.error('An error occurred while updating user');
     }
   };
 
@@ -455,17 +456,17 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        alert('Bluebook updated successfully!');
+        toast.error('Bluebook updated successfully!');
         fetchDashboardData(); // Refresh data
         setShowEditBluebookModal(false);
         setEditingBluebook(null);
       } else {
         const error = await response.json();
-        alert(error.message || 'Failed to update bluebook');
+        toast.error(error.message || 'Failed to update bluebook');
       }
     } catch (error) {
       console.error('Error updating bluebook:', error);
-      alert('An error occurred while updating bluebook');
+      toast.error('An error occurred while updating bluebook');
     }
   };
 
@@ -482,15 +483,15 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        alert('User deleted successfully!');
+        toast.error('User deleted successfully!');
         fetchDashboardData(); // Refresh data
       } else {
         const error = await response.json();
-        alert(error.message || 'Failed to delete user');
+        toast.error(error.message || 'Failed to delete user');
       }
     } catch (error) {
       console.error('Error deleting user:', error);
-      alert('An error occurred while deleting user');
+      toast.error('An error occurred while deleting user');
     } finally {
       setShowDeleteModal(false);
       setUserToDelete(null);
@@ -510,15 +511,15 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        alert('Bluebook rejected successfully!');
+        toast.error('Bluebook rejected successfully!');
         fetchDashboardData(); // Refresh data
       } else {
         const error = await response.json();
-        alert(error.message || 'Failed to reject bluebook');
+        toast.error(error.message || 'Failed to reject bluebook');
       }
     } catch (error) {
       console.error('Error rejecting bluebook:', error);
-      alert('An error occurred while rejecting bluebook');
+      toast.error('An error occurred while rejecting bluebook');
     }
   };
 
@@ -543,14 +544,14 @@ function AdminDashboard() {
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
-        alert(`${reportType} report generated successfully!`);
+        toast.error(`${reportType} report generated successfully!`);
       } else {
         const errorData = await response.json();
-        alert(errorData.message || 'Failed to generate report');
+        toast.error(errorData.message || 'Failed to generate report');
       }
     } catch (error) {
       console.error('Error generating report:', error);
-      alert('An error occurred while generating report. Please try again.');
+      toast.error('An error occurred while generating report. Please try again.');
     }
   };
 
@@ -800,10 +801,10 @@ function AdminDashboard() {
         fetchDashboardData();
       } else {
         const data = await response.json();
-        alert(data.message || 'Failed to update news status');
+        toast.error(data.message || 'Failed to update news status');
       }
     } catch (error) {
-      alert('An error occurred while updating news status');
+      toast.error('An error occurred while updating news status');
     }
   };
 

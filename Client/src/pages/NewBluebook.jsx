@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCar, FaSave, FaArrowLeft, FaUpload } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 function NewBluebook() {
   // Main component for registering a new bluebook
@@ -128,14 +129,14 @@ function NewBluebook() {
       const data = await response.json();
 
       if (response.ok) {
-        alert('Bluebook registered successfully!');
+        toast.success('Bluebook registered successfully!');
         navigate('/dashboard');
       } else {
-        alert(data.message || 'Failed to register bluebook');
+        toast.error(data.message || 'Failed to register bluebook');
       }
     } catch (error) {
       console.error('Error registering bluebook:', error);
-      alert('An error occurred while registering the bluebook');
+      toast.error('An error occurred while registering the bluebook');
     } finally {
       setLoading(false);
     }
