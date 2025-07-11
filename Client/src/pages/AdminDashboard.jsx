@@ -844,9 +844,9 @@ function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
       {/* Header */}
-      <div className="bg-white/90 shadow-lg border-b sticky top-0 z-30 backdrop-blur-md transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-8">
+      <div className="bg-white/80 backdrop-blur shadow-md border-b sticky top-0 z-10 transition-all duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-8 animate-fade-in-down">
             <div>
               <h1 className="text-4xl font-extrabold text-nepal-blue tracking-tight animate-fade-in-down">Admin Dashboard</h1>
               <p className="mt-2 text-base text-gray-500 animate-fade-in">{`Welcome back, ${user?.name || 'Admin'}`}</p>
