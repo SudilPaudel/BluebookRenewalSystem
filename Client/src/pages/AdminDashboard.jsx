@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-  FaUsers, 
-  FaCar, 
-  FaCheckCircle, 
-  FaClock, 
-  FaTimesCircle, 
-  FaShieldAlt, 
-  FaChartBar, 
-  FaEye, 
-  FaEdit, 
-  FaToggleOn, 
+import {
+  FaUsers,
+  FaCar,
+  FaCheckCircle,
+  FaClock,
+  FaTimesCircle,
+  FaShieldAlt,
+  FaChartBar,
+  FaEye,
+  FaEdit,
+  FaToggleOn,
   FaToggleOff,
   FaDownload,
   FaSearch,
@@ -30,7 +30,7 @@ import {
   FaPlus,
   FaImage
 } from "react-icons/fa";
-import fallbackNews from "../assets/news1.jpeg"; 
+import fallbackNews from "../assets/news1.jpeg";
 import { toast } from "react-toastify";
 
 function AdminDashboard() {
@@ -88,7 +88,7 @@ function AdminDashboard() {
   const [createAdminLoading, setCreateAdminLoading] = useState(false);
   const [createAdminError, setCreateAdminError] = useState('');
   const [createAdminSuccess, setCreateAdminSuccess] = useState('');
-  
+
   // News management state
   const [news, setNews] = useState([]);
   const [showNewsModal, setShowNewsModal] = useState(false);
@@ -117,7 +117,7 @@ function AdminDashboard() {
     // Checks localStorage for user details and token, parses user, and redirects if not admin.
     const userDetail = localStorage.getItem('userDetail');
     const token = localStorage.getItem('accessToken');
-    
+
     if (!userDetail || !token) {
       navigate('/login');
       return;
@@ -140,7 +140,7 @@ function AdminDashboard() {
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      
+
       // Fetch users
       const usersResponse = await fetch(`${import.meta.env.VITE_API_URL}/auth/admin/users`, {
         headers: {
@@ -263,7 +263,7 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        toast.error(`User status updated to ${newStatus} successfully!`);
+        toast.success(`User status updated to ${newStatus} successfully!`);
         fetchDashboardData(); // Refresh data
       } else {
         const error = await response.json();
@@ -396,7 +396,7 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        toast.error('User updated successfully!');
+        toast.success('User updated successfully!');
         fetchDashboardData(); // Refresh data
         setShowEditModal(false);
         setEditingUser(null);
@@ -425,9 +425,9 @@ function AdminDashboard() {
       vehicleEngineCC: bluebook.vehicleEngineCC || '',
       vehicleNumber: bluebook.vehicleNumber || '',
       status: bluebook.status || 'pending',
-      VehicleRegistrationDate: bluebook.VehicleRegistrationDate ? bluebook.VehicleRegistrationDate.slice(0,10) : '',
-      taxPayDate: bluebook.taxPayDate ? bluebook.taxPayDate.slice(0,10) : '',
-      taxExpireDate: bluebook.taxExpireDate ? bluebook.taxExpireDate.slice(0,10) : ''
+      VehicleRegistrationDate: bluebook.VehicleRegistrationDate ? bluebook.VehicleRegistrationDate.slice(0, 10) : '',
+      taxPayDate: bluebook.taxPayDate ? bluebook.taxPayDate.slice(0, 10) : '',
+      taxExpireDate: bluebook.taxExpireDate ? bluebook.taxExpireDate.slice(0, 10) : ''
     });
     setShowEditBluebookModal(true);
   };
@@ -456,7 +456,7 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        toast.error('Bluebook updated successfully!');
+        toast.success('Bluebook updated successfully!');
         fetchDashboardData(); // Refresh data
         setShowEditBluebookModal(false);
         setEditingBluebook(null);
@@ -483,7 +483,7 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        toast.error('User deleted successfully!');
+        toast.success('User deleted successfully!');
         fetchDashboardData(); // Refresh data
       } else {
         const error = await response.json();
@@ -511,7 +511,7 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        toast.error('Bluebook rejected successfully!');
+        toast.success('Bluebook rejected successfully!');
         fetchDashboardData(); // Refresh data
       } else {
         const error = await response.json();
@@ -544,7 +544,7 @@ function AdminDashboard() {
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
-        toast.error(`${reportType} report generated successfully!`);
+        toast.success(`${reportType} report generated successfully!`);
       } else {
         const errorData = await response.json();
         toast.error(errorData.message || 'Failed to generate report');
@@ -620,11 +620,11 @@ function AdminDashboard() {
     setNewsLoading(true);
     setNewsError('');
     setNewsSuccess('');
-    
+
     try {
       const token = localStorage.getItem('accessToken');
       const formData = new FormData();
-      
+
       // Append form data
       Object.keys(newsForm).forEach(key => {
         if (key === 'tags') {
@@ -633,12 +633,12 @@ function AdminDashboard() {
           formData.append(key, newsForm[key]);
         }
       });
-      
+
       // Append image if selected
       if (newsImage) {
         formData.append('image', newsImage);
       }
-      
+
       const response = await fetch(`${import.meta.env.VITE_API_URL}/news`, {
         method: 'POST',
         headers: {
@@ -646,9 +646,9 @@ function AdminDashboard() {
         },
         body: formData
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         setNewsSuccess('News article created successfully!');
         setNewsForm({
@@ -693,11 +693,11 @@ function AdminDashboard() {
     setNewsLoading(true);
     setNewsError('');
     setNewsSuccess('');
-    
+
     try {
       const token = localStorage.getItem('accessToken');
       const formData = new FormData();
-      
+
       // Append form data
       Object.keys(newsForm).forEach(key => {
         if (key === 'tags') {
@@ -706,12 +706,12 @@ function AdminDashboard() {
           formData.append(key, newsForm[key]);
         }
       });
-      
+
       // Append image if selected
       if (newsImage) {
         formData.append('image', newsImage);
       }
-      
+
       const response = await fetch(`${import.meta.env.VITE_API_URL}/news/${editingNews._id}`, {
         method: 'PUT',
         headers: {
@@ -719,9 +719,9 @@ function AdminDashboard() {
         },
         body: formData
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         setNewsSuccess('News article updated successfully!');
         setNewsForm({
@@ -766,7 +766,7 @@ function AdminDashboard() {
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (response.ok) {
         setNewsSuccess('News article deleted successfully!');
         fetchDashboardData();
@@ -816,9 +816,9 @@ function AdminDashboard() {
       inactive: { color: 'bg-red-100 text-red-800', text: 'Inactive' },
       draft: { color: 'bg-yellow-100 text-yellow-800', text: 'Draft' }
     };
-    
+
     const config = statusConfig[status] || statusConfig.draft;
-    
+
     return (
       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
         {config.text}
@@ -828,7 +828,7 @@ function AdminDashboard() {
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === 'all' || user.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
@@ -931,11 +931,10 @@ function AdminDashboard() {
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`py-3 px-4 border-b-4 font-semibold text-base transition-all duration-200 ${
-                    activeTab === tab.key
-                      ? 'border-nepal-blue text-nepal-blue bg-blue-50 shadow'
-                      : 'border-transparent text-gray-500 hover:text-nepal-blue hover:border-nepal-blue'
-                  }`}
+                  className={`py-3 px-4 border-b-4 font-semibold text-base transition-all duration-200 ${activeTab === tab.key
+                    ? 'border-nepal-blue text-nepal-blue bg-blue-50 shadow'
+                    : 'border-transparent text-gray-500 hover:text-nepal-blue hover:border-nepal-blue'
+                    }`}
                 >
                   {tab.icon}
                   {tab.label}
@@ -1083,11 +1082,10 @@ function AdminDashboard() {
                               </button>
                               <button
                                 onClick={() => handleUpdateUserStatus(user._id, user.status === 'active' ? 'inactive' : 'active')}
-                                className={`inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-lg shadow ${
-                                  user.status === 'active'
-                                    ? 'text-red-700 bg-red-100 hover:bg-red-200'
-                                    : 'text-green-700 bg-green-100 hover:bg-green-200'
-                                }`}
+                                className={`inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-lg shadow ${user.status === 'active'
+                                  ? 'text-red-700 bg-red-100 hover:bg-red-200'
+                                  : 'text-green-700 bg-green-100 hover:bg-green-200'
+                                  }`}
                               >
                                 {user.status === 'active' ? <FaToggleOff className="mr-1" /> : <FaToggleOn className="mr-1" />}
                                 {user.status === 'active' ? 'Deactivate' : 'Activate'}
@@ -1181,12 +1179,10 @@ function AdminDashboard() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-14 w-14">
-                              <div className={`h-14 w-14 rounded-full flex items-center justify-center border-2 shadow ${
-                                bluebook.status === 'verified' ? 'bg-green-100 border-green-300' : 'bg-yellow-100 border-yellow-300'
-                              }`}>
-                                <FaCar className={`h-7 w-7 ${
-                                  bluebook.status === 'verified' ? 'text-green-600' : 'text-yellow-600'
-                                }`} />
+                              <div className={`h-14 w-14 rounded-full flex items-center justify-center border-2 shadow ${bluebook.status === 'verified' ? 'bg-green-100 border-green-300' : 'bg-yellow-100 border-yellow-300'
+                                }`}>
+                                <FaCar className={`h-7 w-7 ${bluebook.status === 'verified' ? 'text-green-600' : 'text-yellow-600'
+                                  }`} />
                               </div>
                             </div>
                             <div className="ml-5">
@@ -1260,11 +1256,10 @@ function AdminDashboard() {
                             <div className="text-base text-gray-500">{payment.userName}</div>
                             <div className="text-base font-bold text-green-600">Rs. {payment.amount}</div>
                             <div className="text-base">
-                              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold shadow ${
-                                payment.status === 'successful' ? 'bg-green-100 text-green-800' :
+                              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold shadow ${payment.status === 'successful' ? 'bg-green-100 text-green-800' :
                                 payment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-red-100 text-red-800'
-                              }`}>
+                                  'bg-red-100 text-red-800'
+                                }`}>
                                 {payment.status}
                               </span>
                             </div>
@@ -1434,11 +1429,10 @@ function AdminDashboard() {
                             </button>
                             <button
                               onClick={() => handleUpdateNewsStatus(newsItem._id, newsItem.status === 'active' ? 'inactive' : 'active')}
-                              className={`inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-lg shadow ${
-                                newsItem.status === 'active'
-                                  ? 'text-red-700 bg-red-100 hover:bg-red-200'
-                                  : 'text-green-700 bg-green-100 hover:bg-green-200'
-                              }`}
+                              className={`inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-lg shadow ${newsItem.status === 'active'
+                                ? 'text-red-700 bg-red-100 hover:bg-red-200'
+                                : 'text-green-700 bg-green-100 hover:bg-green-200'
+                                }`}
                             >
                               {newsItem.status === 'active' ? <FaToggleOff className="mr-1" /> : <FaToggleOn className="mr-1" />}
                               {newsItem.status === 'active' ? 'Deactivate' : 'Activate'}
@@ -1571,363 +1565,489 @@ function AdminDashboard() {
       </div>
       {/* Modals remain unchanged */}
       {/* ... */}
-    {/* User Details Modal */}
-    {showUserModal && selectedUser && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in-up">
-          <button
-            className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
-            onClick={() => setShowUserModal(false)}
-            aria-label="Close"
-          >
-            &times;
-          </button>
-          <div className="flex flex-col items-center">
-            {selectedUser.image ? (
-              <img
-                className="h-24 w-24 rounded-full border-4 border-nepal-blue shadow mb-4"
-                src={`${import.meta.env.VITE_API_URL}/public/uploads/users/${selectedUser.image}`}
-                alt={selectedUser.name}
-              />
-            ) : (
-              <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center border-4 border-gray-300 mb-4">
-                <FaUsers className="h-12 w-12 text-gray-400" />
+      {/* User Details Modal */}
+      {showUserModal && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in-up">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
+              onClick={() => setShowUserModal(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <div className="flex flex-col items-center">
+              {selectedUser.image ? (
+                <img
+                  className="h-24 w-24 rounded-full border-4 border-nepal-blue shadow mb-4"
+                  src={`${import.meta.env.VITE_API_URL}/public/uploads/users/${selectedUser.image}`}
+                  alt={selectedUser.name}
+                />
+              ) : (
+                <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center border-4 border-gray-300 mb-4">
+                  <FaUsers className="h-12 w-12 text-gray-400" />
+                </div>
+              )}
+              <h2 className="text-2xl font-bold text-nepal-blue mb-1">{selectedUser.name}</h2>
+              <div className="flex items-center space-x-2 mb-2">
+                {getUserStatusBadge(selectedUser.status)}
+                {getUserRoleBadge(selectedUser.role)}
               </div>
-            )}
-            <h2 className="text-2xl font-bold text-nepal-blue mb-1">{selectedUser.name}</h2>
-            <div className="flex items-center space-x-2 mb-2">
-              {getUserStatusBadge(selectedUser.status)}
-              {getUserRoleBadge(selectedUser.role)}
-            </div>
-            <div className="w-full mt-4 space-y-2">
-              <div className="flex items-center text-gray-700">
-                <FaEnvelope className="mr-2 text-nepal-blue" />
-                <span>{selectedUser.email}</span>
+              <div className="w-full mt-4 space-y-2">
+                <div className="flex items-center text-gray-700">
+                  <FaEnvelope className="mr-2 text-nepal-blue" />
+                  <span>{selectedUser.email}</span>
+                </div>
+                <div className="flex items-center text-gray-700">
+                  <FaNewspaper className="mr-2 text-nepal-blue" />
+                  <span>Citizenship No: {selectedUser.citizenshipNo || 'N/A'}</span>
+                </div>
+                <div className="flex items-center text-gray-700">
+                  <FaCalendarAlt className="mr-2 text-nepal-blue" />
+                  <span>Joined: {formatDate(selectedUser.createdAt)}</span>
+                </div>
+                {/* Add more fields as needed */}
               </div>
-              <div className="flex items-center text-gray-700">
-                <FaNewspaper className="mr-2 text-nepal-blue" />
-                <span>Citizenship No: {selectedUser.citizenshipNo || 'N/A'}</span>
-              </div>
-              <div className="flex items-center text-gray-700">
-                <FaCalendarAlt className="mr-2 text-nepal-blue" />
-                <span>Joined: {formatDate(selectedUser.createdAt)}</span>
-              </div>
-              {/* Add more fields as needed */}
             </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
 
-    {/* Edit User Modal */}
-    {showEditModal && editingUser && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in-up">
-          <button
-            className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
-            onClick={() => setShowEditModal(false)}
-            aria-label="Close"
-          >
-            &times;
-          </button>
-          <h2 className="text-2xl font-bold text-nepal-blue mb-6">Edit User</h2>
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              handleUpdateUser();
-            }}
-            className="space-y-4"
-          >
-            <div>
-              <label className="block text-base font-semibold text-gray-700 mb-1">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={editFormData.name}
-                onChange={handleEditFormChange}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-base font-semibold text-gray-700 mb-1">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={editFormData.email}
-                onChange={handleEditFormChange}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-base font-semibold text-gray-700 mb-1">Citizenship No</label>
-              <input
-                type="text"
-                name="citizenshipNo"
-                value={editFormData.citizenshipNo}
-                onChange={handleEditFormChange}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-              />
-            </div>
-            <div>
-              <label className="block text-base font-semibold text-gray-700 mb-1">Role</label>
-              <select
-                name="role"
-                value={editFormData.role}
-                onChange={handleEditFormChange}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-              >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-base font-semibold text-gray-700 mb-1">Status</label>
-              <select
-                name="status"
-                value={editFormData.status}
-                onChange={handleEditFormChange}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
-            <div className="flex justify-end space-x-3 pt-4">
-              <button
-                type="button"
-                onClick={() => setShowEditModal(false)}
-                className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 rounded-lg bg-nepal-blue text-white font-semibold hover:bg-blue-700"
-              >
-                Save Changes
-              </button>
-            </div>
-          </form>
+      {/* Edit User Modal */}
+      {showEditModal && editingUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in-up">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
+              onClick={() => setShowEditModal(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <h2 className="text-2xl font-bold text-nepal-blue mb-6">Edit User</h2>
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                handleUpdateUser();
+              }}
+              className="space-y-4"
+            >
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={editFormData.name}
+                  onChange={handleEditFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={editFormData.email}
+                  onChange={handleEditFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Citizenship No</label>
+                <input
+                  type="text"
+                  name="citizenshipNo"
+                  value={editFormData.citizenshipNo}
+                  onChange={handleEditFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Role</label>
+                <select
+                  name="role"
+                  value={editFormData.role}
+                  onChange={handleEditFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Status</label>
+                <select
+                  name="status"
+                  value={editFormData.status}
+                  onChange={handleEditFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowEditModal(false)}
+                  className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-lg bg-nepal-blue text-white font-semibold hover:bg-blue-700"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    )}
-    {/* Delete User Confirmation Modal */}
-    {showDeleteModal && userToDelete && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in-up">
-          <button
-            className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
-            onClick={() => setShowDeleteModal(false)}
-            aria-label="Close"
-          >
-            &times;
-          </button>
-          <div className="flex flex-col items-center">
-            <FaExclamationTriangle className="text-red-500 text-4xl mb-4" />
-            <h2 className="text-2xl font-bold text-nepal-blue mb-2">Delete User</h2>
-            <p className="text-gray-700 mb-6 text-center">
-              Are you sure you want to delete <span className="font-semibold">{userToDelete.name}</span>? This action cannot be undone.
-            </p>
-            <div className="flex justify-end space-x-3 w-full">
-              <button
-                type="button"
-                onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={confirmDeleteUser}
-                className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700"
-              >
-                Delete
-              </button>
+      )}
+      {/* Delete User Confirmation Modal */}
+      {showDeleteModal && userToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in-up">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
+              onClick={() => setShowDeleteModal(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <div className="flex flex-col items-center">
+              <FaExclamationTriangle className="text-red-500 text-4xl mb-4" />
+              <h2 className="text-2xl font-bold text-nepal-blue mb-2">Delete User</h2>
+              <p className="text-gray-700 mb-6 text-center">
+                Are you sure you want to delete <span className="font-semibold">{userToDelete.name}</span>? This action cannot be undone.
+              </p>
+              <div className="flex justify-end space-x-3 w-full">
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteModal(false)}
+                  className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDeleteUser}
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
-    {/* Edit Bluebook Modal */}
-{showEditBluebookModal && editingBluebook && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
-    <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-8 relative animate-fade-in-up">
+      )}
+      {/* Edit Bluebook Modal */}
+      {showEditBluebookModal && editingBluebook && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-8 relative animate-fade-in-up">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
+              onClick={() => setShowEditBluebookModal(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <h2 className="text-2xl font-bold text-nepal-blue mb-6">Edit Bluebook</h2>
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                handleUpdateBluebook();
+              }}
+              className="grid grid-cols-2 gap-6"
+            >
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Reg. No</label>
+                <input
+                  type="text"
+                  name="vehicleRegNo"
+                  value={editBluebookFormData.vehicleRegNo}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Owner Name</label>
+                <input
+                  type="text"
+                  name="vehicleOwnerName"
+                  value={editBluebookFormData.vehicleOwnerName}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Type</label>
+                <input
+                  type="text"
+                  name="vehicleType"
+                  value={editBluebookFormData.vehicleType}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Model</label>
+                <input
+                  type="text"
+                  name="vehicleModel"
+                  value={editBluebookFormData.vehicleModel}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Manufacture Year</label>
+                <input
+                  type="text"
+                  name="manufactureYear"
+                  value={editBluebookFormData.manufactureYear}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Chasis Number</label>
+                <input
+                  type="text"
+                  name="chasisNumber"
+                  value={editBluebookFormData.chasisNumber}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Color</label>
+                <input
+                  type="text"
+                  name="vehicleColor"
+                  value={editBluebookFormData.vehicleColor}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Engine CC</label>
+                <input
+                  type="text"
+                  name="vehicleEngineCC"
+                  value={editBluebookFormData.vehicleEngineCC}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Number</label>
+                <input
+                  type="text"
+                  name="vehicleNumber"
+                  value={editBluebookFormData.vehicleNumber}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Status</label>
+                <select
+                  name="status"
+                  value={editBluebookFormData.status}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="verified">Verified</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Registration Date</label>
+                <input
+                  type="date"
+                  name="VehicleRegistrationDate"
+                  value={editBluebookFormData.VehicleRegistrationDate}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Tax Pay Date</label>
+                <input
+                  type="date"
+                  name="taxPayDate"
+                  value={editBluebookFormData.taxPayDate}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-1">Tax Expire Date</label>
+                <input
+                  type="date"
+                  name="taxExpireDate"
+                  value={editBluebookFormData.taxExpireDate}
+                  onChange={handleEditBluebookFormChange}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+                />
+              </div>
+              {/* Empty div to align buttons to right side on last row */}
+              <div></div>
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowEditBluebookModal(false)}
+                  className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-lg bg-nepal-blue text-white font-semibold hover:bg-blue-700"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {showNewsModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 animate-fade-in">
+    <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-10 relative animate-fade-in-up scale-95 sm:scale-100 transition-transform duration-300">
       <button
-        className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
-        onClick={() => setShowEditBluebookModal(false)}
+        className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-3xl font-bold transition-colors duration-200"
+        onClick={() => {
+          setShowNewsModal(false);
+          setEditingNews(null);
+          setNewsForm({
+            title: '',
+            content: '',
+            status: 'draft',
+            priority: 1,
+            tags: []
+          });
+          setNewsImage(null);
+        }}
         aria-label="Close"
       >
         &times;
       </button>
-      <h2 className="text-2xl font-bold text-nepal-blue mb-6">Edit Bluebook</h2>
+      <h2 className="text-3xl font-extrabold text-nepal-blue mb-8 text-center tracking-tight animate-fade-in-down">
+        {editingNews ? 'Edit News' : 'Add News'}
+      </h2>
       <form
         onSubmit={e => {
           e.preventDefault();
-          handleUpdateBluebook();
+          editingNews ? handleUpdateNews() : handleCreateNews();
         }}
-        className="grid grid-cols-2 gap-6"
+        className="space-y-6"
       >
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Reg. No</label>
+        <div className="space-y-2 animate-fade-in-up">
+          <label className="block text-base font-semibold text-gray-700">Title</label>
           <input
             type="text"
-            name="vehicleRegNo"
-            value={editBluebookFormData.vehicleRegNo}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+            name="title"
+            value={newsForm.title}
+            onChange={handleNewsFormChange}
+            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
             required
+            placeholder="Enter news title..."
           />
         </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Owner Name</label>
-          <input
-            type="text"
-            name="vehicleOwnerName"
-            value={editBluebookFormData.vehicleOwnerName}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+        <div className="space-y-2 animate-fade-in-up delay-75">
+          <label className="block text-base font-semibold text-gray-700">Content</label>
+          <textarea
+            name="content"
+            value={newsForm.content}
+            onChange={handleNewsFormChange}
+            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+            rows={5}
             required
+            placeholder="Write your news content here..."
           />
         </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Type</label>
+        <div className="space-y-2 animate-fade-in-up delay-100">
+          <label className="block text-base font-semibold text-gray-700">Image</label>
           <input
-            type="text"
-            name="vehicleType"
-            value={editBluebookFormData.vehicleType}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
+            type="file"
+            accept="image/*"
+            onChange={handleNewsImageChange}
+            className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-nepal-blue file:text-white hover:file:bg-blue-700 transition"
           />
+          {/* Image preview */}
+          {(newsImage || (editingNews && editingNews.image)) && (
+            <div className="mt-2 flex justify-center animate-fade-in-up">
+              <img
+                src={newsImage ? URL.createObjectURL(newsImage) : `${import.meta.env.VITE_API_URL}/public/uploads/news/${editingNews.image}`}
+                alt="Preview"
+                className="w-48 h-32 object-cover rounded-xl border border-gray-200 shadow-md"
+              />
+            </div>
+          )}
         </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Model</label>
-          <input
-            type="text"
-            name="vehicleModel"
-            value={editBluebookFormData.vehicleModel}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-          />
+        <div className="grid grid-cols-2 gap-4 animate-fade-in-up delay-150">
+          <div>
+            <label className="block text-base font-semibold text-gray-700">Status</label>
+            <select
+              name="status"
+              value={newsForm.status}
+              onChange={handleNewsFormChange}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+            >
+              <option value="draft">Draft</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-base font-semibold text-gray-700">Priority</label>
+            <input
+              type="number"
+              name="priority"
+              value={newsForm.priority}
+              onChange={handleNewsFormChange}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+              min={1}
+            />
+          </div>
         </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Manufacture Year</label>
-          <input
-            type="text"
-            name="manufactureYear"
-            value={editBluebookFormData.manufactureYear}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-          />
-        </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Chasis Number</label>
-          <input
-            type="text"
-            name="chasisNumber"
-            value={editBluebookFormData.chasisNumber}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-          />
-        </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Color</label>
-          <input
-            type="text"
-            name="vehicleColor"
-            value={editBluebookFormData.vehicleColor}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-          />
-        </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Engine CC</label>
-          <input
-            type="text"
-            name="vehicleEngineCC"
-            value={editBluebookFormData.vehicleEngineCC}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-          />
-        </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Number</label>
-          <input
-            type="text"
-            name="vehicleNumber"
-            value={editBluebookFormData.vehicleNumber}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-          />
-        </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Status</label>
-          <select
-            name="status"
-            value={editBluebookFormData.status}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-          >
-            <option value="pending">Pending</option>
-            <option value="verified">Verified</option>
-            <option value="rejected">Rejected</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Registration Date</label>
-          <input
-            type="date"
-            name="VehicleRegistrationDate"
-            value={editBluebookFormData.VehicleRegistrationDate}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-          />
-        </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Tax Pay Date</label>
-          <input
-            type="date"
-            name="taxPayDate"
-            value={editBluebookFormData.taxPayDate}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-          />
-        </div>
-        <div>
-          <label className="block text-base font-semibold text-gray-700 mb-1">Tax Expire Date</label>
-          <input
-            type="date"
-            name="taxExpireDate"
-            value={editBluebookFormData.taxExpireDate}
-            onChange={handleEditBluebookFormChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-          />
-        </div>
-        {/* Empty div to align buttons to right side on last row */}
-        <div></div>
-        <div className="flex justify-end space-x-3 pt-4">
+        <div className="flex justify-end space-x-3 pt-6 animate-fade-in-up delay-200">
           <button
             type="button"
-            onClick={() => setShowEditBluebookModal(false)}
-            className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
+            onClick={() => setShowNewsModal(false)}
+            className="px-6 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 font-semibold hover:bg-gray-100 transition shadow-sm"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-nepal-blue text-white font-semibold hover:bg-blue-700"
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-nepal-blue to-blue-500 text-white font-bold shadow-lg hover:from-blue-700 hover:to-nepal-blue transition disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={newsLoading}
           >
-            Save Changes
+            {newsLoading ? (
+              <span className="flex items-center"><svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>Saving...</span>
+            ) : (
+              editingNews ? 'Save Changes' : 'Add News'
+            )}
           </button>
         </div>
+        {newsError && <div className="text-red-500 text-center animate-fade-in-up mt-2">{newsError}</div>}
+        {newsSuccess && <div className="text-green-500 text-center animate-fade-in-up mt-2">{newsSuccess}</div>}
       </form>
     </div>
   </div>
 )}
-
     </div>
   );
 }
+
 
 export default AdminDashboard;

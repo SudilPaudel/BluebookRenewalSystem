@@ -144,30 +144,10 @@ function NewBluebook() {
 
   const vehicleTypes = [
     "Motorcycle",
-    "Car",
-    "Jeep",
-    "Van",
-    "Bus",
-    "Truck",
-    "Tractor",
-    "Other"
+    "Car"
   ];
 
-  const vehicleColors = [
-    "White",
-    "Black",
-    "Red",
-    "Blue",
-    "Green",
-    "Yellow",
-    "Silver",
-    "Gray",
-    "Brown",
-    "Orange",
-    "Purple",
-    "Pink",
-    "Other"
-  ];
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 py-12 animate-fade-in">
@@ -347,19 +327,16 @@ function NewBluebook() {
                   <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
                     Vehicle Color <span className="text-red-500">*</span>
                   </label>
-                  <select
+                  <input
+                    type="text"
                     name="vehicleColor"
                     value={formData.vehicleColor}
                     onChange={handleChange}
                     className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
                       errors.vehicleColor ? 'border-red-400' : 'border-blue-200'
                     }`}
-                  >
-                    <option value="">Select color</option>
-                    {vehicleColors.map(color => (
-                      <option key={color} value={color}>{color}</option>
-                    ))}
-                  </select>
+                    placeholder="Enter vehicle color"
+                  />
                   {errors.vehicleColor && (
                     <p className="mt-1 text-xs text-red-500">{errors.vehicleColor}</p>
                   )}
