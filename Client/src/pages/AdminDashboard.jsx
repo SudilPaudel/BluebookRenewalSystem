@@ -27,6 +27,7 @@ import {
   FaPhone,
   FaEnvelope,
   FaNewspaper,
+  FaMotorcycle,
   FaPlus,
   FaImage
 } from "react-icons/fa";
@@ -1179,10 +1180,17 @@ function AdminDashboard() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-14 w-14">
-                              <div className={`h-14 w-14 rounded-full flex items-center justify-center border-2 shadow ${bluebook.status === 'verified' ? 'bg-green-100 border-green-300' : 'bg-yellow-100 border-yellow-300'
+                              <div className={`h-14 w-14 rounded-full flex items-center justify-center border-2 shadow ${bluebook.status === 'verified' ? 'bg-green-100 border-green-300' :  bluebook.status === 'rejected' ? 'bg-red-100 border-red-300' : 'bg-yellow-100 border-yellow-300'
                                 }`}>
-                                <FaCar className={`h-7 w-7 ${bluebook.status === 'verified' ? 'text-green-600' : 'text-yellow-600'
-                                  }`} />
+                                {
+                                  bluebook.vehicleType === 'Car' ? (
+                                    <FaCar className={`h-7 w-7 ${bluebook.status === 'verified' ? 'text-green-600' :  bluebook.status === 'pending' ? 'text-yellow-600' : 'text-red-600'
+                                      }`} />
+                                  ) : (
+                                    <FaMotorcycle className={`h-7 w-7 ${bluebook.status === 'verified' ? 'text-green-600' :  bluebook.status === 'pending' ? 'text-yellow-600' : 'text-red-600'
+                                      }`} />
+                                  )
+                                }
                               </div>
                             </div>
                             <div className="ml-5">
