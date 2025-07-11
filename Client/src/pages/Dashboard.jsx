@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaCar, FaFileAlt, FaClock, FaCheckCircle, FaTimesCircle, FaPlus, FaSearch, FaDownload, FaEdit, FaTrash, FaMotorcycle } from "react-icons/fa";
+import { FaCar, FaFileAlt, FaClock, FaCheckCircle, FaTimesCircle, FaPlus, FaSearch, FaDownload, FaEdit, FaTrash, FaMotorcycle, FaUserCircle } from "react-icons/fa";
 
 function Dashboard() {
   // Main dashboard component for displaying user bluebooks and stats
@@ -183,6 +183,7 @@ function Dashboard() {
               <p className="mt-2 text-base text-gray-500 font-medium">
                 Welcome back, <span className="text-nepal-blue font-semibold">{user?.name || 'User'}</span>
               </p>
+              
             </div>
             <div className="flex items-center space-x-4">
               <button
@@ -192,6 +193,17 @@ function Dashboard() {
                 <FaPlus className="mr-2 animate-bounce" />
                 New Bluebook
               </button>
+              {
+                user?.role === 'admin' && (
+                  <button
+                    onClick={() => navigate('/admin-dashboard')}
+                    className="inline-flex items-center px-5 py-2.5 border border-transparent text-base font-semibold rounded-lg shadow-lg text-white bg-gradient-to-r from-nepal-blue to-blue-500 hover:scale-105 hover:from-blue-700 hover:to-nepal-blue transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nepal-blue"
+                  >
+                    <FaUserCircle className="mr-2 animate-bounce" />
+                    Admin Dashboard
+                  </button>
+                )
+              }
             </div>
           </div>
         </div>
