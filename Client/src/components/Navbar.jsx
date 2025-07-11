@@ -92,6 +92,9 @@ function Navbar() {
     };
   }, []);
 
+  const user = JSON.parse(localStorage.getItem("userDetail"));
+
+
   // Logout handler
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -214,12 +217,23 @@ function Navbar() {
           ) : (
             <>
               <li>
-                <Link
-                  to="/dashboard"
-                  className="text-white font-semibold hover:text-red-400 transition-colors duration-200"
-                >
-                  Dashboard
-                </Link>
+                {
+                  user?.role === 'admin' ? (
+                    <Link
+                      to="/admin-dashboard"
+                      className="text-white font-semibold hover:text-red-400 transition-colors duration-200"
+                    >
+                     Dashboard
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/dashboard"
+                      className="text-white font-semibold hover:text-red-400 transition-colors duration-200"
+                    >
+                      Dashboard
+                    </Link>
+                  )
+                }
               </li>
               <li>
                 <button
