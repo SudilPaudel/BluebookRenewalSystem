@@ -84,7 +84,7 @@ function AdminDashboard() {
     taxExpireDate: ''
   });
   const [showCreateAdminModal, setShowCreateAdminModal] = useState(false);
-  const [createAdminForm, setCreateAdminForm] = useState({ name: '', email: '', password: '' });
+  const [createAdminForm, setCreateAdminForm] = useState({ name: '', email: '', citizenshipNo: '', password: '' });
   const [createAdminLoading, setCreateAdminLoading] = useState(false);
   const [createAdminError, setCreateAdminError] = useState('');
   const [createAdminSuccess, setCreateAdminSuccess] = useState('');
@@ -106,6 +106,14 @@ function AdminDashboard() {
   const [editingNews, setEditingNews] = useState(null);
   const [showDeleteNewsModal, setShowDeleteNewsModal] = useState(false);
   const [newsToDelete, setNewsToDelete] = useState(null);
+
+  // OTP modal state
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otpValue, setOtpValue] = useState('');
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState('');
+  const [otpSuccess, setOtpSuccess] = useState('');
+  const [pendingAdminUserId, setPendingAdminUserId] = useState(null);
 
   useEffect(() => {
     checkAuth();
@@ -579,13 +587,11 @@ function AdminDashboard() {
       });
       const data = await response.json();
       if (response.ok) {
-        setCreateAdminSuccess('Admin created successfully!');
-        setCreateAdminForm({ name: '', email: '', password: '' });
-        fetchDashboardData();
-        setTimeout(() => {
-          setShowCreateAdminModal(false);
-          setCreateAdminSuccess('');
-        }, 1200);
+        setCreateAdminSuccess('Admin registration successful! Please check email for OTP.');
+        setPendingAdminUserId(data.result.userId);
+        setShowCreateAdminModal(false);
+        setShowOtpModal(true);
+        setCreateAdminForm({ name: '', email: '', citizenshipNo: '', password: '' });
       } else {
         setCreateAdminError(data.message || 'Failed to create admin');
       }
@@ -1512,7 +1518,10 @@ function AdminDashboard() {
                   <div className="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl shadow-lg animate-fade-in-up delay-100">
                     <h3 className="text-xl font-bold text-green-700 mb-6">Admin Actions</h3>
                     <div className="space-y-4">
-                      <button className="w-full text-left p-4 border border-gray-100 rounded-xl hover:bg-green-50 transition flex items-center gap-4 shadow">
+                      <button
+                        className="w-full text-left p-4 border border-gray-100 rounded-xl hover:bg-green-50 transition flex items-center gap-4 shadow"
+                        onClick={() => setShowCreateAdminModal(true)}
+                      >
                         <FaUserPlus className="h-6 w-6 text-green-600" />
                         <div>
                           <div className="font-semibold text-gray-900">Create New Admin</div>
@@ -2041,6 +2050,184 @@ function AdminDashboard() {
         </div>
         {newsError && <div className="text-red-500 text-center animate-fade-in-up mt-2">{newsError}</div>}
         {newsSuccess && <div className="text-green-500 text-center animate-fade-in-up mt-2">{newsSuccess}</div>}
+      </form>
+    </div>
+  </div>
+)}
+      {showCreateAdminModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 animate-fade-in">
+    <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-10 relative animate-fade-in-up">
+      <button
+        className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-3xl font-bold"
+        onClick={() => setShowCreateAdminModal(false)}
+        aria-label="Close"
+      >
+        &times;
+      </button>
+      <h2 className="text-3xl font-extrabold text-nepal-blue mb-8 text-center tracking-tight animate-fade-in-down">
+        Add New Admin
+      </h2>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          handleCreateAdmin();
+        }}
+        className="space-y-6"
+      >
+        <div className="space-y-2 animate-fade-in-up">
+          <label className="block text-base font-semibold text-gray-700 text-left">Name</label>
+          <input
+            type="text"
+            name="name"
+            value={createAdminForm.name}
+            onChange={handleCreateAdminFormChange}
+            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+            required
+            placeholder="Enter admin name..."
+          />
+        </div>
+        <div className="space-y-2 animate-fade-in-up delay-75">
+          <label className="block text-base font-semibold text-gray-700 text-left">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={createAdminForm.email}
+            onChange={handleCreateAdminFormChange}
+            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+            required
+            placeholder="Enter admin email..."
+          />
+        </div>
+        <div className="space-y-2 animate-fade-in-up delay-100">
+          <label className="block text-base font-semibold text-gray-700 text-left">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={createAdminForm.password}
+            onChange={handleCreateAdminFormChange}
+            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+            required
+            placeholder="Enter password..."
+          />
+        </div>
+        <div className="space-y-2 animate-fade-in-up delay-50">
+          <label className="block text-base font-semibold text-gray-700 text-left">Citizenship No</label>
+          <input
+            type="text"
+            name="citizenshipNo"
+            value={createAdminForm.citizenshipNo}
+            onChange={handleCreateAdminFormChange}
+            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+            required
+            placeholder="Enter citizenship number..."
+          />
+        </div>
+        <div className="flex justify-end space-x-3 pt-6 animate-fade-in-up delay-200">
+          <button
+            type="button"
+            onClick={() => setShowCreateAdminModal(false)}
+            className="px-6 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 font-semibold hover:bg-gray-100 transition shadow-sm"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-nepal-blue to-blue-500 text-white font-bold shadow-lg hover:from-blue-700 hover:to-nepal-blue transition disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={createAdminLoading}
+          >
+            {createAdminLoading ? (
+              <span className="flex items-center"><svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>Saving...</span>
+            ) : (
+              'Add Admin'
+            )}
+          </button>
+        </div>
+        {createAdminError && <div className="text-red-500 text-center animate-fade-in-up mt-2">{createAdminError}</div>}
+        {createAdminSuccess && <div className="text-green-500 text-center animate-fade-in-up mt-2">{createAdminSuccess}</div>}
+      </form>
+    </div>
+  </div>
+)}
+      {showOtpModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 animate-fade-in">
+    <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-10 relative animate-fade-in-up">
+      <button
+        className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-3xl font-bold"
+        onClick={() => { setShowOtpModal(false); setOtpValue(''); setOtpError(''); setOtpSuccess(''); }}
+        aria-label="Close"
+      >
+        &times;
+      </button>
+      <h2 className="text-2xl font-extrabold text-nepal-blue mb-6 text-center">Verify Admin Email</h2>
+      <form
+        onSubmit={async e => {
+          e.preventDefault();
+          setOtpLoading(true);
+          setOtpError('');
+          setOtpSuccess('');
+          try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify-email-otp`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ userId: pendingAdminUserId, otp: otpValue })
+            });
+            const data = await response.json();
+            if (response.ok) {
+              setOtpSuccess('Admin email verified and account activated!');
+              setTimeout(() => {
+                setShowOtpModal(false);
+                setOtpValue('');
+                setOtpError('');
+                setOtpSuccess('');
+                fetchDashboardData();
+                toast.success('Admin registration and verification successful!');
+              }, 1200);
+            } else {
+              setOtpError(data.message || 'Invalid OTP or verification failed');
+            }
+          } catch (err) {
+            setOtpError('An error occurred during OTP verification');
+          } finally {
+            setOtpLoading(false);
+          }
+        }}
+        className="space-y-6"
+      >
+        <div className="space-y-2 animate-fade-in-up">
+          <label className="block text-base font-semibold text-gray-700 text-left">Enter OTP</label>
+          <input
+            type="text"
+            name="otp"
+            value={otpValue}
+            onChange={e => setOtpValue(e.target.value)}
+            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+            required
+            placeholder="Enter 6-digit OTP..."
+            maxLength={6}
+          />
+        </div>
+        <div className="flex justify-end space-x-3 pt-6 animate-fade-in-up delay-200">
+          <button
+            type="button"
+            onClick={() => { setShowOtpModal(false); setOtpValue(''); setOtpError(''); setOtpSuccess(''); }}
+            className="px-6 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 font-semibold hover:bg-gray-100 transition shadow-sm"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-nepal-blue to-blue-500 text-white font-bold shadow-lg hover:from-blue-700 hover:to-nepal-blue transition disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={otpLoading}
+          >
+            {otpLoading ? (
+              <span className="flex items-center"><svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>Verifying...</span>
+            ) : (
+              'Verify OTP'
+            )}
+          </button>
+        </div>
+        {otpError && <div className="text-red-500 text-center animate-fade-in-up mt-2">{otpError}</div>}
+        {otpSuccess && <div className="text-green-500 text-center animate-fade-in-up mt-2">{otpSuccess}</div>}
       </form>
     </div>
   </div>

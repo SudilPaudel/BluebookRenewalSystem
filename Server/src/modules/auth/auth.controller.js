@@ -541,8 +541,8 @@ class AuthController{
     // Creates a new admin user (admin only).
     createAdmin = async (req, res, next) => {
         try {
-            const { name, email, password } = req.body;
-            if (!name || !email || !password) {
+            const { name, email, citizenshipNo, password } = req.body;
+            if (!name || !email || !citizenshipNo || !password) {
                 return res.status(400).json({ message: "All fields are required" });
             }
             // Check for existing user
@@ -550,16 +550,58 @@ class AuthController{
             if (existing) {
                 return res.status(400).json({ message: "Email already in use" });
             }
-            // Create admin user
+            // Generate OTP for email verification
+            const emailOtp = Math.floor(100000 + Math.random() * 900000).toString();
+            // Create admin user with status pending
             const newUser = new (require('../user/user.model'))({
                 name,
                 email,
+                citizenshipNo,
                 password, // Should be hashed by pre-save hook
                 role: "admin",
-                status: "active"
+                status: "pending",
+                emailVerified: false,
+                emailOtp,
+                emailOtpExpiresAt: new Date(Date.now() + 10 * 60 * 1000)
             });
             await newUser.save();
-            res.status(201).json({ message: "Admin created successfully", result: { _id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role, status: newUser.status } });
+            // Send OTP email
+            try {
+                await mailSvc.sendEmail(
+                    newUser.email,
+                    "Admin Email Verification OTP - Bluebook Renewal System",
+                    `Dear ${newUser.name}, <br />\n<p>You have been registered as an admin on Bluebook Renewal System!</p><br/>\n<p>Your verification OTP is: <strong style=\"font-size: 24px; color: #007bff;\">${emailOtp}</strong></p><br/>\n<p>This OTP is valid for 10 minutes.</p><br/>\n<p>Please enter this OTP to verify your email address and activate your admin account.</p><br/>\n<p>If you did not request this, please ignore this email.</p><br/>\n<p>Thank you!</p>\n<p>Regards,</p>\n<p>Bluebook Renewal System Team</p>\n<p><small>Please do not reply to this email</small></p>`
+                );
+                return res.status(201).json({
+                    result: {
+                        userId: newUser._id,
+                        email: newUser.email,
+                        name: newUser.name
+                    },
+                    message: "Admin registration successful! Please check your email for the verification OTP.",
+                    meta: null
+                });
+            } catch (emailError) {
+                console.error('Failed to send OTP email:', emailError);
+                // Demo mode: Show OTP in console instead of failing
+                if (process.env.DISABLE_EMAIL === 'true' || !process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASSWORD || process.env.SMTP_PASSWORD === 'your_app_password_here') {
+                    console.log('\n📧 DEMO MODE: Email not configured');
+                    console.log(`📱 OTP for ${newUser.email}: ${emailOtp}`);
+                    console.log('💡 To enable real email sending, configure SMTP settings in .env file\n');
+                    return res.status(201).json({
+                        result: {
+                            userId: newUser._id,
+                            email: newUser.email,
+                            name: newUser.name
+                        },
+                        message: `Admin registration successful! Demo OTP: ${emailOtp} (Check server console for OTP)`,
+                        meta: null
+                    });
+                } else {
+                    await require('../user/user.model').findByIdAndDelete(newUser._id);
+                    return res.status(500).json({ message: "Failed to send verification email. Please try again." });
+                }
+            }
         } catch (err) {
             next(err);
         }
