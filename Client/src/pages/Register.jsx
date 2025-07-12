@@ -282,7 +282,7 @@ function Register() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto mt-14 p-10 bg-gradient-to-br from-white via-blue-50 to-blue-100 shadow-2xl rounded-3xl border border-blue-100 animate-fade-in">
+    <div className="max-w-3xl mx-auto mt-14 mb-14 p-10 bg-gradient-to-br from-white via-blue-50 to-blue-100 shadow-2xl rounded-3xl border border-blue-100 animate-fade-in">
       <h2 className="text-4xl font-extrabold text-nepal-blue mb-10 text-center tracking-tight drop-shadow animate-slide-down">
         User Registration
       </h2>
@@ -338,47 +338,51 @@ function Register() {
           </div>
 
           {/* Password */}
-          <div className="relative flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <label className="block font-semibold mb-1 text-left text-gray-700">Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              required
-              placeholder="Enter a strong password"
-              value={formData.password}
-              onChange={handleChange}
-              autoComplete="new-password"
-              className="w-full border border-blue-200 px-5 py-3 pr-12 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 bg-white shadow transition-all duration-200"
-            />
-            <span
-              className="absolute top-10 right-4 text-gray-400 hover:text-nepal-blue cursor-pointer transition-colors duration-150"
-              onClick={() => setShowPassword(!showPassword)}
-              tabIndex={0}
-            >
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
-            </span>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                required
+                placeholder="Enter a strong password"
+                value={formData.password}
+                onChange={handleChange}
+                autoComplete="new-password"
+                className="w-full border border-blue-200 px-5 py-3 pr-12 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 bg-white shadow transition-all duration-200"
+              />
+              <span
+                className="absolute top-1/2 right-4 transform -translate-y-1/2 flex items-center justify-center text-gray-400 hover:text-nepal-blue cursor-pointer transition-colors duration-150"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex={0}
+              >
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </span>
+            </div>
           </div>
 
           {/* Confirm Password */}
-          <div className="relative flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <label className="block font-semibold mb-1 text-left text-gray-700">Confirm Password</label>
-            <input
-              type={showConfirm ? "text" : "password"}
-              name="confirmPassword"
-              required
-              placeholder="Re-enter your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              autoComplete="new-password"
-              className="w-full border border-blue-200 px-5 py-3 pr-12 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 bg-white shadow transition-all duration-200"
-            />
-            <span
-              className="absolute top-10 right-4 text-gray-400 hover:text-nepal-blue cursor-pointer transition-colors duration-150"
-              onClick={() => setShowConfirm(!showConfirm)}
-              tabIndex={0}
-            >
-              {showConfirm ? <FaEye /> : <FaEyeSlash />}
-            </span>
+            <div className="relative">
+              <input
+                type={showConfirm ? "text" : "password"}
+                name="confirmPassword"
+                required
+                placeholder="Re-enter your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                autoComplete="new-password"
+                className="w-full border border-blue-200 px-5 py-3 pr-12 rounded-xl focus:outline-none focus:ring-4 focus:ring-nepal-blue/30 bg-white shadow transition-all duration-200"
+              />
+              <span
+                className="absolute top-1/2 right-4 transform -translate-y-1/2 flex items-center justify-center text-gray-400 hover:text-nepal-blue cursor-pointer transition-colors duration-150"
+                onClick={() => setShowConfirm(!showConfirm)}
+                tabIndex={0}
+              >
+                {showConfirm ? <FaEye /> : <FaEyeSlash />}
+              </span>
+            </div>
           </div>
 
           {/* Image Upload */}
@@ -410,7 +414,7 @@ function Register() {
           <div className="col-span-1 md:col-span-2 mt-2">
             <button
               type="submit"
-              className="w-full inline-flex items-center px-8 py-3 border border-nepal-blue rounded-full text-base font-bold text-white bg-gradient-to-r from-nepal-blue to-nepal-red hover:scale-105 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed justify-center"
+              className="w-full inline-flex items-center px-8 py-3 border border-blue-500 rounded-full text-base font-bold text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed justify-center"
               disabled={isLoading}
             >
               {isLoading ? (

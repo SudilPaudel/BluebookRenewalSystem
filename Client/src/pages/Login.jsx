@@ -147,25 +147,27 @@ function Login() {
               <label className="block font-semibold mb-2 text-left text-gray-700 group-hover:text-nepal-blue transition">
                 Password
               </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                required
-                placeholder="Enter your password"
-                autoComplete="current-password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full border border-gray-200 px-5 py-3 pr-12 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-nepal-blue transition bg-gray-50 group-hover:bg-blue-50"
-                disabled={loading}
-              />
-              <span
-                className="absolute top-10 right-4 text-gray-400 hover:text-nepal-blue cursor-pointer transition"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-                tabIndex={0}
-              >
-                {showPassword ? <FaEye className="animate-fade-in" /> : <FaEyeSlash className="animate-fade-in" />}
-              </span>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  required
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full border border-gray-200 px-5 py-3 pr-12 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-nepal-blue focus:border-nepal-blue transition bg-gray-50 group-hover:bg-blue-50"
+                  disabled={loading}
+                />
+                <span
+                  className="absolute top-1/2 right-4 transform -translate-y-1/2 flex items-center justify-center text-gray-400 hover:text-nepal-blue cursor-pointer transition"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  tabIndex={0}
+                >
+                  {showPassword ? <FaEye className="animate-fade-in" /> : <FaEyeSlash className="animate-fade-in" />}
+                </span>
+              </div>
             </div>
 
             {/* Forgot Password Link */}
