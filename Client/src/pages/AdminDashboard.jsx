@@ -116,9 +116,16 @@ function AdminDashboard() {
   const [otpSuccess, setOtpSuccess] = useState('');
   const [pendingAdminUserId, setPendingAdminUserId] = useState(null);
 
+  // Marquee management state
+  const [marqueeText, setMarqueeText] = useState('');
+  const [marqueeLoading, setMarqueeLoading] = useState(false);
+  const [marqueeError, setMarqueeError] = useState('');
+  const [marqueeSuccess, setMarqueeSuccess] = useState('');
+
   useEffect(() => {
     checkAuth();
     fetchDashboardData();
+    fetchMarqueeText();
   }, []);
 
   // Checks authentication and redirects user if not admin or not logged in.
@@ -833,6 +840,48 @@ function AdminDashboard() {
     );
   };
 
+  // Marquee management functions
+  const fetchMarqueeText = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/marquee`);
+      const data = await response.json();
+      setMarqueeText(data.result || '');
+    } catch (error) {
+      console.error('Error fetching marquee:', error);
+      setMarqueeText('');
+    }
+  };
+
+  const handleUpdateMarquee = async () => {
+    setMarqueeLoading(true);
+    setMarqueeError('');
+    setMarqueeSuccess('');
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/marquee`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: marqueeText })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setMarqueeSuccess('Marquee updated successfully!');
+        setTimeout(() => setMarqueeSuccess(''), 3000);
+      } else {
+        setMarqueeError(data.message || 'Failed to update marquee');
+      }
+    } catch (error) {
+      setMarqueeError('An error occurred while updating marquee');
+    } finally {
+      setMarqueeLoading(false);
+    }
+  };
+
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -933,6 +982,7 @@ function AdminDashboard() {
                 { key: 'payments', icon: <FaMoneyBillWave className="inline mr-2" />, label: `Payments (${payments.length})` },
                 { key: 'reports', icon: <FaFileAlt className="inline mr-2" />, label: 'Reports' },
                 { key: 'news', icon: <FaNewspaper className="inline mr-2" />, label: `News (${news.length})` },
+                { key: 'marquee', icon: <FaNewspaper className="inline mr-2" />, label: 'Marquee' },
                 { key: 'settings', icon: <FaCog className="inline mr-2" />, label: 'Settings' }
               ].map(tab => (
                 <button
@@ -1472,6 +1522,45 @@ function AdminDashboard() {
               </div>
             )}
 
+            {/* Marquee Tab */}
+            {activeTab === 'marquee' && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="bg-white/90 p-8 rounded-2xl shadow-xl animate-fade-in-up">
+                  <h3 className="text-xl font-bold text-nepal-blue mb-6">Marquee Management</h3>
+                  <p className="text-gray-600 mb-6">Update the scrolling text that appears at the top of the website. This text will be visible to all users.</p>
+                  
+                  <form
+                    onSubmit={e => { e.preventDefault(); handleUpdateMarquee(); }}
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label className="block text-base font-semibold text-gray-700 mb-2">Marquee Text</label>
+                      <textarea
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+                        rows={4}
+                        value={marqueeText}
+                        onChange={e => setMarqueeText(e.target.value)}
+                        placeholder="Enter marquee text that will display at the top of the website..."
+                        required
+                      />
+                      <p className="text-sm text-gray-500 mt-2">This text will scroll from right to left at the top of the website and pause when users hover over it.</p>
+                    </div>
+                    <div className="flex justify-end space-x-3 pt-2">
+                      <button
+                        type="submit"
+                        className="px-6 py-2 rounded-xl bg-gradient-to-r from-nepal-blue to-blue-500 text-white font-bold shadow-lg hover:from-blue-700 hover:to-nepal-blue transition disabled:opacity-60 disabled:cursor-not-allowed"
+                        disabled={marqueeLoading}
+                      >
+                        {marqueeLoading ? 'Saving...' : 'Save Marquee'}
+                      </button>
+                    </div>
+                    {marqueeError && <div className="text-red-500 text-center animate-fade-in-up mt-2">{marqueeError}</div>}
+                    {marqueeSuccess && <div className="text-green-500 text-center animate-fade-in-up mt-2">{marqueeSuccess}</div>}
+                  </form>
+                </div>
+              </div>
+            )}
+
             {/* Settings Tab */}
             {activeTab === 'settings' && (
               <div className="space-y-8 animate-fade-in">
@@ -1575,6 +1664,8 @@ function AdminDashboard() {
                     </div>
                   </div>
                 </div>
+
+
               </div>
             )}
           </div>

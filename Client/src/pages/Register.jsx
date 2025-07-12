@@ -410,10 +410,12 @@ function Register() {
           <div className="col-span-1 md:col-span-2 mt-2">
             <button
               type="submit"
+              className="w-full inline-flex items-center px-8 py-3 border border-nepal-blue rounded-full text-base font-bold text-white bg-gradient-to-r from-nepal-blue to-nepal-red hover:scale-105 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed justify-center"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-nepal-blue to-blue-500 text-white py-3 font-bold rounded-2xl shadow-lg hover:from-blue-700 hover:to-nepal-blue transition-all duration-200 flex items-center justify-center text-lg tracking-wide disabled:opacity-60 disabled:cursor-not-allowed animate-bounce-in"
             >
-              {isLoading ? <FaSpinner className="animate-spin mr-2" /> : null}
+              {isLoading ? (
+                <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></span>
+              ) : null}
               Register
             </button>
           </div>

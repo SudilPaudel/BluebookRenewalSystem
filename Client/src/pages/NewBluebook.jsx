@@ -158,36 +158,36 @@ function NewBluebook() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate('/dashboard')}
-                className="mr-2 p-2 rounded-full bg-white shadow hover:bg-blue-100 transition-all duration-200"
+                className="mr-2 p-2 rounded-full bg-white shadow hover:bg-nepal-blue/10 transition-all duration-200"
               >
-                <FaArrowLeft className="h-5 w-5 text-blue-500" />
+                <FaArrowLeft className="h-5 w-5 text-nepal-blue" />
               </button>
               <div>
-                <h1 className="text-4xl font-extrabold text-blue-900 tracking-tight animate-slide-down">
+                <h1 className="text-4xl font-extrabold text-nepal-blue tracking-tight animate-slide-down">
                   Register New Bluebook
                 </h1>
-                <p className="mt-1 text-base text-blue-600 animate-fade-in delay-100">
+                <p className="mt-1 text-base text-gray-600 animate-fade-in delay-100">
                   Enter vehicle details for bluebook registration
                 </p>
               </div>
             </div>
             <div className="flex items-center">
-              <FaCar className="h-10 w-10 text-blue-500 drop-shadow-lg animate-bounce-slow" />
+              <FaCar className="h-10 w-10 text-nepal-blue drop-shadow-lg animate-bounce-slow" />
             </div>
           </div>
         </div>
 
         {/* Form */}
-        <div className="bg-white/90 shadow-2xl backdrop-blur-md ring-1 ring-blue-100 overflow-hidden sm:rounded-2xl animate-fade-in-up">
+        <div className="bg-white/90 shadow-2xl backdrop-blur-md ring-1 ring-nepal-blue/20 overflow-hidden sm:rounded-2xl animate-fade-in-up">
           <form onSubmit={handleSubmit} className="space-y-8 p-8">
             {/* Vehicle Information */}
             <div>
-              <h3 className="text-xl font-semibold text-blue-800 mb-6 border-l-4 border-blue-400 pl-3 animate-slide-right">
+              <h3 className="text-xl font-semibold text-nepal-blue mb-6 border-l-4 border-nepal-blue pl-3 animate-slide-right text-left">
                 Vehicle Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Vehicle Registration Number <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -195,8 +195,8 @@ function NewBluebook() {
                     name="vehicleRegNo"
                     value={formData.vehicleRegNo}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.vehicleRegNo ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.vehicleRegNo ? 'border-red-400' : 'border-gray-200'
                     }`}
                     placeholder="Enter registration number"
                   />
@@ -206,15 +206,15 @@ function NewBluebook() {
                 </div>
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Vehicle Type <span className="text-red-500">*</span>
                   </label>
                   <select
                     name="vehicleType"
                     value={formData.vehicleType}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.vehicleType ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.vehicleType ? 'border-red-400' : 'border-gray-200'
                     }`}
                   >
                     <option value="">Select vehicle type</option>
@@ -228,7 +228,7 @@ function NewBluebook() {
                 </div>
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Vehicle Registration Date <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -236,8 +236,8 @@ function NewBluebook() {
                     name="VehicleRegistrationDate"
                     value={formData.VehicleRegistrationDate}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.VehicleRegistrationDate ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.VehicleRegistrationDate ? 'border-red-400' : 'border-gray-200'
                     }`}
                   />
                   {errors.VehicleRegistrationDate && (
@@ -246,7 +246,7 @@ function NewBluebook() {
                 </div>
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Vehicle Owner Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -254,8 +254,8 @@ function NewBluebook() {
                     name="vehicleOwnerName"
                     value={formData.vehicleOwnerName}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.vehicleOwnerName ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.vehicleOwnerName ? 'border-red-400' : 'border-gray-200'
                     }`}
                     placeholder="Enter owner name"
                   />
@@ -265,7 +265,7 @@ function NewBluebook() {
                 </div>
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Vehicle Model <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -273,8 +273,8 @@ function NewBluebook() {
                     name="vehicleModel"
                     value={formData.vehicleModel}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.vehicleModel ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.vehicleModel ? 'border-red-400' : 'border-gray-200'
                     }`}
                     placeholder="e.g., Honda City, Toyota Corolla"
                   />
@@ -284,7 +284,7 @@ function NewBluebook() {
                 </div>
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Manufacture Year <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -292,8 +292,8 @@ function NewBluebook() {
                     name="manufactureYear"
                     value={formData.manufactureYear}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.manufactureYear ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.manufactureYear ? 'border-red-400' : 'border-gray-200'
                     }`}
                     placeholder="e.g., 2020"
                     min="1900"
@@ -305,7 +305,7 @@ function NewBluebook() {
                 </div>
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Chassis Number <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -313,8 +313,8 @@ function NewBluebook() {
                     name="chasisNumber"
                     value={formData.chasisNumber}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.chasisNumber ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.chasisNumber ? 'border-red-400' : 'border-gray-200'
                     }`}
                     placeholder="Enter chassis number"
                   />
@@ -324,7 +324,7 @@ function NewBluebook() {
                 </div>
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Vehicle Color <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -332,8 +332,8 @@ function NewBluebook() {
                     name="vehicleColor"
                     value={formData.vehicleColor}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.vehicleColor ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.vehicleColor ? 'border-red-400' : 'border-gray-200'
                     }`}
                     placeholder="Enter vehicle color"
                   />
@@ -343,7 +343,7 @@ function NewBluebook() {
                 </div>
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Engine CC <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -351,8 +351,8 @@ function NewBluebook() {
                     name="vehicleEngineCC"
                     value={formData.vehicleEngineCC}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.vehicleEngineCC ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.vehicleEngineCC ? 'border-red-400' : 'border-gray-200'
                     }`}
                     placeholder="e.g., 1500"
                     min="50"
@@ -364,7 +364,7 @@ function NewBluebook() {
                 </div>
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Vehicle Number <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -372,8 +372,8 @@ function NewBluebook() {
                     name="vehicleNumber"
                     value={formData.vehicleNumber}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.vehicleNumber ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.vehicleNumber ? 'border-red-400' : 'border-gray-200'
                     }`}
                     placeholder="e.g., Ba 1 Pa 1234"
                   />
@@ -386,12 +386,12 @@ function NewBluebook() {
 
             {/* Tax Information */}
             <div>
-              <h3 className="text-xl font-semibold text-blue-800 mb-6 border-l-4 border-blue-400 pl-3 animate-slide-right">
+              <h3 className="text-xl font-semibold text-nepal-blue mb-6 border-l-4 border-nepal-blue pl-3 animate-slide-right text-left">
                 Tax Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Tax Pay Date <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -399,8 +399,8 @@ function NewBluebook() {
                     name="taxPayDate"
                     value={formData.taxPayDate}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.taxPayDate ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.taxPayDate ? 'border-red-400' : 'border-gray-200'
                     }`}
                   />
                   {errors.taxPayDate && (
@@ -409,7 +409,7 @@ function NewBluebook() {
                 </div>
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
-                  <label className="block text-sm font-semibold text-blue-700 text-left mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
                     Tax Expire Date <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -417,8 +417,8 @@ function NewBluebook() {
                     name="taxExpireDate"
                     value={formData.taxExpireDate}
                     onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ${
-                      errors.taxExpireDate ? 'border-red-400' : 'border-blue-200'
+                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
+                      errors.taxExpireDate ? 'border-red-400' : 'border-gray-200'
                     }`}
                   />
                   {errors.taxExpireDate && (
@@ -429,27 +429,27 @@ function NewBluebook() {
             </div>
 
             {/* Submit Buttons */}
-            <div className="flex justify-end space-x-4 pt-8 border-t border-blue-100">
+            <div className="flex justify-end space-x-4 pt-8 border-t border-gray-200">
               <button
                 type="button"
                 onClick={() => navigate('/dashboard')}
-                className="px-5 py-2 border border-blue-200 rounded-lg text-sm font-semibold text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-200 shadow-sm"
+                className="px-5 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all duration-200 shadow-sm"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex items-center px-6 py-2 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                className="inline-flex items-center px-8 py-3 border border-blue-500 rounded-full text-base font-bold text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
                     Registering...
                   </>
                 ) : (
                   <>
-                    <FaSave className="mr-2" />
+                    <FaSave className="mr-3 text-lg" />
                     Register Bluebook
                   </>
                 )}

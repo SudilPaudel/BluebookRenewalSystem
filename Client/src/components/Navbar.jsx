@@ -10,6 +10,9 @@ function Navbar() {
   // Check auth state from localStorage
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Marquee state
+  const [marqueeText, setMarqueeText] = useState('Government of Nepal - Ministry of Physical Infrastructure and Transport - Department of Transport Management - Nepal');
+
   // Nepali Date & Time state
   const [dateTimeStr, setDateTimeStr] = useState("");
 
@@ -62,6 +65,20 @@ function Navbar() {
     return () => clearInterval(intervalId);
   }, []);
 
+  // Fetch marquee text from backend
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/marquee`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.result) {
+          setMarqueeText(data.result);
+        }
+      })
+      .catch(err => {
+        console.log('Marquee fetch error:', err);
+      });
+  }, []);
+
   // Check auth state on component mount and listen for storage changes
   useEffect(() => {
     const checkAuthState = () => {
@@ -108,8 +125,13 @@ function Navbar() {
     <>
       {/* Top Marquee Heading */}
       <div className="overflow-hidden bg-gradient-to-r from-nepal-blue via-blue-700 to-nepal-blue shadow-md">
-        <div className="inline-block animate-marquee py-2 px-4 text-white font-bold text-lg tracking-wide group-hover:[animation-play-state:paused]">
-          Government of Nepal - Ministry of Physical Infrastructure and Transport - Department of Transport Management - Nepal
+        <div
+          className="inline-block animate-marquee py-2 px-4 text-white font-bold text-lg tracking-wide"
+          style={{ whiteSpace: 'nowrap' }}
+          onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
+          onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
+        >
+          {marqueeText}
         </div>
       </div>
 
