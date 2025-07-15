@@ -66,7 +66,6 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     clearNotification();
-
     try {
       const response = await API.post("/auth/login", formData);
       const data = response.data;
