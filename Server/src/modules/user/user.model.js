@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 // seperate schema for address as 2 of the attribute shares the same schema 
 const AddressSchema = new mongoose.Schema({
     houseNo: String,
@@ -87,12 +88,7 @@ citizenshipNo:{
     autoIndex: true
 }
 )
-UserSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
-  next();
-});
+
 
 const UserModel = mongoose.model("User", UserSchema)
 

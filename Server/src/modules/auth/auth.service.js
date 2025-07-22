@@ -39,6 +39,17 @@ class AuthService{
             throw exception;
         }
     }
+    updateUserPassword = async (userId, newPassword) => {
+    try {
+        const user = await UserModel.findById(userId);
+        if (!user) throw new Error("User not found");
+        user.password = newPassword;
+        await user.save(); // triggers pre-save hook
+        return user;
+    } catch (exception) {
+        throw exception;
+    }
+}
 
     // Finds all users matching the filter and excludes sensitive fields.
     findAllUsers = async(filter = {})=>{
