@@ -606,6 +606,85 @@ class AuthController{
             next(err);
         }
     }
+    forgotPassword = async (req, res, next) => {
+        try {
+            const { email } = req.body;
+            if (!email) {
+                throw { code: 400, message: "Email is required" };
+            }
+
+            const user = await authSvc.findOneUser({ email });
+            if (!user) {
+                // For security, respond with success even if user doesn't exist
+                return res.json({
+                    message: "If an account with this email exists, a reset link has been sent.",
+                    meta: null
+                });
+            }
+
+            // Generate a reset token (valid for 1 hour)
+            const resetToken = require('crypto').randomBytes(32).toString('hex');
+            const resetTokenExpiresAt = new Date(Date.now() + 60 * 60 * 1000);
+
+            await authSvc.updateUser({
+                resetToken,
+                resetTokenExpiresAt
+            }, user._id);
+
+            // Send reset email
+            const resetLink = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
+            await mailSvc.sendEmail(
+                user.email,
+                "Password Reset Request - Bluebook Renewal System",
+                `Dear ${user.name || 'User'},<br/>
+                <p>You requested a password reset. Click the link below to reset your password:</p>
+                <p><a href="${resetLink}">${resetLink}</a></p>
+                <p>This link is valid for 1 hour.</p>
+                <p>If you did not request this, please ignore this email.</p>
+                <p>Thank you!</p>
+                <p>Bluebook Renewal System Team</p>
+                <p><small>Please do not reply to this email</small></p>`
+            );
+
+            res.json({
+                message: "If an account with this email exists, a reset link has been sent.",
+                meta: null
+            });
+        } catch (exception) {
+            next(exception);
+        }
+    }
+    resetPassword = async (req, res, next) => {
+        try {
+            const { token, newPassword } = req.body;
+            if (!token || !newPassword) {
+                throw { code: 400, message: "Token and new password are required" };
+            }
+
+            // Find user by reset token and check expiration
+            const user = await authSvc.findOneUser({
+                resetToken: token,
+                resetTokenExpiresAt: { $gt: new Date() }
+            });
+
+            if (!user) {
+                throw { code: 400, message: "Invalid or expired reset token" };
+            }
+
+            // Update password and clear reset token
+            user.password = newPassword; // Make sure your model hashes password on save!
+            user.resetToken = null;
+            user.resetTokenExpiresAt = null;
+            await user.save();
+
+            res.json({
+                message: "Password reset successful. You can now login.",
+                meta: null
+            });
+        } catch (exception) {
+            next(exception);
+        }
+    }
 }
 const authCtrl = new AuthController();
 module.exports = authCtrl;

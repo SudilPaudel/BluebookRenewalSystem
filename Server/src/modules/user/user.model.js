@@ -58,6 +58,14 @@ citizenshipNo:{
         type: String
     },
     image: String,
+    resetToken:{
+        type: String,
+        default: null
+    },
+    resetTokenExpiresAt: {
+        type: Date,
+        default: null
+    },
     address:{
         permanentAddress: AddressSchema,
         temporaryAddress: AddressSchema
@@ -79,6 +87,12 @@ citizenshipNo:{
     autoIndex: true
 }
 )
+UserSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
 
 const UserModel = mongoose.model("User", UserSchema)
 

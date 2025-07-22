@@ -19,6 +19,7 @@ import PaymentVerification from "./pages/PaymentVerification.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
+import ResetPassword from "./pages/ResetPassword.jsx";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               <Route path="/signup" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route
                 path="/otp-verification"
                 element={<OtpAndResetPassword />}

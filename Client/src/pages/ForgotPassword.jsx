@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import API from "../api/api";
 
 /**
  * ForgotPassword component allows users to request a password reset link by entering their email address.
@@ -14,14 +15,19 @@ function ForgotPassword() {
    * Prevents default form behavior, simulates API call, and sets a success message.
    * @param {React.FormEvent} e
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage(null);
 
-    // Here you would typically call your backend API to send reset link
-    console.log("Password reset requested for:", email);
-
-    // For demo purpose, just show a success message
-    setMessage(`If an account with email ${email} exists, a reset link has been sent.`);
+    try {
+      const response = await API.post("/auth/forgot-password", { email });
+      setMessage(response.data.message || "If an account with this email exists, a reset link has been sent.");
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message ||
+        "Failed to send reset link. Please try again."
+      );
+    }
   };
 
   return (

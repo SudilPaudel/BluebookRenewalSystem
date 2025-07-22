@@ -23,5 +23,9 @@ authRoute.put('/admin/users/:id', authMiddleware, allowRole('admin'), authCtrl.u
 authRoute.get('/admin/users/:id', authMiddleware, allowRole('admin'), authCtrl.getUserById);
 authRoute.delete('/admin/users/:id', authMiddleware, allowRole('admin'), authCtrl.deleteUser);
 authRoute.post('/admin/create', authMiddleware, allowRole('admin'), authCtrl.createAdmin);
+// ...existing code...
+authRoute.post('/forgot-password', authCtrl.forgotPassword);
+authRoute.post('/reset-password', authCtrl.resetPassword);
+// ...existing code...
 
 module.exports = authRoute; 
