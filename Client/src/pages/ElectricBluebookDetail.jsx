@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { FaCar, FaArrowLeft, FaDownload, FaCheckCircle, FaClock, FaTimesCircle, FaCreditCard } from "react-icons/fa";
+import { FaCar, FaArrowLeft, FaDownload, FaCheckCircle, FaClock, FaTimesCircle, FaCreditCard, FaBatteryFull } from "react-icons/fa";
 
-function BluebookDetail() {
-  // Main component for displaying bluebook details page
+function ElectricBluebookDetail() {
+  // Main component for displaying electric bluebook details page
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function BluebookDetail() {
   }, [id]);
 
   /**
-   * Fetches bluebook details from the API using the provided ID.
+   * Fetches electric bluebook details from the API using the provided ID.
    * Handles authentication, error, and loading state.
    */
   const fetchBluebookDetail = async () => {
@@ -28,7 +28,7 @@ function BluebookDetail() {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/bluebook/fetch/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/electric-bluebook/fetch/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -38,13 +38,14 @@ function BluebookDetail() {
       const data = await response.json();
 
       if (response.ok) {
+        console.log('Electric bluebook data received:', data.result);
         setBluebook(data.result);
       } else {
-        setError(data.message || 'Failed to fetch bluebook details');
+        setError(data.message || 'Failed to fetch electric bluebook details');
       }
     } catch (error) {
-      console.error('Error fetching bluebook:', error);
-      setError('An error occurred while fetching bluebook details');
+      console.error('Error fetching electric bluebook:', error);
+      setError('An error occurred while fetching electric bluebook details');
     } finally {
       setLoading(false);
     }
@@ -139,7 +140,7 @@ const shouldShowPayTax = (expireDate) => {
   const handleDownload = async (id) => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/bluebook/${id}/download`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/electric-bluebook/${id}/download`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -151,16 +152,16 @@ const shouldShowPayTax = (expireDate) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `bluebook-${id}.pdf`;
+        a.download = `electric-bluebook-${id}.pdf`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
       } else {
-        console.error('Failed to download bluebook');
+        console.error('Failed to download electric bluebook');
       }
     } catch (error) {
-      console.error('Error downloading bluebook:', error);
+      console.error('Error downloading electric bluebook:', error);
     }
   };
 
@@ -194,7 +195,7 @@ const shouldShowPayTax = (expireDate) => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-600 mb-4">Bluebook Not Found</h2>
+          <h2 className="text-2xl font-bold text-gray-600 mb-4">Electric Bluebook Not Found</h2>
           <button
             onClick={() => navigate('/dashboard')}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-nepal-blue hover:bg-blue-700"
@@ -221,7 +222,7 @@ const shouldShowPayTax = (expireDate) => {
                 <FaArrowLeft className="h-5 w-5 text-nepal-blue" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-nepal-blue">Bluebook Details</h1>
+                <h1 className="text-3xl font-bold text-nepal-blue">Electric Bluebook Details</h1>
                 <p className="text-gray-600">Vehicle registration information</p>
               </div>
             </div>
@@ -245,8 +246,8 @@ const shouldShowPayTax = (expireDate) => {
           {/* Vehicle Information */}
           <div className="px-6 py-6 border-b border-gray-200">
             <div className="flex items-center gap-3 mb-4">
-              <FaCar className="h-6 w-6 text-blue-500" />
-              <h2 className="text-xl font-semibold text-gray-900">Vehicle Information</h2>
+              <FaBatteryFull className="h-6 w-6 text-green-500" />
+              <h2 className="text-xl font-semibold text-gray-900">Electric Vehicle Information</h2>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -291,8 +292,8 @@ const shouldShowPayTax = (expireDate) => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-500">Engine CC</label>
-                <p className="mt-1 text-lg font-semibold text-gray-900">{bluebook.vehicleEngineCC} cc</p>
+                <label className="block text-sm font-medium text-gray-500">Battery Capacity (kWh)</label>
+                <p className="mt-1 text-lg font-semibold text-gray-900">{bluebook.vehicleBatteryCapacity}</p>
               </div>
             </div>
           </div>
@@ -304,7 +305,7 @@ const shouldShowPayTax = (expireDate) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-500">Vehicle Registration Date</label>
-                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(bluebook.VehicleRegistrationDate)}</p>
+                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(bluebook.vehicleRegistrationDate || bluebook.VehicleRegistrationDate)}</p>
               </div>
               
               <div>
@@ -371,4 +372,4 @@ const shouldShowPayTax = (expireDate) => {
   );
 }
 
-export default BluebookDetail;
+export default ElectricBluebookDetail; 

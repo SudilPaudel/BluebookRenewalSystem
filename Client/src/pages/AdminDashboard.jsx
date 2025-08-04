@@ -29,7 +29,8 @@ import {
   FaNewspaper,
   FaMotorcycle,
   FaPlus,
-  FaImage
+  FaImage,
+  FaBatteryFull
 } from "react-icons/fa";
 import fallbackNews from "../assets/news1.jpeg";
 import { toast } from "react-toastify";
@@ -175,37 +176,82 @@ function AdminDashboard() {
         }));
       }
 
-      // Fetch all bluebooks
-      const bluebooksResponse = await fetch(`${import.meta.env.VITE_API_URL}/bluebook/admin/all`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      // Fetch all bluebooks (both regular and electric)
+      const [bluebooksResponse, electricBluebooksResponse] = await Promise.all([
+        fetch(`${import.meta.env.VITE_API_URL}/bluebook/admin/all`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }),
+        fetch(`${import.meta.env.VITE_API_URL}/electric-bluebook/admin/all`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+      ]);
+
+      let allBluebooks = [];
+      let totalBluebooks = 0;
+      let pendingBluebooks = 0;
+      let verifiedBluebooks = 0;
 
       if (bluebooksResponse.ok) {
         const bluebooksData = await bluebooksResponse.json();
-        setBluebooks(bluebooksData.result || []);
-        setStats(prev => ({
-          ...prev,
-          totalBluebooks: bluebooksData.meta?.total || 0,
-          pendingBluebooks: bluebooksData.meta?.pending || 0,
-          verifiedBluebooks: bluebooksData.meta?.verified || 0
-        }));
+        const regularBluebooks = bluebooksData.result || [];
+        allBluebooks = [...allBluebooks, ...regularBluebooks];
+        totalBluebooks += bluebooksData.meta?.total || 0;
+        pendingBluebooks += bluebooksData.meta?.pending || 0;
+        verifiedBluebooks += bluebooksData.meta?.verified || 0;
       }
 
-      // Fetch pending bluebooks
-      const pendingResponse = await fetch(`${import.meta.env.VITE_API_URL}/bluebook/admin/pending`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      if (electricBluebooksResponse.ok) {
+        const electricBluebooksData = await electricBluebooksResponse.json();
+        const electricBluebooks = electricBluebooksData.result || [];
+        allBluebooks = [...allBluebooks, ...electricBluebooks];
+        totalBluebooks += electricBluebooksData.meta?.total || 0;
+        pendingBluebooks += electricBluebooksData.meta?.pending || 0;
+        verifiedBluebooks += electricBluebooksData.meta?.verified || 0;
+      }
+
+      setBluebooks(allBluebooks);
+      setStats(prev => ({
+        ...prev,
+        totalBluebooks,
+        pendingBluebooks,
+        verifiedBluebooks
+      }));
+
+      // Fetch pending bluebooks (both regular and electric)
+      const [pendingResponse, electricPendingResponse] = await Promise.all([
+        fetch(`${import.meta.env.VITE_API_URL}/bluebook/admin/pending`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }),
+        fetch(`${import.meta.env.VITE_API_URL}/electric-bluebook/admin/pending`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+      ]);
+
+      let allPendingBluebooks = [];
 
       if (pendingResponse.ok) {
         const pendingData = await pendingResponse.json();
-        setPendingBluebooks(pendingData.result || []);
+        allPendingBluebooks = [...allPendingBluebooks, ...(pendingData.result || [])];
       }
+
+      if (electricPendingResponse.ok) {
+        const electricPendingData = await electricPendingResponse.json();
+        allPendingBluebooks = [...allPendingBluebooks, ...(electricPendingData.result || [])];
+      }
+
+      setPendingBluebooks(allPendingBluebooks);
 
       // Fetch payments
       const paymentsResponse = await fetch(`${import.meta.env.VITE_API_URL}/admin/payments`, {
@@ -241,11 +287,12 @@ function AdminDashboard() {
   };
 
   // Handles bluebook verification by sending a request to the backend and refreshing data.
-  const handleVerifyBluebook = async (bluebookId) => {
+  const handleVerifyBluebook = async (bluebookId, isElectric = false) => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/bluebook/${bluebookId}`, {
-        method: 'GET',
+      const endpoint = isElectric ? `/electric-bluebook/${bluebookId}/verify` : `/bluebook/${bluebookId}/verify`;
+      const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
+        method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -515,10 +562,11 @@ function AdminDashboard() {
   };
 
   // Rejects a bluebook by sending a request to the backend and refreshes data.
-  const handleRejectBluebook = async (bluebookId) => {
+  const handleRejectBluebook = async (bluebookId, isElectric = false) => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/bluebook/${bluebookId}/reject`, {
+      const endpoint = isElectric ? `/electric-bluebook/${bluebookId}/reject` : `/bluebook/${bluebookId}/reject`;
+      const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -527,7 +575,7 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        toast.success('Bluebook rejected successfully!');
+        toast.success(`${isElectric ? 'Electric ' : ''}Bluebook rejected successfully!`);
         fetchDashboardData(); // Refresh data
       } else {
         const error = await response.json();
@@ -1015,11 +1063,19 @@ function AdminDashboard() {
                           style={{ animationDelay: `${idx * 60}ms` }}
                         >
                           <div>
-                            <p className="font-semibold text-gray-900">{bluebook.vehicleRegNo}</p>
+                            <p className="font-semibold text-gray-900">
+                              {bluebook.vehicleRegNo}
+                              {bluebook.isElectric && (
+                                <span className="inline-flex items-center ml-2 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                  <FaBatteryFull className="mr-1" />
+                                  Electric
+                                </span>
+                              )}
+                            </p>
                             <p className="text-sm text-gray-500">{bluebook.vehicleOwnerName}</p>
                           </div>
                           <button
-                            onClick={() => handleVerifyBluebook(bluebook._id)}
+                            onClick={() => handleVerifyBluebook(bluebook._id, bluebook.isElectric)}
                             className="inline-flex items-center px-4 py-2 border border-transparent text-base font-semibold rounded-lg text-white bg-nepal-blue hover:bg-blue-700 shadow transition"
                           >
                             <FaCheckCircle className="mr-1" />
@@ -1198,14 +1254,14 @@ function AdminDashboard() {
                                 Edit
                               </button>
                               <button
-                                onClick={() => handleVerifyBluebook(bluebook._id)}
+                                onClick={() => handleVerifyBluebook(bluebook._id, bluebook.isElectric)}
                                 className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-lg text-white bg-nepal-blue hover:bg-blue-700 shadow"
                               >
                                 <FaCheckCircle className="mr-1" />
                                 Verify
                               </button>
                               <button
-                                onClick={() => handleRejectBluebook(bluebook._id)}
+                                onClick={() => handleRejectBluebook(bluebook._id, bluebook.isElectric)}
                                 className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-lg text-red-700 bg-red-100 hover:bg-red-200 shadow"
                               >
                                 <FaTimesCircle className="mr-1" />
@@ -1239,7 +1295,10 @@ function AdminDashboard() {
                               <div className={`h-14 w-14 rounded-full flex items-center justify-center border-2 shadow ${bluebook.status === 'verified' ? 'bg-green-100 border-green-300' :  bluebook.status === 'rejected' ? 'bg-red-100 border-red-300' : 'bg-yellow-100 border-yellow-300'
                                 }`}>
                                 {
-                                  bluebook.vehicleType === 'Car' ? (
+                                  bluebook.isElectric ? (
+                                    <FaBatteryFull className={`h-7 w-7 ${bluebook.status === 'verified' ? 'text-green-600' :  bluebook.status === 'pending' ? 'text-yellow-600' : 'text-red-600'
+                                      }`} />
+                                  ) : bluebook.vehicleType === 'Car' ? (
                                     <FaCar className={`h-7 w-7 ${bluebook.status === 'verified' ? 'text-green-600' :  bluebook.status === 'pending' ? 'text-yellow-600' : 'text-red-600'
                                       }`} />
                                   ) : (
@@ -1252,7 +1311,15 @@ function AdminDashboard() {
                             <div className="ml-5">
                               <div className="text-base font-semibold text-gray-900">{bluebook.vehicleRegNo}</div>
                               <div className="text-sm text-gray-500">{bluebook.vehicleOwnerName}</div>
-                              <div className="text-xs text-gray-400">{bluebook.vehicleType} - {bluebook.vehicleModel}</div>
+                              <div className="text-xs text-gray-400">
+                                {bluebook.vehicleType} - {bluebook.vehicleModel || bluebook.VehicleModel || 'N/A'}
+                                {bluebook.isElectric && (
+                                  <span className="inline-flex items-center ml-2 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <FaBatteryFull className="mr-1" />
+                                    Electric
+                                  </span>
+                                )}
+                              </div>
                               <div className="text-xs text-gray-400">Created: {formatDate(bluebook.createdAt)}</div>
                             </div>
                           </div>
@@ -1268,7 +1335,7 @@ function AdminDashboard() {
                               </button>
                               {bluebook.status === 'pending' && (
                                 <button
-                                  onClick={() => handleVerifyBluebook(bluebook._id)}
+                                  onClick={() => handleVerifyBluebook(bluebook._id, bluebook.isElectric)}
                                   className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-lg text-white bg-nepal-blue hover:bg-blue-700 shadow"
                                 >
                                   <FaCheckCircle className="mr-1" />

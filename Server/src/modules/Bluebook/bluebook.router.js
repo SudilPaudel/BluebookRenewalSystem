@@ -20,7 +20,7 @@ blueBookRoute.get('/admin/pending', auth, allowRole('admin'), bluebookCtrl.getPe
 blueBookRoute.get('/admin/verified', auth, allowRole('admin'), bluebookCtrl.getVerifiedBluebooks)
 
 // Only admins can verify bluebooks
-blueBookRoute.get('/:id', auth, allowRole('admin'), bluebookCtrl.verifyBluebook)
+blueBookRoute.put('/:id/verify', auth, allowRole('admin'), bluebookCtrl.verifyBluebook)
 blueBookRoute.put('/:id/reject', auth, allowRole('admin'), bluebookCtrl.rejectBluebook)
 blueBookRoute.put('/admin/:id', auth, allowRole('admin'), bluebookCtrl.updateBluebook)
 blueBookRoute.get('/fetch/:id', auth, bluebookCtrl.fetchBluebookById )

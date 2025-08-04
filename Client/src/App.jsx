@@ -20,6 +20,8 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import ElectricNewBluebook from "./pages/ElectricNewBluebook.jsx";
+import ElectricBluebookDetail from "./pages/ElectricBluebookDetail.jsx";
 
 function App() {
   return (
@@ -49,6 +51,8 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/bluebook/new" element={<NewBluebook />} />
+              <Route path="/electric-bluebook/new" element={<ElectricNewBluebook />} />
+              <Route path="/electric-bluebook/:id" element={<ElectricBluebookDetail />} />
               <Route path="/bluebook/:id" element={<BluebookDetail />} />
               <Route path="/payment/:id" element={<Payment />} />
               <Route
