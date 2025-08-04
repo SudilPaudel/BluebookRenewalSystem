@@ -35,6 +35,12 @@ import {
 import fallbackNews from "../assets/news1.jpeg";
 import { toast } from "react-toastify";
 
+// Helper function to get API URL
+const getApiUrl = (endpoint) => {
+  // Use relative URL for proxy, fallback to full URL if needed
+  return endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+};
+
 function AdminDashboard() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -267,7 +273,7 @@ function AdminDashboard() {
       }
 
       // Fetch news
-      const newsResponse = await fetch(`${import.meta.env.VITE_API_URL}/news`, {
+      const newsResponse = await fetch(`/news`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -701,7 +707,7 @@ function AdminDashboard() {
         formData.append('image', newsImage);
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/news`, {
+      const response = await fetch(`/news`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -774,7 +780,7 @@ function AdminDashboard() {
         formData.append('image', newsImage);
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/news/${editingNews._id}`, {
+      const response = await fetch(`/news/${editingNews._id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -821,7 +827,9 @@ function AdminDashboard() {
   const confirmDeleteNews = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/news/${newsToDelete._id}`, {
+      
+      // Try relative URL first (for proxy)
+      let response = await fetch(`/news/${newsToDelete._id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -829,20 +837,30 @@ function AdminDashboard() {
         }
       });
 
+      // If relative URL fails, try full URL
+      if (!response.ok && response.status !== 404) {
+        console.log('Relative URL failed, trying full URL...');
+        response = await fetch(`${import.meta.env.VITE_API_URL}/news/${newsToDelete._id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+
       if (response.ok) {
-        setNewsSuccess('News article deleted successfully!');
+        toast.success('News article deleted successfully!');
         fetchDashboardData();
-        setTimeout(() => {
-          setShowDeleteNewsModal(false);
-          setNewsToDelete(null);
-          setNewsSuccess('');
-        }, 1200);
+        setShowDeleteNewsModal(false);
+        setNewsToDelete(null);
       } else {
         const data = await response.json();
-        setNewsError(data.message || 'Failed to delete news article');
+        toast.error(data.message || 'Failed to delete news article');
       }
     } catch (error) {
-      setNewsError('An error occurred while deleting news article');
+      console.error('Error deleting news:', error);
+      toast.error('An error occurred while deleting news article');
     }
   };
 
@@ -850,22 +868,48 @@ function AdminDashboard() {
   const handleUpdateNewsStatus = async (newsId, newStatus) => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/news/${newsId}/status`, {
+      
+      // Try relative URL first (for proxy)
+      let apiUrl = getApiUrl(`/news/${newsId}/status`);
+      let response = await fetch(apiUrl, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({ status: newStatus })
       });
-      console.log(response);
+      
+      // If relative URL fails, try full URL
+      if (!response.ok && response.status !== 404) {
+        console.log('Relative URL failed, trying full URL...');
+        apiUrl = `${import.meta.env.VITE_API_URL}/news/${newsId}/status`;
+        response = await fetch(apiUrl, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+      }
+      
+      console.log('Response status:', response.status);
+      
       if (response.ok) {
+        const data = await response.json();
+        console.log('Success response:', data);
+        toast.success(`News status updated to ${newStatus} successfully!`);
         fetchDashboardData();
       } else {
         const data = await response.json();
+        console.error('Error response:', data);
         toast.error(data.message || 'Failed to update news status');
       }
     } catch (error) {
+      console.error('Error updating news status:', error);
       toast.error('An error occurred while updating news status');
     }
   };
@@ -891,7 +935,7 @@ function AdminDashboard() {
   // Marquee management functions
   const fetchMarqueeText = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/marquee`);
+      const response = await fetch(`/marquee`);
       const data = await response.json();
       setMarqueeText(data.result || '');
     } catch (error) {
@@ -907,7 +951,7 @@ function AdminDashboard() {
 
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/marquee`, {
+      const response = await fetch(`/marquee`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -2095,36 +2139,43 @@ function AdminDashboard() {
         </div>
       )}
       {showNewsModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 animate-fade-in">
-    <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-10 relative animate-fade-in-up scale-95 sm:scale-100 transition-transform duration-300">
-      <button
-        className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-3xl font-bold transition-colors duration-200"
-        onClick={() => {
-          setShowNewsModal(false);
-          setEditingNews(null);
-          setNewsForm({
-            title: '',
-            content: '',
-            status: 'draft',
-            priority: 1,
-            tags: []
-          });
-          setNewsImage(null);
-        }}
-        aria-label="Close"
-      >
-        &times;
-      </button>
-      <h2 className="text-3xl font-extrabold text-nepal-blue mb-8 text-center tracking-tight animate-fade-in-down">
-        {editingNews ? 'Edit News' : 'Add News'}
-      </h2>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          editingNews ? handleUpdateNews() : handleCreateNews();
-        }}
-        className="space-y-6"
-      >
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300 animate-fade-in p-4">
+    <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col animate-fade-in-up scale-95 sm:scale-100 transition-transform duration-300">
+      {/* Header */}
+      <div className="flex-shrink-0 p-6 border-b border-gray-100">
+        <button
+          className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-3xl font-bold transition-colors duration-200 z-10"
+          onClick={() => {
+            setShowNewsModal(false);
+            setEditingNews(null);
+            setNewsForm({
+              title: '',
+              content: '',
+              status: 'draft',
+              priority: 1,
+              tags: []
+            });
+            setNewsImage(null);
+          }}
+          aria-label="Close"
+        >
+          &times;
+        </button>
+        <h2 className="text-3xl font-extrabold text-nepal-blue text-center tracking-tight animate-fade-in-down">
+          {editingNews ? 'Edit News' : 'Add News'}
+        </h2>
+      </div>
+      
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto p-6 modal-scroll">
+        <form
+          id="newsForm"
+          onSubmit={e => {
+            e.preventDefault();
+            editingNews ? handleUpdateNews() : handleCreateNews();
+          }}
+          className="space-y-6"
+        >
         <div className="space-y-2 animate-fade-in-up">
           <label className="block text-base font-semibold text-gray-700">Title</label>
           <input
@@ -2132,10 +2183,14 @@ function AdminDashboard() {
             name="title"
             value={newsForm.title}
             onChange={handleNewsFormChange}
-            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-base shadow-sm transition"
             required
             placeholder="Enter news title..."
+            maxLength={200}
           />
+          <div className="text-xs text-gray-400 text-right">
+            {newsForm.title.length}/200 characters
+          </div>
         </div>
         <div className="space-y-2 animate-fade-in-up delay-75">
           <label className="block text-base font-semibold text-gray-700">Content</label>
@@ -2143,80 +2198,130 @@ function AdminDashboard() {
             name="content"
             value={newsForm.content}
             onChange={handleNewsFormChange}
-            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
-            rows={5}
+            className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-base shadow-sm transition resize-none"
+            rows={6}
             required
             placeholder="Write your news content here..."
+            maxLength={2000}
           />
+          <div className="text-xs text-gray-400 text-right">
+            {newsForm.content.length}/2000 characters
+          </div>
         </div>
         <div className="space-y-2 animate-fade-in-up delay-100">
           <label className="block text-base font-semibold text-gray-700">Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleNewsImageChange}
-            className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-nepal-blue file:text-white hover:file:bg-blue-700 transition"
-          />
-          {/* Image preview */}
-          {(newsImage || (editingNews && editingNews.image)) && (
-            <div className="mt-2 flex justify-center animate-fade-in-up">
-              <img
-                src={newsImage ? URL.createObjectURL(newsImage) : `${import.meta.env.VITE_API_URL}/public/uploads/news/${editingNews.image}`}
-                alt="Preview"
-                className="w-48 h-32 object-cover rounded-xl border border-gray-200 shadow-md"
-              />
-            </div>
-          )}
+          <div className="space-y-3">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleNewsImageChange}
+              className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-nepal-blue file:text-white hover:file:bg-blue-700 transition"
+            />
+            {/* Image preview */}
+            {(newsImage || (editingNews && editingNews.image)) && (
+              <div className="flex justify-center animate-fade-in-up">
+                <div className="relative group">
+                  <img
+                    src={newsImage ? URL.createObjectURL(newsImage) : `${import.meta.env.VITE_API_URL}/public/uploads/news/${editingNews.image}`}
+                    alt="Preview"
+                    className="w-64 h-40 object-cover rounded-xl border border-gray-200 shadow-md transition-transform group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-xl transition-all duration-200 flex items-center justify-center">
+                    <span className="text-white opacity-0 group-hover:opacity-100 text-sm font-medium">Preview</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-4 animate-fade-in-up delay-150">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in-up delay-150">
+          <div className="space-y-2">
             <label className="block text-base font-semibold text-gray-700">Status</label>
             <select
               name="status"
               value={newsForm.status}
               onChange={handleNewsFormChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-base shadow-sm transition"
             >
-              <option value="draft">Draft</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="draft">📝 Draft</option>
+              <option value="active">✅ Active</option>
+              <option value="inactive">❌ Inactive</option>
             </select>
           </div>
-          <div>
+          <div className="space-y-2">
             <label className="block text-base font-semibold text-gray-700">Priority</label>
             <input
               type="number"
               name="priority"
               value={newsForm.priority}
               onChange={handleNewsFormChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-base shadow-sm transition"
               min={1}
+              max={10}
+              placeholder="1-10"
             />
           </div>
         </div>
-        <div className="flex justify-end space-x-3 pt-6 animate-fade-in-up delay-200">
+        </form>
+      </div>
+      
+      {/* Fixed Footer */}
+      <div className="flex-shrink-0 p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100 rounded-b-3xl">
+        <div className="flex justify-end space-x-3">
           <button
             type="button"
             onClick={() => setShowNewsModal(false)}
-            className="px-6 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 font-semibold hover:bg-gray-100 transition shadow-sm"
+            className="px-6 py-3 rounded-xl border border-gray-200 bg-white text-gray-700 font-semibold hover:bg-gray-100 transition-all shadow-sm hover:shadow-md"
+            disabled={newsLoading}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-nepal-blue to-blue-500 text-white font-bold shadow-lg hover:from-blue-700 hover:to-nepal-blue transition disabled:opacity-60 disabled:cursor-not-allowed"
+            form="newsForm"
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-nepal-blue to-blue-500 text-white font-bold shadow-lg hover:from-blue-700 hover:to-nepal-blue transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:shadow-xl transform hover:scale-105"
             disabled={newsLoading}
           >
             {newsLoading ? (
-              <span className="flex items-center"><svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>Saving...</span>
+              <span className="flex items-center">
+                <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                Saving...
+              </span>
             ) : (
-              editingNews ? 'Save Changes' : 'Add News'
+              <span className="flex items-center">
+                {editingNews ? (
+                  <>
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Save Changes
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Add News
+                  </>
+                )}
+              </span>
             )}
           </button>
         </div>
-        {newsError && <div className="text-red-500 text-center animate-fade-in-up mt-2">{newsError}</div>}
-        {newsSuccess && <div className="text-green-500 text-center animate-fade-in-up mt-2">{newsSuccess}</div>}
-      </form>
+        {newsError && (
+          <div className="text-red-500 text-center animate-fade-in-up mt-3 text-sm bg-red-50 p-2 rounded-lg border border-red-200">
+            {newsError}
+          </div>
+        )}
+        {newsSuccess && (
+          <div className="text-green-500 text-center animate-fade-in-up mt-3 text-sm bg-green-50 p-2 rounded-lg border border-green-200">
+            {newsSuccess}
+          </div>
+        )}
+      </div>
     </div>
   </div>
 )}
@@ -2398,6 +2503,44 @@ function AdminDashboard() {
     </div>
   </div>
 )}
+
+      {/* Delete News Confirmation Modal */}
+      {showDeleteNewsModal && newsToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in-up">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
+              onClick={() => setShowDeleteNewsModal(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <div className="flex flex-col items-center">
+              <FaExclamationTriangle className="text-red-500 text-4xl mb-4" />
+              <h2 className="text-2xl font-bold text-nepal-blue mb-2">Delete News Article</h2>
+              <p className="text-gray-700 mb-6 text-center">
+                Are you sure you want to delete <span className="font-semibold">"{newsToDelete.title}"</span>? This action cannot be undone.
+              </p>
+              <div className="flex justify-end space-x-3 w-full">
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteNewsModal(false)}
+                  className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDeleteNews}
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

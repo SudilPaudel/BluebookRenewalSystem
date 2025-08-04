@@ -8,6 +8,11 @@ export default defineConfig({
     proxy: {
       '/auth': 'http://localhost:9005',
       '/bluebook': 'http://localhost:9005',
+      '/electric-bluebook': 'http://localhost:9005',
+      '/news': 'http://localhost:9005',
+      '/marquee': 'http://localhost:9005',
+      '/admin': 'http://localhost:9005',
+      '/payment': 'http://localhost:9005',
     },
   },
 })
