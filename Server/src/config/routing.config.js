@@ -18,4 +18,18 @@ mainRouter.use('/payment', paymentRouter);
 mainRouter.use('/news', newsRouter);
 mainRouter.use('/marquee', marqueeRouter);
 
+// Serve React app for payment verification route
+mainRouter.get("/payment-verification/:id", (req, res) => {
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+  const { id } = req.params;
+  const { pidx } = req.query;
+  
+  // Redirect to dashboard with payment verification parameters
+  const redirectUrl = pidx 
+    ? `${frontendUrl}/dashboard?payment_verification=true&id=${id}&pidx=${pidx}`
+    : `${frontendUrl}/dashboard?payment_verification=true&id=${id}`;
+  
+  res.redirect(redirectUrl);
+});
+
 module.exports = mainRouter;

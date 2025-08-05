@@ -5,6 +5,18 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    historyApiFallback: {
+      index: '/index.html',
+      rewrites: [
+        { from: /^\/payment-verification\/.*/, to: '/index.html' },
+        { from: /^\/dashboard.*/, to: '/index.html' },
+        { from: /^\/bluebook\/.*/, to: '/index.html' },
+        { from: /^\/electric-bluebook\/.*/, to: '/index.html' },
+        { from: /^\/payment\/.*/, to: '/index.html' },
+        { from: /^\/profile.*/, to: '/index.html' },
+        { from: /^\/admin-dashboard.*/, to: '/index.html' },
+      ]
+    },
     proxy: {
       '/auth': 'http://localhost:9005',
       '/bluebook': 'http://localhost:9005',

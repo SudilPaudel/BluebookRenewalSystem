@@ -195,7 +195,7 @@ class PaymentController {
         if (paymentDataObj.paymentMethod === "khalti") {
           data = {
             return_url: `${
-              process.env.FRONTEND_URL || "http://localhost:5173"
+              process.env.BACKEND_URL || "http://localhost:9005"
             }/payment-verification/${id}`,
             purchase_order_id: TaxData._id,
             amount: totalTaxAmount * 100, //Khalti dont accept in rupee so convert it to paisa
@@ -305,7 +305,7 @@ class PaymentController {
         if (paymentDataObj.paymentMethod === "khalti") {
           data = {
             return_url: `${
-              process.env.FRONTEND_URL || "http://localhost:5173"
+              process.env.BACKEND_URL || "http://localhost:9005"
             }/payment-verification/${id}`,
             purchase_order_id: TaxData._id,
             amount: totalTaxAmount * 100, //Khalti dont accept in rupee so convert it to paisa

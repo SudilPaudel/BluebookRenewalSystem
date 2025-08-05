@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { FaCar, FaFileAlt, FaClock, FaCheckCircle, FaTimesCircle, FaPlus, FaSearch, FaDownload, FaEdit, FaTrash, FaMotorcycle, FaUserCircle, FaBatteryFull } from "react-icons/fa";
 
 function Dashboard() {
   // Main dashboard component for displaying user bluebooks and stats
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [user, setUser] = useState(null);
   const [bluebooks, setBluebooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,6 +22,20 @@ function Dashboard() {
   useEffect(() => {
     checkAuth();
     fetchUserBluebooks();
+    
+    // Handle payment verification redirect
+    const paymentVerification = searchParams.get('payment_verification');
+    const id = searchParams.get('id');
+    const pidx = searchParams.get('pidx');
+    
+    if (paymentVerification === 'true' && id) {
+      // Redirect to payment verification page
+      const redirectUrl = pidx 
+        ? `/payment-verification/${id}?pidx=${pidx}`
+        : `/payment-verification/${id}`;
+      navigate(redirectUrl);
+    }
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
