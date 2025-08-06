@@ -15,7 +15,9 @@ import NewBluebook from "./pages/NewBluebook.jsx";
 import BluebookDetail from "./pages/BluebookDetail.jsx";
 import Profile from "./pages/Profile.jsx";
 import Payment from "./pages/Payment.jsx";
+import ElectricPayment from "./pages/ElectricPayment.jsx";
 import PaymentVerification from "./pages/PaymentVerification.jsx";
+import ElectricPaymentVerification from "./pages/ElectricPaymentVerification.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
@@ -54,10 +56,16 @@ function App() {
               <Route path="/electric-bluebook/new" element={<ElectricNewBluebook />} />
               <Route path="/electric-bluebook/:id" element={<ElectricBluebookDetail />} />
               <Route path="/bluebook/:id" element={<BluebookDetail />} />
+              <Route path="/electric-bluebook/:id" element={<ElectricBluebookDetail />} />
               <Route path="/payment/:id" element={<Payment />} />
+              <Route path="/electric-payment/:id" element={<ElectricPayment />} />
               <Route
                 path="/payment-verification/:id"
                 element={<PaymentVerification />}
+              />
+              <Route
+                path="/electric-payment-verification/:id"
+                element={<ElectricPaymentVerification />}
               />
               <Route path="/admin-dashboard" element={<AdminDashboard />} />
             </Routes>

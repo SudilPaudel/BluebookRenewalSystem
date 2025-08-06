@@ -352,7 +352,7 @@ const shouldShowPayTax = (expireDate) => {
               <div className="flex items-center gap-3">
                 {bluebook.status === 'verified' && shouldShowPayTax(bluebook.taxExpireDate) && (
                   <button
-                    onClick={() => navigate(`/payment/${bluebook._id}`)}
+                    onClick={() => navigate(`/electric-payment/${bluebook._id}`)}
                     className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white ${
                       isExpired(bluebook.taxExpireDate) 
                         ? 'bg-red-600 hover:bg-red-700' 

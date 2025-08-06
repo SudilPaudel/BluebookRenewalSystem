@@ -25,6 +25,7 @@ function Dashboard() {
     
     // Handle payment verification redirect
     const paymentVerification = searchParams.get('payment_verification');
+    const electricPaymentVerification = searchParams.get('electric_payment_verification');
     const id = searchParams.get('id');
     const pidx = searchParams.get('pidx');
     
@@ -33,6 +34,14 @@ function Dashboard() {
       const redirectUrl = pidx 
         ? `/payment-verification/${id}?pidx=${pidx}`
         : `/payment-verification/${id}`;
+      navigate(redirectUrl);
+    }
+    
+    if (electricPaymentVerification === 'true' && id) {
+      // Redirect to electric payment verification page
+      const redirectUrl = pidx 
+        ? `/electric-payment-verification/${id}?pidx=${pidx}`
+        : `/electric-payment-verification/${id}`;
       navigate(redirectUrl);
     }
     
@@ -443,7 +452,17 @@ return (
             </button>
             {shouldShowPayTax(bluebook.taxExpireDate) && (
               <button
-            onClick={() => navigate(`/payment/${bluebook._id}`)}
+            onClick={() => {
+              console.log('Pay Tax clicked for bluebook:', bluebook);
+              console.log('Is Electric:', bluebook.isElectric);
+              console.log('Bluebook ID:', bluebook._id);
+              console.log('Vehicle Type:', bluebook.vehicleType);
+              console.log('Battery Capacity:', bluebook.vehicleBatteryCapacity);
+              
+              bluebook.isElectric
+                ? navigate(`/electric-payment/${bluebook._id}`)
+                : navigate(`/payment/${bluebook._id}`)
+            }}
             className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-lg text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
               isExpired(bluebook.taxExpireDate) 
                 ? 'bg-gradient-to-r from-red-500 to-red-600 hover:scale-105 focus:ring-red-500' 

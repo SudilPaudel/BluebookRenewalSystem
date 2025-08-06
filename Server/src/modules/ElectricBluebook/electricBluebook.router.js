@@ -22,6 +22,9 @@ electricBluebookRoute.get('/admin/verified', auth, allowRole('admin'), electricB
 electricBluebookRoute.put('/:id/verify', auth, allowRole('admin'), electricBluebookCtrl.verifyBluebook)
 electricBluebookRoute.put('/:id/reject', auth, allowRole('admin'), electricBluebookCtrl.rejectBluebook)
 electricBluebookRoute.put('/admin/:id', auth, allowRole('admin'), electricBluebookCtrl.updateBluebook)
+
+// General routes - these must come last to avoid conflicts
 electricBluebookRoute.get('/fetch/:id', auth, electricBluebookCtrl.fetchBluebookById )
+electricBluebookRoute.get('/:id', auth, electricBluebookCtrl.fetchBluebookById )
 
 module.exports = electricBluebookRoute

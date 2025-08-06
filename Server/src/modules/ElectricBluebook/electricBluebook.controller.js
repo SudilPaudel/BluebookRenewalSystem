@@ -6,16 +6,16 @@ require("dotenv").config();
 class ElectricBluebookController {
     createBluebook = async (req, res, next) => {
         try {
-            console.log('Creating electric bluebook with data:', req.body);
+        
             const data = electricBluebookSvc.transformCreateData(req);
             const bluebooknewData = {
                 ...data,
                 isElectric: true,
                 createdBy: req.authUser
             }
-            console.log('Transformed data:', bluebooknewData);
+
             const electricBluebookData = await electricBluebookSvc.createBluebook(bluebooknewData);
-            console.log('Created bluebook:', electricBluebookData);
+
             res.status(201).json({
                 result: electricBluebookData,
                 message: "Bluebook Created for electric vehicle Successfully",
@@ -80,11 +80,19 @@ class ElectricBluebookController {
     fetchBluebookById = async (req, res, next) => {
         try {
             const id = req.params.id
-            console.log('Fetching electric bluebook with ID:', id);
+    
             const bluebookData = await electricBluebookSvc.findOneBluebook({
                 _id: id
             })
-            console.log('Fetched bluebook data:', bluebookData);
+
+            
+            if (!bluebookData) {
+                return res.status(404).json({
+                    message: "Electric bluebook not found",
+                    meta: null
+                })
+            }
+            
             if (bluebookData.status === "pending") {
                 return res.status(400).json({
                     message: "Please wait for the admin to verify the bluebook details",
