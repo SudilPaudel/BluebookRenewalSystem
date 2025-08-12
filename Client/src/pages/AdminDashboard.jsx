@@ -1732,72 +1732,94 @@ function AdminDashboard() {
 
             {/* News Tab */}
             {activeTab === 'news' && (
-              <div className="space-y-6 animate-fade-in">
-                <div className="flex items-center justify-between">
+              <div className="space-y-8 animate-fade-in">
+                {/* Header Section */}
+                <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
+                      <FaNewspaper className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-800">News Management</h2>
+                      <p className="text-gray-600">Manage news articles and announcements</p>
+                    </div>
+                  </div>
                   <button
                     onClick={() => setShowNewsModal(true)}
-                    className="inline-flex items-center px-5 py-2 border border-transparent text-base font-semibold rounded-lg text-white bg-gradient-to-r from-nepal-blue to-blue-500 hover:from-blue-700 hover:to-nepal-blue shadow transition"
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-xl text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                   >
                     <FaPlus className="mr-2" />
                     Add News
                   </button>
                 </div>
 
-                <div className="bg-white/90 shadow-xl overflow-hidden sm:rounded-2xl animate-fade-in-up">
+                {/* News List */}
+                <div className="bg-white/95 backdrop-blur-sm shadow-2xl overflow-hidden rounded-3xl border border-gray-100 animate-fade-in-up">
+                  <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-8 py-4 border-b border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-800">News Articles ({news.length})</h3>
+                  </div>
                   <ul className="divide-y divide-gray-100">
                     {news.map((newsItem, idx) => (
-                      <li key={newsItem._id} className="px-8 py-6 animate-fade-in-up" style={{ animationDelay: `${idx * 30}ms` }}>
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                          <div className="flex items-center space-x-6 w-full md:w-auto">
-                            <div className="flex-shrink-0">
+                      <li key={newsItem._id} className="px-8 py-8 animate-fade-in-up hover:bg-gray-50/50 transition-all duration-200" style={{ animationDelay: `${idx * 50}ms` }}>
+                        <div className="flex flex-col lg:flex-row items-start justify-between gap-8">
+                          <div className="flex items-start space-x-6 w-full lg:w-auto">
+                            <div className="flex-shrink-0 relative group">
                               {newsItem.image ? (
                                 <img
-                                  className="w-[220px] h-[140px] object-cover rounded-xl border border-gray-200 shadow"
+                                  className="w-[240px] h-[160px] object-cover rounded-2xl border-2 border-gray-200 shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105"
                                   src={`${import.meta.env.VITE_API_URL}/public/uploads/news/${newsItem.image}`}
                                   alt={newsItem.title}
                                   onError={e => { e.target.onerror = null; e.target.src = fallbackNews; }}
                                 />
                               ) : (
                                 <img
-                                  className="w-[220px] h-[140px] object-cover rounded-xl border border-gray-200 shadow"
+                                  className="w-[240px] h-[160px] object-cover rounded-2xl border-2 border-gray-200 shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105"
                                   src="https://via.placeholder.com/400x250?text=No+Image"
                                   alt="No news image"
                                 />
                               )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-lg font-bold text-gray-900 truncate">{newsItem.title}</div>
-                              <div className="text-base text-gray-500 truncate">{newsItem.content.substring(0, 100)}...</div>
-                              <div className="flex items-center space-x-3 mt-2">
+                              <div className="absolute top-3 left-3">
                                 {getNewsStatusBadge(newsItem.status)}
-                                <span className="text-xs text-gray-400">Priority: {newsItem.priority}</span>
-                                <span className="text-xs text-gray-400">Created: {formatDate(newsItem.createdAt)}</span>
+                              </div>
+                            </div>
+                            <div className="flex-1 min-w-0 space-y-3">
+                              <div>
+                                <h4 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">{newsItem.title}</h4>
+                                <p className="text-gray-600 leading-relaxed line-clamp-3">{newsItem.content.substring(0, 150)}...</p>
+                              </div>
+                              <div className="flex items-center space-x-4 pt-2">
+                                <div className="flex items-center space-x-2 px-3 py-1 bg-blue-50 rounded-full">
+                                  <span className="text-xs font-medium text-blue-700">Priority: {newsItem.priority}</span>
+                                </div>
+                                <div className="flex items-center space-x-2 px-3 py-1 bg-gray-50 rounded-full">
+                                  <span className="text-xs font-medium text-gray-600">Created: {formatDate(newsItem.createdAt)}</span>
+                                </div>
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center space-x-3 lg:flex-col lg:space-x-0 lg:space-y-3">
                             <button
                               onClick={() => handleEditNews(newsItem)}
-                              className="inline-flex items-center px-3 py-1 border border-gray-200 text-sm font-medium rounded-lg text-blue-700 bg-blue-50 hover:bg-blue-100 shadow"
+                              className="inline-flex items-center px-4 py-2 border border-blue-200 text-sm font-medium rounded-xl text-blue-700 bg-blue-50 hover:bg-blue-100 hover:border-blue-300 shadow-sm transition-all duration-200 transform hover:scale-105"
                             >
-                              <FaEdit className="mr-1" />
+                              <FaEdit className="mr-2" />
                               Edit
                             </button>
                             <button
                               onClick={() => handleUpdateNewsStatus(newsItem._id, newsItem.status === 'active' ? 'inactive' : 'active')}
-                              className={`inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-lg shadow ${newsItem.status === 'active'
-                                ? 'text-red-700 bg-red-100 hover:bg-red-200'
-                                : 'text-green-700 bg-green-100 hover:bg-green-200'
+                              className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl shadow-sm transition-all duration-200 transform hover:scale-105 ${newsItem.status === 'active'
+                                ? 'text-red-700 bg-red-50 hover:bg-red-100 border-red-200'
+                                : 'text-green-700 bg-green-50 hover:bg-green-100 border-green-200'
                                 }`}
                             >
-                              {newsItem.status === 'active' ? <FaToggleOff className="mr-1" /> : <FaToggleOn className="mr-1" />}
+                              {newsItem.status === 'active' ? <FaToggleOff className="mr-2" /> : <FaToggleOn className="mr-2" />}
                               {newsItem.status === 'active' ? 'Deactivate' : 'Activate'}
                             </button>
                             <button
                               onClick={() => handleDeleteNews(newsItem)}
-                              className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-lg text-red-700 bg-red-100 hover:bg-red-200 shadow"
+                              className="inline-flex items-center px-4 py-2 border border-red-200 text-sm font-medium rounded-xl text-red-700 bg-red-50 hover:bg-red-100 hover:border-red-300 shadow-sm transition-all duration-200 transform hover:scale-105"
                             >
-                              <FaTrash className="mr-1" />
+                              <FaTrash className="mr-2" />
                               Delete
                             </button>
                           </div>
@@ -1805,8 +1827,21 @@ function AdminDashboard() {
                       </li>
                     ))}
                     {news.length === 0 && (
-                      <li className="px-8 py-12 text-center text-gray-400 animate-fade-in">
-                        No news articles found. Click "Add News" to create your first article.
+                      <li className="px-8 py-16 text-center">
+                        <div className="max-w-md mx-auto">
+                          <div className="p-4 bg-gray-50 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                            <FaNewspaper className="h-8 w-8 text-gray-400" />
+                          </div>
+                          <h3 className="text-lg font-semibold text-gray-600 mb-2">No News Articles</h3>
+                          <p className="text-gray-500 mb-4">Get started by creating your first news article to keep users informed.</p>
+                          <button
+                            onClick={() => setShowNewsModal(true)}
+                            className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                          >
+                            <FaPlus className="mr-2" />
+                            Create First Article
+                          </button>
+                        </div>
                       </li>
                     )}
                   </ul>
@@ -1816,38 +1851,88 @@ function AdminDashboard() {
 
             {/* Marquee Tab */}
             {activeTab === 'marquee' && (
-              <div className="space-y-6 animate-fade-in">
-                <div className="bg-white/90 p-8 rounded-2xl shadow-xl animate-fade-in-up">
-                  <h3 className="text-xl font-bold text-nepal-blue mb-6">Marquee Management</h3>
-                  <p className="text-gray-600 mb-6">Update the scrolling text that appears at the top of the website. This text will be visible to all users.</p>
+              <div className="space-y-8 animate-fade-in">
+                {/* Header Section */}
+                <div className="flex items-center justify-between bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl border border-purple-100">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-lg">
+                      <FaFileAlt className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-800">Marquee Management</h2>
+                      <p className="text-gray-600">Update the scrolling announcement banner</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Marquee Form */}
+                <div className="bg-white/95 backdrop-blur-sm shadow-2xl rounded-3xl border border-gray-100 animate-fade-in-up overflow-hidden">
+                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-8 py-6 border-b border-purple-100">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">Announcement Banner</h3>
+                    <p className="text-gray-600">This text will scroll from right to left at the top of the website and pause when users hover over it.</p>
+                  </div>
                   
                   <form
                     onSubmit={e => { e.preventDefault(); handleUpdateMarquee(); }}
-                    className="space-y-4"
+                    className="p-8 space-y-6"
                   >
-                    <div>
-                      <label className="block text-base font-semibold text-gray-700 mb-2">Marquee Text</label>
+                    <div className="space-y-3">
+                      <label className="block text-lg font-semibold text-gray-700 mb-3">
+                        <span className="flex items-center space-x-2">
+                          <FaFileAlt className="text-purple-500" />
+                          <span>Marquee Text</span>
+                        </span>
+                      </label>
                       <textarea
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 text-lg shadow-sm transition"
+                        className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-purple-100 focus:border-purple-400 bg-gray-50 text-lg shadow-sm transition-all duration-200 resize-none"
                         rows={4}
                         value={marqueeText}
                         onChange={e => setMarqueeText(e.target.value)}
-                        placeholder="Enter marquee text that will display at the top of the website..."
+                        placeholder="Enter announcement text that will display at the top of the website..."
                         required
                       />
-                      <p className="text-sm text-gray-500 mt-2">This text will scroll from right to left at the top of the website and pause when users hover over it.</p>
+                      <div className="flex items-center space-x-2 text-sm text-gray-500">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                        <span>This text will scroll from right to left at the top of the website</span>
+                      </div>
                     </div>
-                    <div className="flex justify-end space-x-3 pt-2">
+                    
+                    <div className="flex justify-end space-x-4 pt-4">
                       <button
                         type="submit"
-                        className="px-6 py-2 rounded-xl bg-gradient-to-r from-nepal-blue to-blue-500 text-white font-bold shadow-lg hover:from-blue-700 hover:to-nepal-blue transition disabled:opacity-60 disabled:cursor-not-allowed"
+                        className="px-8 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold shadow-lg hover:from-purple-600 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
                         disabled={marqueeLoading}
                       >
-                        {marqueeLoading ? 'Saving...' : 'Save Marquee'}
+                        {marqueeLoading ? (
+                          <span className="flex items-center space-x-2">
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <span>Saving...</span>
+                          </span>
+                        ) : (
+                          <span className="flex items-center space-x-2">
+                            <FaFileAlt />
+                            <span>Save Marquee</span>
+                          </span>
+                        )}
                       </button>
                     </div>
-                    {marqueeError && <div className="text-red-500 text-center animate-fade-in-up mt-2">{marqueeError}</div>}
-                    {marqueeSuccess && <div className="text-green-500 text-center animate-fade-in-up mt-2">{marqueeSuccess}</div>}
+                    
+                    {marqueeError && (
+                      <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-center animate-fade-in-up">
+                        <div className="flex items-center justify-center space-x-2">
+                          <FaExclamationTriangle />
+                          <span>{marqueeError}</span>
+                        </div>
+                      </div>
+                    )}
+                    {marqueeSuccess && (
+                      <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700 text-center animate-fade-in-up">
+                        <div className="flex items-center justify-center space-x-2">
+                          <FaCheckCircle />
+                          <span>{marqueeSuccess}</span>
+                        </div>
+                      </div>
+                    )}
                   </form>
                 </div>
               </div>

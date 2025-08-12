@@ -5,6 +5,14 @@ class BluebookService {
         try {
             const payload = req.body
             
+            // Calculate tax expire date as 1 year after tax pay date
+            if (payload.taxPayDate) {
+                const payDate = new Date(payload.taxPayDate);
+                const expireDate = new Date(payDate);
+                expireDate.setFullYear(payDate.getFullYear() + 1);
+                payload.taxExpireDate = expireDate;
+            }
+            
             payload.status = 'pending';
             return payload
         } catch (exception) {

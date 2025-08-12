@@ -557,7 +557,7 @@ class AuthController {
                 name,
                 email,
                 citizenshipNo,
-                password, // Should be hashed by pre-save hook
+                password: bcrypt.hashSync(password, 10), // Should be hashed by pre-save hook
                 role: "admin",
                 status: "pending",
                 emailVerified: false,

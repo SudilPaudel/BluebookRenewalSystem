@@ -24,6 +24,7 @@ import "react-toastify/ReactToastify.css";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import ElectricNewBluebook from "./pages/ElectricNewBluebook.jsx";
 import ElectricBluebookDetail from "./pages/ElectricBluebookDetail.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
                 element={<ElectricPaymentVerification />}
               />
               <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
           <Footer />

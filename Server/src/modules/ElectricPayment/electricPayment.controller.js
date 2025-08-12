@@ -71,6 +71,28 @@ class ElectricPaymentController {
   payElectricTax = async (req, res, next) => {
     try {
       const id = req.params.id;
+      
+      // Debug logging
+      console.log('Electric Payment - ID from params:', id);
+      console.log('Electric Payment - Request params:', req.params);
+      
+      // Validate id parameter
+      if (!id) {
+        return res.status(400).json({
+          message: "Electric bluebook ID is required.",
+          meta: null,
+        });
+      }
+
+      // Validate that id is a valid ObjectId
+      const mongoose = require('mongoose');
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+          message: "Invalid electric bluebook ID format.",
+          meta: null,
+        });
+      }
+      
       //fetch electric bluebook data
       const electricBluebookData = await electricBluebookSvc.findOneBluebook({
         _id: id,
@@ -229,6 +251,11 @@ class ElectricPaymentController {
               // Create payment record without Khalti pidx initially (like fuel payment)
               paymentDataObj.amount = totalTaxAmount;
         paymentDataObj.electricBluebookId = id; // Store the bluebook ID
+        
+        // Debug logging
+        console.log('Electric Payment - Creating payment record with electricBluebookId:', id);
+        console.log('Electric Payment - Payment data object:', paymentDataObj);
+        
         const paymentData = await ElectricPaymentModel.create(paymentDataObj);
 
         // Send OTP email (only if email service is configured)
@@ -288,6 +315,12 @@ class ElectricPaymentController {
 
         // Create payment record without Khalti pidx initially (like fuel payment)
         paymentDataObj.amount = totalTaxAmount;
+        paymentDataObj.electricBluebookId = id; // Store the bluebook ID
+        
+        // Debug logging
+        console.log('Electric Payment - Creating payment record with electricBluebookId (expired):', id);
+        console.log('Electric Payment - Payment data object (expired):', paymentDataObj);
+        
         const paymentData = await ElectricPaymentModel.create(paymentDataObj);
 
         // Send OTP email (only if email service is configured)
@@ -427,6 +460,20 @@ class ElectricPaymentController {
 
       // Get the electric bluebook ID from the payment record
       const electricBluebookId = payment.electricBluebookId;
+      
+      // Debug logging
+      console.log('Electric Khalti Payment - Payment record:', payment);
+      console.log('Electric Khalti Payment - Electric bluebook ID:', electricBluebookId);
+      console.log('Electric Khalti Payment - Payment ID:', paymentId);
+
+      // Validate electric bluebook ID
+      if (!electricBluebookId) {
+        console.error('Electric Khalti Payment - Electric bluebook ID is missing from payment record');
+        return res.status(400).json({
+          message: "Payment record is missing electric bluebook ID. Please try again.",
+          meta: null,
+        });
+      }
 
       // Initialize data object for Khalti payment
       const data = {
@@ -547,10 +594,33 @@ class ElectricPaymentController {
       const { pidx } = req.body;
       const { id } = req.params;
       const userId = req.authUser;
+      
+      // Validate pidx
       if (!pidx) {
         res.status(400).json({
           message:
             "Payment verification failed: Missing transaction details. Please try again.",
+          meta: null,
+        });
+        return;
+      }
+
+      // Validate id parameter
+      if (!id) {
+        res.status(400).json({
+          message:
+            "Payment verification failed: Missing electric bluebook ID. Please try again.",
+          meta: null,
+        });
+        return;
+      }
+
+      // Validate that id is a valid ObjectId
+      const mongoose = require('mongoose');
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400).json({
+          message:
+            "Payment verification failed: Invalid electric bluebook ID format. Please try again.",
           meta: null,
         });
         return;
@@ -590,6 +660,16 @@ class ElectricPaymentController {
       const oneYearLater = new Date(today);
       oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
       if (data.status === "Completed") {
+        // Verify that the electric bluebook exists before updating
+        const electricBluebook = await ElectricBluebookModel.findById(id);
+        if (!electricBluebook) {
+          res.status(404).json({
+            message: "Electric bluebook not found. Please check the bluebook ID and try again.",
+            meta: null,
+          });
+          return;
+        }
+
         await ElectricPaymentModel.updateOne(
           {
             pidx: pidx,

@@ -6,6 +6,15 @@ class ElectricBluebookService {
             console.log('Service transformCreateData - incoming payload:', payload);
             console.log('Service transformCreateData - vehicleModel value:', payload.vehicleModel);
             console.log('Service transformCreateData - vehicleModel type:', typeof payload.vehicleModel);
+            
+            // Calculate tax expire date as 1 year after tax pay date
+            if (payload.taxPayDate) {
+                const payDate = new Date(payload.taxPayDate);
+                const expireDate = new Date(payDate);
+                expireDate.setFullYear(payDate.getFullYear() + 1);
+                payload.taxExpireDate = expireDate;
+            }
+            
             payload.status = 'pending';
             console.log('Service transformCreateData - transformed payload:', payload);
             return payload;
