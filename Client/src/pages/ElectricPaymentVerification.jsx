@@ -33,9 +33,16 @@ function ElectricPaymentVerification() {
   const verifyElectricPayment = async () => {
     try {
       const pidx = searchParams.get('pidx');
+      
       if (!pidx) {
         setVerificationStatus('failed');
         setError('Electric payment verification failed: Missing transaction ID');
+        return;
+      }
+
+      if (!id) {
+        setVerificationStatus('failed');
+        setError('Electric payment verification failed: Missing electric bluebook ID');
         return;
       }
 

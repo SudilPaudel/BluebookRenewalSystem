@@ -96,6 +96,14 @@ function AdminDashboard() {
   const [createAdminLoading, setCreateAdminLoading] = useState(false);
   const [createAdminError, setCreateAdminError] = useState('');
   const [createAdminSuccess, setCreateAdminSuccess] = useState('');
+  
+  // Payment details modal state
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [paymentFilter, setPaymentFilter] = useState('all');
+  const [filteredPayments, setFilteredPayments] = useState([]);
+  const [bluebookSearchTerm, setBluebookSearchTerm] = useState('');
+  const [filteredBluebooks, setFilteredBluebooks] = useState([]);
 
   // News management state
   const [news, setNews] = useState([]);
@@ -134,6 +142,60 @@ function AdminDashboard() {
     fetchDashboardData();
     fetchMarqueeText();
   }, []);
+
+  // Filter payments based on selected filter
+  useEffect(() => {
+    if (payments.length > 0) {
+      let filtered = [];
+      
+      switch (paymentFilter) {
+        case 'successful':
+          filtered = payments.filter(payment => payment.status === 'successful');
+          break;
+        case 'pending':
+          filtered = payments.filter(payment => payment.status === 'pending');
+          break;
+        case 'failed':
+          filtered = payments.filter(payment => payment.status === 'failed');
+          break;
+        case 'electric':
+          filtered = payments.filter(payment => payment.isElectric === true);
+          break;
+        case 'fuel':
+          filtered = payments.filter(payment => payment.isElectric === false);
+          break;
+        default:
+          filtered = payments;
+      }
+      
+      setFilteredPayments(filtered);
+    } else {
+      setFilteredPayments([]);
+    }
+  }, [payments, paymentFilter]);
+
+  // Filter bluebooks based on search term
+  useEffect(() => {
+    if (bluebooks.length > 0) {
+      if (bluebookSearchTerm.trim() === '') {
+        setFilteredBluebooks(bluebooks);
+      } else {
+        const searchTerm = bluebookSearchTerm.toLowerCase().trim();
+        const filtered = bluebooks.filter(bluebook => {
+          const ownerName = (bluebook.vehicleOwnerName || '').toLowerCase();
+          const regNo = (bluebook.vehicleRegNo || '').toLowerCase();
+          const model = (bluebook.vehicleModel || bluebook.VehicleModel || '').toLowerCase();
+          
+          return ownerName.includes(searchTerm) || 
+                 regNo.includes(searchTerm) || 
+                 model.includes(searchTerm);
+        });
+        setFilteredBluebooks(filtered);
+      }
+    } else {
+      setFilteredBluebooks([]);
+    }
+  }, [bluebooks, bluebookSearchTerm]);
 
   // Checks authentication and redirects user if not admin or not logged in.
   const checkAuth = () => {
@@ -597,6 +659,13 @@ function AdminDashboard() {
   const generateReport = async (reportType) => {
     try {
       const token = localStorage.getItem('accessToken');
+      if (!token) {
+        toast.error('No authentication token found. Please login again.');
+        return;
+      }
+
+      console.log('Making request to:', `${import.meta.env.VITE_API_URL}/admin/reports/${reportType}`);
+      
       const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/reports/${reportType}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -605,24 +674,46 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        const blob = await response.blob();
+        let blob;
+        try {
+          const arrayBuffer = await response.arrayBuffer();
+          blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+        } catch (blobError) {
+          toast.error('Error processing PDF response');
+          return;
+        }
+        
+        if (blob.size === 0) {
+          toast.error('Generated PDF is empty. Please try again.');
+          return;
+        }
+
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `${reportType}_report_${new Date().toISOString().split('T')[0]}.pdf`;
         document.body.appendChild(a);
         a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
+        
+        // Clean up immediately after download
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        }, 100);
+        
         toast.success(`${reportType} report generated successfully!`);
-      } else {
-        const errorData = await response.json();
-        toast.error(errorData.message || 'Failed to generate report');
+              } else {
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const errorData = await response.json();
+            toast.error(errorData.message || 'Failed to generate report');
+          } else {
+            toast.error(`Server error: ${response.status} ${response.statusText}`);
+          }
+        }
+      } catch (error) {
+        toast.error('Network error occurred while generating report');
       }
-    } catch (error) {
-      console.error('Error generating report:', error);
-      toast.error('An error occurred while generating report. Please try again.');
-    }
   };
 
   // Handles changes in the create admin form fields.
@@ -661,6 +752,43 @@ function AdminDashboard() {
       setCreateAdminError('An error occurred while creating admin');
     } finally {
       setCreateAdminLoading(false);
+    }
+  };
+
+  // Handle view payment details
+  const handleViewPayment = (payment) => {
+    setSelectedPayment(payment);
+    setShowPaymentModal(true);
+  };
+
+  // Handle download payment receipt
+  const handleDownloadPayment = async (payment) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/payment-receipt/${payment._id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `payment-receipt-${payment.transactionId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        toast.success('Payment receipt downloaded successfully!');
+      } else {
+        toast.error('Failed to download payment receipt');
+      }
+    } catch (error) {
+      console.error('Error downloading payment receipt:', error);
+      toast.error('Network error. Please try again.');
     }
   };
 
@@ -1329,9 +1457,39 @@ function AdminDashboard() {
             {/* All Bluebooks Tab */}
             {activeTab === 'bluebooks' && (
               <div className="space-y-6 animate-fade-in">
+                {/* Search Bar */}
+                                                    <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold text-nepal-blue">All Bluebooks</h3>
+                  <div className="flex items-center space-x-4">
+                      <div className="relative">
+                        <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <input
+                          type="text"
+                          placeholder="Search by owner name, registration number, or model..."
+                          value={bluebookSearchTerm}
+                          onChange={(e) => setBluebookSearchTerm(e.target.value)}
+                          className="pl-10 pr-10 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 shadow min-w-80"
+                        />
+                        {bluebookSearchTerm && (
+                          <button
+                            onClick={() => setBluebookSearchTerm('')}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500 transition"
+                            title="Clear search"
+                          >
+                            <FaTimesCircle className="h-4 w-4" />
+                          </button>
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        Showing {filteredBluebooks.length} of {bluebooks.length} bluebooks
+                      </div>
+                    </div>
+                </div>
+
                 <div className="bg-white/90 shadow-xl overflow-hidden sm:rounded-2xl animate-fade-in-up">
                   <ul className="divide-y divide-gray-100">
-                    {bluebooks.map((bluebook, idx) => (
+                    {filteredBluebooks.length > 0 ? (
+                      filteredBluebooks.map((bluebook, idx) => (
                       <li key={bluebook._id} className="px-8 py-5 hover:bg-green-50 transition animate-fade-in-up" style={{ animationDelay: `${idx * 30}ms` }}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
@@ -1390,7 +1548,12 @@ function AdminDashboard() {
                           </div>
                         </div>
                       </li>
-                    ))}
+                    ))
+                    ) : (
+                      <li className="px-8 py-12 text-center text-gray-400 animate-fade-in">
+                        {bluebooks.length === 0 ? 'No bluebooks found' : `No bluebooks match "${bluebookSearchTerm}"`}
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>
@@ -1399,38 +1562,48 @@ function AdminDashboard() {
             {/* Payments Tab */}
             {activeTab === 'payments' && (
               <div className="space-y-6 animate-fade-in">
+                {/* Payment Statistics */}
+                
                 <div className="flex items-center justify-between mb-8">
                   <h3 className="text-xl font-bold text-nepal-blue">Payment Transactions</h3>
                   <div className="flex items-center space-x-4">
-                    <select className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 shadow">
+                    <select 
+                      value={paymentFilter}
+                      onChange={(e) => setPaymentFilter(e.target.value)}
+                      className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 shadow"
+                    >
                       <option value="all">All Payments</option>
                       <option value="successful">Successful</option>
                       <option value="pending">Pending</option>
                       <option value="failed">Failed</option>
+                      
                     </select>
+                    <div className="text-sm text-gray-600">
+                      Showing {filteredPayments.length} of {payments.length} payments
+                    </div>
                   </div>
                 </div>
 
                 <div className="bg-white/90 shadow-xl overflow-hidden sm:rounded-2xl animate-fade-in-up">
                   <div className="px-8 py-5 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-gray-100 rounded-t-2xl">
-                    <div className="grid grid-cols-6 gap-4 text-base font-semibold text-nepal-blue">
-                      <div>Transaction ID</div>
-                      <div>User</div>
-                      <div>Amount</div>
-                      <div>Status</div>
-                      <div>Date</div>
-                      <div>Actions</div>
+                    <div className="grid grid-cols-12 gap-4 text-base font-semibold text-nepal-blue">
+                      <div className="col-span-3">Transaction ID</div>
+                      <div className="col-span-2">User</div>
+                      <div className="col-span-2">Amount</div>
+                      <div className="col-span-2">Status</div>
+                      <div className="col-span-2">Date</div>
+                      <div className="col-span-1">Actions</div>
                     </div>
                   </div>
                   <ul className="divide-y divide-gray-100">
-                    {payments.length > 0 ? (
-                      payments.map((payment, idx) => (
+                    {filteredPayments.length > 0 ? (
+                      filteredPayments.map((payment, idx) => (
                         <li key={payment._id} className="px-8 py-5 animate-fade-in-up" style={{ animationDelay: `${idx * 30}ms` }}>
-                          <div className="grid grid-cols-6 gap-4 items-center">
-                            <div className="text-base font-semibold text-gray-900">{payment.transactionId}</div>
-                            <div className="text-base text-gray-500">{payment.userName}</div>
-                            <div className="text-base font-bold text-green-600">Rs. {payment.amount}</div>
-                            <div className="text-base">
+                          <div className="grid grid-cols-12 gap-4 items-center">
+                            <div className="col-span-3 text-base font-semibold text-gray-900 break-all">{payment.transactionId}</div>
+                            <div className="col-span-2 text-base text-gray-500 truncate" title={payment.userName}>{payment.userName}</div>
+                            <div className="col-span-2 text-base font-bold text-green-600">Rs. {payment.amount}</div>
+                            <div className="col-span-2 text-base">
                               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold shadow ${payment.status === 'successful' ? 'bg-green-100 text-green-800' :
                                 payment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                                   'bg-red-100 text-red-800'
@@ -1438,12 +1611,20 @@ function AdminDashboard() {
                                 {payment.status}
                               </span>
                             </div>
-                            <div className="text-base text-gray-400">{formatDate(payment.createdAt)}</div>
-                            <div className="flex items-center space-x-2">
-                              <button className="text-nepal-blue hover:text-blue-700 transition">
+                            <div className="col-span-2 text-base text-gray-400 truncate" title={formatDate(payment.createdAt)}>{formatDate(payment.createdAt)}</div>
+                            <div className="col-span-1 flex items-center space-x-2">
+                              <button 
+                                onClick={() => handleViewPayment(payment)}
+                                className="text-nepal-blue hover:text-blue-700 transition p-1 rounded hover:bg-blue-50"
+                                title="View Payment Details"
+                              >
                                 <FaEye className="h-5 w-5" />
                               </button>
-                              <button className="text-green-600 hover:text-green-700 transition">
+                              <button 
+                                onClick={() => handleDownloadPayment(payment)}
+                                className="text-green-600 hover:text-green-700 transition p-1 rounded hover:bg-green-50"
+                                title="Download Receipt"
+                              >
                                 <FaDownload className="h-5 w-5" />
                               </button>
                             </div>
@@ -1452,7 +1633,7 @@ function AdminDashboard() {
                       ))
                     ) : (
                       <li className="px-8 py-12 text-center text-gray-400 animate-fade-in">
-                        No payment transactions found
+                        {payments.length === 0 ? 'No payment transactions found' : `No payments match the "${paymentFilter}" filter`}
                       </li>
                     )}
                   </ul>
@@ -1965,176 +2146,204 @@ function AdminDashboard() {
       )}
       {/* Edit Bluebook Modal */}
       {showEditBluebookModal && editingBluebook && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-8 relative animate-fade-in-up">
-            <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
-              onClick={() => setShowEditBluebookModal(false)}
-              aria-label="Close"
-            >
-              &times;
-            </button>
-            <h2 className="text-2xl font-bold text-nepal-blue mb-6">Edit Bluebook</h2>
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                handleUpdateBluebook();
-              }}
-              className="grid grid-cols-2 gap-6"
-            >
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Reg. No</label>
-                <input
-                  type="text"
-                  name="vehicleRegNo"
-                  value={editBluebookFormData.vehicleRegNo}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Owner Name</label>
-                <input
-                  type="text"
-                  name="vehicleOwnerName"
-                  value={editBluebookFormData.vehicleOwnerName}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Type</label>
-                <input
-                  type="text"
-                  name="vehicleType"
-                  value={editBluebookFormData.vehicleType}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Model</label>
-                <input
-                  type="text"
-                  name="vehicleModel"
-                  value={editBluebookFormData.vehicleModel}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Manufacture Year</label>
-                <input
-                  type="text"
-                  name="manufactureYear"
-                  value={editBluebookFormData.manufactureYear}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Chasis Number</label>
-                <input
-                  type="text"
-                  name="chasisNumber"
-                  value={editBluebookFormData.chasisNumber}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Color</label>
-                <input
-                  type="text"
-                  name="vehicleColor"
-                  value={editBluebookFormData.vehicleColor}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Engine CC</label>
-                <input
-                  type="text"
-                  name="vehicleEngineCC"
-                  value={editBluebookFormData.vehicleEngineCC}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Number</label>
-                <input
-                  type="text"
-                  name="vehicleNumber"
-                  value={editBluebookFormData.vehicleNumber}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Status</label>
-                <select
-                  name="status"
-                  value={editBluebookFormData.status}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="verified">Verified</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Vehicle Registration Date</label>
-                <input
-                  type="date"
-                  name="VehicleRegistrationDate"
-                  value={editBluebookFormData.VehicleRegistrationDate}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Tax Pay Date</label>
-                <input
-                  type="date"
-                  name="taxPayDate"
-                  value={editBluebookFormData.taxPayDate}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                />
-              </div>
-              <div>
-                <label className="block text-base font-semibold text-gray-700 mb-1">Tax Expire Date</label>
-                <input
-                  type="date"
-                  name="taxExpireDate"
-                  value={editBluebookFormData.taxExpireDate}
-                  onChange={handleEditBluebookFormChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50"
-                />
-              </div>
-              {/* Empty div to align buttons to right side on last row */}
-              <div></div>
-              <div className="flex justify-end space-x-3 pt-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full my-8 relative animate-fade-in-up scale-95 sm:scale-100 transition-transform duration-300">
+            {/* Header */}
+            <div className="flex-shrink-0 p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-blue-100 rounded-t-3xl">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-nepal-blue rounded-lg">
+                    <FaCar className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-nepal-blue">Edit Bluebook</h2>
+                    <p className="text-sm text-gray-600">Update vehicle information</p>
+                  </div>
+                </div>
                 <button
-                  type="button"
+                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all duration-200"
                   onClick={() => setShowEditBluebookModal(false)}
-                  className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
+                  aria-label="Close"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-lg bg-nepal-blue text-white font-semibold hover:bg-blue-700"
-                >
-                  Save Changes
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               </div>
-            </form>
+            </div>
+
+            {/* Form Content */}
+            <div className="p-6">
+              <form
+                onSubmit={e => {
+                  e.preventDefault();
+                  handleUpdateBluebook();
+                }}
+                className="space-y-6"
+              >
+                {/* Vehicle Information Section */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                    <FaCar className="mr-2 text-nepal-blue" />
+                    Vehicle Information
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Vehicle Reg. No</label>
+                      <input
+                        type="text"
+                        name="vehicleRegNo"
+                        value={editBluebookFormData.vehicleRegNo}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Owner Name</label>
+                      <input
+                        type="text"
+                        name="vehicleOwnerName"
+                        value={editBluebookFormData.vehicleOwnerName}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Vehicle Type</label>
+                      <input
+                        type="text"
+                        name="vehicleType"
+                        value={editBluebookFormData.vehicleType}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Vehicle Model</label>
+                      <input
+                        type="text"
+                        name="vehicleModel"
+                        value={editBluebookFormData.vehicleModel}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Manufacture Year</label>
+                      <input
+                        type="text"
+                        name="manufactureYear"
+                        value={editBluebookFormData.manufactureYear}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Chasis Number</label>
+                      <input
+                        type="text"
+                        name="chasisNumber"
+                        value={editBluebookFormData.chasisNumber}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Vehicle Color</label>
+                      <input
+                        type="text"
+                        name="vehicleColor"
+                        value={editBluebookFormData.vehicleColor}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Engine CC</label>
+                      <input
+                        type="text"
+                        name="vehicleEngineCC"
+                        value={editBluebookFormData.vehicleEngineCC}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Vehicle Number</label>
+                      <input
+                        type="text"
+                        name="vehicleNumber"
+                        value={editBluebookFormData.vehicleNumber}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                      <select
+                        name="status"
+                        value={editBluebookFormData.status}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="verified">Verified</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Vehicle Registration Date</label>
+                      <input
+                        type="date"
+                        name="VehicleRegistrationDate"
+                        value={editBluebookFormData.VehicleRegistrationDate}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Tax Pay Date</label>
+                      <input
+                        type="date"
+                        name="taxPayDate"
+                        value={editBluebookFormData.taxPayDate}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Tax Expire Date</label>
+                      <input
+                        type="date"
+                        name="taxExpireDate"
+                        value={editBluebookFormData.taxExpireDate}
+                        onChange={handleEditBluebookFormChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-nepal-blue bg-gray-50 transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-end space-x-4 pt-6 border-t border-gray-100">
+                  <button
+                    type="button"
+                    onClick={() => setShowEditBluebookModal(false)}
+                    className="px-6 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 font-semibold hover:bg-gray-100 transition-all duration-200 shadow-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-nepal-blue to-blue-600 text-white font-semibold hover:from-blue-700 hover:to-nepal-blue transition-all duration-200 shadow-lg"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
@@ -2535,6 +2744,99 @@ function AdminDashboard() {
                   className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700"
                 >
                   Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Details Modal */}
+      {showPaymentModal && selectedPayment && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 relative animate-fade-in-up">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl"
+              onClick={() => setShowPaymentModal(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <div className="space-y-6">
+              <div className="text-center">
+                <h2 className="text-2xl font-bold text-nepal-blue mb-2">Payment Details</h2>
+                <p className="text-gray-600">Transaction Information</p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Transaction ID</label>
+                    <p className="text-lg font-semibold text-gray-900">{selectedPayment.transactionId}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">User</label>
+                    <p className="text-lg text-gray-900">{selectedPayment.userName}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Amount</label>
+                    <p className="text-lg font-bold text-green-600">Rs. {selectedPayment.amount}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Status</label>
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold shadow ${
+                      selectedPayment.status === 'successful' ? 'bg-green-100 text-green-800' :
+                      selectedPayment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {selectedPayment.status}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Vehicle Type</label>
+                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-sm font-semibold shadow ${
+                      selectedPayment.isElectric 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {selectedPayment.isElectric ? (
+                        <>
+                          <FaBatteryFull className="h-3 w-3" />
+                          Electric
+                        </>
+                      ) : (
+                        <>
+                          <FaMotorcycle className="h-3 w-3" />
+                          Fuel
+                        </>
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-500 mb-1">Payment Date</label>
+                <p className="text-lg text-gray-900">{formatDate(selectedPayment.createdAt)}</p>
+              </div>
+              
+              <div className="flex justify-end space-x-3 pt-6">
+                <button
+                  onClick={() => handleDownloadPayment(selectedPayment)}
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold shadow-lg hover:from-green-600 hover:to-green-700 transition flex items-center gap-2"
+                >
+                  <FaDownload className="h-4 w-4" />
+                  Download Receipt
+                </button>
+                <button
+                  onClick={() => setShowPaymentModal(false)}
+                  className="px-6 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 font-semibold hover:bg-gray-100 transition"
+                >
+                  Close
                 </button>
               </div>
             </div>

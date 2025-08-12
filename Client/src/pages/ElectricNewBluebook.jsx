@@ -21,7 +21,6 @@ const ElectricNewBluebook = () => {
     vehicleBatteryCapacity: "",
     vehicleNumber: "",
     taxPayDate: "",
-    taxExpireDate: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -63,6 +62,21 @@ const ElectricNewBluebook = () => {
   };
 
   /**
+   * Calculates tax expire date as 1 year after tax pay date
+   * @param {string} taxPayDate - The tax pay date in YYYY-MM-DD format
+   * @returns {string} The calculated tax expire date in YYYY-MM-DD format
+   */
+  const calculateTaxExpireDate = (taxPayDate) => {
+    if (!taxPayDate) return "";
+    
+    const payDate = new Date(taxPayDate);
+    const expireDate = new Date(payDate);
+    expireDate.setFullYear(payDate.getFullYear() + 1);
+    
+    return expireDate.toISOString().split('T')[0];
+  };
+
+  /**
    * Validates the form fields and sets error messages if validation fails.
    * @returns {boolean} True if the form is valid, false otherwise.
    */
@@ -80,14 +94,6 @@ const ElectricNewBluebook = () => {
     if (!formData.vehicleBatteryCapacity) newErrors.vehicleBatteryCapacity = "Battery capacity is required";
     if (!formData.vehicleNumber) newErrors.vehicleNumber = "Vehicle number is required";
     if (!formData.taxPayDate) newErrors.taxPayDate = "Tax pay date is required";
-    if (!formData.taxExpireDate) newErrors.taxExpireDate = "Tax expire date is required";
-
-    // Validate dates
-    if (formData.taxExpireDate && formData.taxPayDate) {
-      if (new Date(formData.taxExpireDate) <= new Date(formData.taxPayDate)) {
-        newErrors.taxExpireDate = "Tax expire date must be after tax pay date";
-      }
-    }
 
     // Validate year
     if (formData.manufactureYear) {
@@ -119,13 +125,13 @@ const ElectricNewBluebook = () => {
     try {
       const token = localStorage.getItem('accessToken');
       
-      // Convert vehicleBatteryCapacity to number and dates to Date objects
+      // Calculate tax expire date and convert data types
       const submitData = {
         ...formData,
         vehicleBatteryCapacity: parseFloat(formData.vehicleBatteryCapacity),
         vehicleRegistrationDate: new Date(formData.vehicleRegistrationDate),
         taxPayDate: new Date(formData.taxPayDate),
-        taxExpireDate: new Date(formData.taxExpireDate)
+        taxExpireDate: new Date(calculateTaxExpireDate(formData.taxPayDate))
       };
       
       console.log('Submitting electric bluebook data:', submitData);
@@ -427,20 +433,12 @@ const ElectricNewBluebook = () => {
 
                 <div className="transition-all duration-200 hover:scale-[1.02]">
                   <label className="block text-sm font-semibold text-gray-700 text-left mb-1">
-                    Tax Expire Date <span className="text-red-500">*</span>
+                    Tax Expire Date (Auto-calculated)
                   </label>
-                  <input
-                    type="date"
-                    name="taxExpireDate"
-                    value={formData.taxExpireDate}
-                    onChange={handleChange}
-                    className={`mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-nepal-blue transition-all duration-200 ${
-                      errors.taxExpireDate ? 'border-red-400' : 'border-gray-200'
-                    }`}
-                  />
-                  {errors.taxExpireDate && (
-                    <p className="mt-1 text-xs text-red-500">{errors.taxExpireDate}</p>
-                  )}
+                  <div className="mt-1 block w-full border rounded-lg px-4 py-2 bg-gray-100 text-gray-600 border-gray-200">
+                    {formData.taxPayDate ? calculateTaxExpireDate(formData.taxPayDate) : 'Will be calculated automatically'}
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500">Tax expire date will be automatically set to 1 year after the tax pay date</p>
                 </div>
               </div>
             </div>
